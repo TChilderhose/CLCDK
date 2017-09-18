@@ -1,0 +1,15 @@
+## Interface: 70300
+## Author: Threk
+## Version: 7.3.0
+## Title: CLC DK
+## Notes: Death Knight Helper.
+## SavedVariablesPerCharacter: CLCDK_Settings
+
+Localization\localization.lua
+Localization\localization.de.lua
+Localization\localization.cn.lua
+Localization\localization.tw.lua
+Localization\localization.br.lua
+
+CLC_DK_Options.xml
+CLC_DK.lua
