@@ -236,16 +236,6 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		return;
 	end	
 	
-	function CLCDK:GetDisease() 
-		if (Current_Spec == SPEC_UNHOLY) then
-			return spells["Virulent Plague"]
-		elseif (Current_Spec == SPEC_FROST) then
-			return spells["Frost Fever"]
-		elseif (Current_Spec == SPEC_BLOOD) then
-			return spells["Blood Plague"]
-		end
-	end
-
 	function CLCDK:LoadTrinkets()
 		local loaded = true
 		
@@ -706,8 +696,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 					frame.Icon:SetTexture(nil)
 				end			
 			elseif CLCDK_Settings.CD[Current_Spec][location][IS_BUFF] then --Buff/DeBuff			
-				local icon, count, dur, expirationTime					
-
+				local icon, count, dur, expirationTime		
 				if CLCDK_Settings.CD[Current_Spec][location][1] == spells["Dark Simulacrum"] then
 					local id
 					if (curtime - simtime) >= 5 then
@@ -935,7 +924,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 			CLCDK.Disease:SetAlpha(1)
 			local diseaseTime = 0;
 			if UnitCanAttack("player", "target") and (not UnitIsDead("target")) then							
-				local expires = select(7,UnitDebuff("TARGET", CLCDK:GetDisease(), nil, "PLAYER"))
+				local expires = select(7,UnitDebuff("TARGET", CLCDK:GetSpecDisease(), nil, "PLAYER"))
 				if  expires ~= nil and (expires - curtime) > 0 then
 					diseaseTime = expires - curtime
 				end				
@@ -1036,10 +1025,20 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 			end
 			return numCool;
 		end		
+		
+		function CLCDK:GetSpecDisease() 
+			if (Current_Spec == SPEC_UNHOLY) then
+				return spells["Virulent Plague"]
+			elseif (Current_Spec == SPEC_FROST) then
+				return spells["Frost Fever"]
+			elseif (Current_Spec == SPEC_BLOOD) then
+				return spells["Blood Plague"]
+			end
+		end
 
 		--Determines if Dieseases need to be refreshed or applied
 		function CLCDK:GetDisease(icon)		
-			local expires = select(7,UnitDebuff("TARGET", CLCDK:GetDisease(), nil, "PLAYER"))
+			local expires = select(7,UnitDebuff("TARGET", CLCDK:GetSpecDisease(), nil, "PLAYER"))
 			if  expires ~= nil then	expires = expires - curtime end	
 			return (expires == nil or expires < 2)
 		end
