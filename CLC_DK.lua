@@ -33,6 +33,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	local spellLookup = {
 		["Anti-Magic Shell"] = 48707,
 		["Army of the Dead"] = 42650,
+		["Blood Plague"] = 55078,
 		["Blood Strike"] = 45902,
 		["Dark Command"] = 56222,
 		["Dark Simulacrum"] = 77606, --Cata
@@ -44,6 +45,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Death Strike"] = 49998,		
 		["Empower Rune Weapon"] = 47568,	
 		["Festering Strike"] = 85948,	--Cata
+		["Frost Fever"] = 55095,
 		["Horn of Winter"] = 57330,		
 		["Icebound Fortitude"] = 48792,
 		["Lichborne"] = 49039,
@@ -230,6 +232,16 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		if debugg then print("CLCDK:Cooldowns Loaded")end
 		return;
 	end	
+	
+	function CLCDK:GetDisease() 
+		if (Current_Spec == SPEC_UNHOLY) then
+			return spells["Virulent Plague"]
+		elseif (Current_Spec == SPEC_FROST) then
+			return spells["Frost Fever"]
+		elseif (Current_Spec == SPEC_BLOOD) then
+			return spells["Blood Plague"]
+		end
+	end
 
 	function CLCDK:LoadTrinkets()
 		local loaded = true
@@ -920,7 +932,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 			CLCDK.Disease:SetAlpha(1)
 			local diseaseTime = 0;
 			if UnitCanAttack("player", "target") and (not UnitIsDead("target")) then							
-				local expires = select(7,UnitDebuff("TARGET", spells["Virulent Plague"], nil, "PLAYER"))
+				local expires = select(7,UnitDebuff("TARGET", CLCDK:GetDisease(), nil, "PLAYER"))
 				if  expires ~= nil and (expires - curtime) > 0 then
 					diseaseTime = expires - curtime
 				end				
@@ -1024,7 +1036,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 
 		--Determines if Dieseases need to be refreshed or applied
 		function CLCDK:GetDisease(icon)		
-			local expires = select(7,UnitDebuff("TARGET", spells["Virulent Plague"], nil, "PLAYER"))
+			local expires = select(7,UnitDebuff("TARGET", CLCDK:GetDisease(), nil, "PLAYER"))
 			if  expires ~= nil then	expires = expires - curtime end					
 
 			-- Apply	
