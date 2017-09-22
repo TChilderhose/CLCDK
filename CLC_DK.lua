@@ -72,7 +72,12 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Howling Blast"] = 49184,	
 		["Killing Machine"] = 51124,
 		["Pillar of Frost"] = 51271,	
-						
+		["Rime"] = 59057,	
+		["Razorice"] = 51714,
+		["Sindragosa's Fury"] = 190778,	
+		["Gathering Storm"] = 194912,	
+		["Remorseless Winter"] = 196770,
+								
 		--Unholy Only
 		["Anti-Magic Zone"] = 51052,
 		["Dark Transformation"] = 63560,
@@ -82,6 +87,10 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Scourge Strike"] = 55090,	
 		["Sudden Doom"] = 81340,
 		["Summon Gargoyle"] = 49206,
+		["Virulent Plague"] = 191587,--Legion
+		["Festering Wound"] = 197147,--Legion
+		["Apocalypse"] = 220143,--Legion
+		["Scourge of Worlds"] = 191748,--Legion
 
 		--Tier Sets
 		
@@ -99,12 +108,6 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Troll"] = 26297,--Berserking
 		["BloodElf"] = 28730,--Arcane Torrent
 		["Goblin"] = 69070,--Rocket Jump
-				
-		--Legion
-		["Virulent Plague"] = 191587,
-		["Festering Wound"] = 197147,
-		["Apocalypse"] = 220143,
-		["Scourge of Worlds"] = 191748,
 	}
 	
 	local spells
@@ -1037,13 +1040,8 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		--Determines if Dieseases need to be refreshed or applied
 		function CLCDK:GetDisease(icon)		
 			local expires = select(7,UnitDebuff("TARGET", CLCDK:GetDisease(), nil, "PLAYER"))
-			if  expires ~= nil then	expires = expires - curtime end					
-
-			-- Apply	
-			if (expires == nil or expires < 2) then				
-				return true, CLCDK:GetRangeandIcon(icon, spells["Outbreak"])
-			end
-			return false
+			if  expires ~= nil then	expires = expires - curtime end	
+			return (expires == nil or expires < 2)
 		end
 
 		--Function to determine rotation for Unholy Spec
@@ -1060,9 +1058,9 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 			local numRunes = CLCDK:RuneCDs()
 
 			-- Virulent Plague maintained at all times via Outbreak.		
-			local disease, move = CLCDK:GetDisease(icon)	
+			local disease = CLCDK:GetDisease(icon)	
 			if disease and numRunes >= 1 then 
-				return move 
+				return CLCDK:GetRangeandIcon(icon, spells["Outbreak"]) 
 			end	
 			
 			-- Dark Transformation		
@@ -1103,6 +1101,50 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		end
 		
 		function CLCDK:FrostMove(icon)
+			--[[			
+			Use Icon Sindragosa's Fury (with Pillar of Frost Icon Pillar of Frost, the proc from Rune of the Fallen Crusader Icon Rune of the Fallen Crusader, and 5 stacks of Razorice).
+			Use Remorseless Winter Icon Remorseless Winter on cooldown (for Gathering Storm Icon Gathering Storm).
+			Use Howling Blast Icon Howling Blast, only if you have a Rime Icon Rime proc.
+			Use Obliterate Icon Obliterate to avoid capping runes, or if you have a Killing Machine Icon Killing Machine proc.
+			Use Frost Strike Icon Frost Strike when you are about to cap Runic Power.
+			Use Obliterate Icon Obliterate.
+			Use Frost Strike Icon Frost Strike.			
+			]]
+				
+			--Rune Info
+			local numRunes = CLCDK:RuneCDs()
+						
+			if (UnitBuff("PLAYER",spells["Pillar of Frost"]) ~= nil and
+				UnitBuff("PLAYER",spells["Unholy Strength"]) ~= nil	and		
+				UnitBuff("PLAYER",spells["Razorice"]) ~= nil and
+				select(4, UnitBuff("PLAYER",spells["Razorice"])) == 5) then
+				return CLCDK:GetRangeandIcon(icon, spells["Sindragosa's Fury"])
+			end				
+			
+			if (numRunes >= 1 and isOffCD(GetSpellCooldown(spells["Remorseless Winter"]))) then						
+				return CLCDK:GetRangeandIcon(icon, spells["Remorseless Winter"])				
+			end			
+			
+			if (UnitBuff("PLAYER", spells["Rime"]) ~= nil) then
+				return CLCDK:GetRangeandIcon(icon, spells["Howling Blast"])
+			end	
+			
+			if (UnitBuff("PLAYER",spells["Killing Machine"]) ~= nil or numRunes > 4) then
+				return CLCDK:GetRangeandIcon(icon, spells["Obliterate"])
+			end	
+			
+			if (UnitPower("player") >= 80) then
+				return CLCDK:GetRangeandIcon(icon, spells["Frost Strike"])
+			end	
+			
+			if (numRunes >= 2) then
+				return CLCDK:GetRangeandIcon(icon, spells["Obliterate"])
+			end	
+			
+			if (UnitPower("player") >= 25) then
+				return CLCDK:GetRangeandIcon(icon, spells["Frost Strike"])
+			end	
+		
 			return nil				
 		end
 		
