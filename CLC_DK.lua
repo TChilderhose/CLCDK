@@ -27,6 +27,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	local GCD, curtime, launchtime = 0, 0, 0
 	local Current_Spec = SPEC_UNKNOWN
 	local updatetimer = 0
+	local maxPower = 100
 
 	if debugg then print("CLCDK:Locals Done")end
 	
@@ -1079,6 +1080,11 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 			if (numFestWounds >= 6 and isOffCD(GetSpellCooldown(spells["Apocalypse"]))) then						
 				return CLCDK:GetRangeandIcon(icon, spells["Apocalypse"])				
 			end			
+						
+			-- Death Coil if close to cap. 2 runes plus 3 rp / sec
+			if (UnitPower("player") >= (maxPower - 23)) then
+				return CLCDK:GetRangeandIcon(icon, spells["Death Coil"])
+			end	
 			
 			--Scourge Strike
 			if (numRunes >= 1 and numFestWounds > 1) then		
@@ -1215,7 +1221,8 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	local slottimer = 0
 	CLCDK:SetScript("OnEvent", function(_, e, ...)
 		if loaded then
-			CLCDK:CheckSpec() 
+			CLCDK:CheckSpec()			
+			maxPower = UnitPowerMax("Player")
 		end
 	end)	
 		
