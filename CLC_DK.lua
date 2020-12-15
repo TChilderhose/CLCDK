@@ -1,10 +1,10 @@
-local debugg = false
+local debugg = true
 if select(2, UnitClass("player")) == "DEATHKNIGHT" then	
 	if debugg then print("CLCDK:Starting")end	
-	CLCDK_VERSION = 7.3	
+	CLCDK_VERSION = 9.02
 	
 	-----Create Main Frame-----
-	local CLCDK = CreateFrame("Button", "CLCDK", UIParent)
+	local CLCDK = CreateFrame("Button", "CLCDK", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	CLCDK:SetWidth(94)
 	CLCDK:SetHeight(68)
 	CLCDK:SetFrameStrata("BACKGROUND")	
@@ -12,7 +12,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	-----Locals-----
 	--Constants
 	local PLAYER_NAME, PLAYER_RACE = UnitName("player"), select(2, UnitRace("player"))
-	local SPEC_UNKNOWN, SPEC_BLOOD, SPEC_FROST, SPEC_UNHOLY = 0, 1, 2, 3
+	local SPEC_UNKNOWN, SPEC_BLOOD, SPEC_FROST, SPEC_UNHOLY = 5, 1, 2, 3
 	local IS_BUFF = 2
 	local ITEM_LOAD_THRESHOLD = .5
 		
@@ -57,6 +57,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Pestilence"] = 50842,			
 		["Raise Ally"] = 61999,
 		["Raise Dead"] = 46584,	
+		["Rune Strike"] = 210764,	
 		["Strangulate"] = 47476,	
 		["Unholy Strength"] = 53365,
 		["Unholy Frenzy"] = 207289,
@@ -65,9 +66,11 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Blood Shield"] = 77535,	
 		["Dancing Rune Weapon"] = 49028,	
 		["Vampiric Blood"] = 55233,
+		["Marrowrend"] = 195182,
+		["Blooddrinker"] = 206931,
+		["Heart Strike"] = 206930,
 		
 		--Frost Only
-		["Chilblains"] = 50041,
 		["Freezing Fog"] = 59052,
 		["Frost Strike"] = 49143,		
 		["Howling Blast"] = 49184,	
@@ -89,7 +92,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Sudden Doom"] = 81340,
 		["Summon Gargoyle"] = 49206,
 		["Virulent Plague"] = 191587,--Legion
-		["Festering Wound"] = 197147,--Legion
+		["Festering Wound"] = 194310,--Legion
 		["Apocalypse"] = 220143,--Legion
 		["Scourge of Worlds"] = 191748,--Legion
 
@@ -145,7 +148,6 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				spells["Death Grip"],
 				spells["Death Pact"],
 				spells["Empower Rune Weapon"],
-				spells["Festering Wound"],	
 				spells["Horn of Winter"],
 				spells["Icebound Fortitude"],				
 				spells["Lichborne"],
@@ -161,6 +163,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				spells["Anti-Magic Zone"],
 				spells["Dark Transformation"],
 				spells["Gnaw"],
+				spells["Festering Wound"],
 				spells["Runic Corruption"],
 				spells["Scourge of Worlds"],
 				spells["Summon Gargoyle"],	
@@ -197,17 +200,17 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				[spells["Unholy Strength"]] = {"player", false},					
 						
 				--unholy
-				[spells["Dark Transformation"]] = {"pet", false},
+				[spells["Dark Transformation"]] = {"pet", true},
 				[spells["Unholy Frenzy"]] = {"player", false},
 				[spells["Runic Corruption"]] = {"player", false},
 				[spells["Sudden Doom"]] = {"player", false},
+				[spells["Virulent Plague"]] = {"target", false},
 				
 				--frost
 				[spells["Pillar of Frost"]] = {"player", true},
 				[spells["Lichborne"]] = {"player", true},
 				[spells["Freezing Fog"]] = {"player", false},
 				[spells["Killing Machine"]] = {"player", false},
-				[spells["Chilblains"]] = {"target", false},
 				
 				--blood
 				[spells["Blood Shield"]] = {"player", false},	
@@ -229,7 +232,6 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				spells["Obliterate"],
 				spells["Pestilence"],
 				spells["Plague Strike"],
-				spells["Rune Strike"],
 				spells["Scourge Strike"],
 			},				
 		}
@@ -293,11 +295,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		-- Scales of Life
 		spells["Weight of a Feather"] = GetSpellInfo(97117)
 		AddTrinket(select(1, GetItemInfo(69109)), {spells["Weight of a Feather"], true, 69109})
-		
-		-- Fire of the Deep
-		spells["Elusive"] = GetSpellInfo(109779)
-		AddTrinket(select(1, GetItemInfo(78008)), {spells["Elusive"], true, 78008})
-		
+				
 		-- Rotting Skull
 		spells["Titanic Strength"] = GetSpellInfo(109746)
 		AddTrinket(select(1, GetItemInfo(77116)), {spells["Titanic Strength"], true, 77116})
@@ -505,12 +503,12 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	--In: name: the name of the icon frame   parent: the icons parent   spellname: the spell the icon will first display   size:height and width in pixels
 	--Out: returns the icon create by parameters
 	function CLCDK:CreateIcon(name, parent, spellname, size)
-		frame = CreateFrame('Button', name, parent)
+		frame = CreateFrame('Button', name, parent, BackdropTemplateMixin and "BackdropTemplate")
 		frame:SetWidth(size)
 		frame:SetHeight(size)
 		frame:SetFrameStrata("BACKGROUND")
 		frame.Spell = spellname
-		frame.c = CreateFrame('Cooldown', nil, frame)
+		frame.c = CreateFrame('Cooldown', nil, frame, BackdropTemplateMixin and "BackdropTemplate")
 		frame.c:SetAllPoints(frame)
 		frame.Icon = frame:CreateTexture("$parentIcon", "DIALOG")
 		frame.Icon:SetAllPoints()
@@ -532,7 +530,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		
 		--Create two frames in which 2 icons will placed in each
 		for i = 1, 4 do  
-			CLCDK.CD[i] = CreateFrame("Button", "CLCDK.CD"..i, CLCDK)
+			CLCDK.CD[i] = CreateFrame("Button", "CLCDK.CD"..i, CLCDK, BackdropTemplateMixin and "BackdropTemplate")
 			CLCDK.CD[i]:SetWidth(34)
 			CLCDK.CD[i]:SetHeight(68)
 			CLCDK.CD[i]:SetFrameStrata("BACKGROUND")
@@ -578,7 +576,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		CLCDK:SetupMoveFunction(CLCDK)
 
 		--Create Rune bar frame
-		CLCDK.RuneBar = CreateFrame("Button", "CLCDK.RuneBar", CLCDK)
+		CLCDK.RuneBar = CreateFrame("Button", "CLCDK.RuneBar", CLCDK, BackdropTemplateMixin and "BackdropTemplate")
 		CLCDK.RuneBar:SetHeight(23)
 		CLCDK.RuneBar:SetWidth(94)	
 		CLCDK.RuneBar:SetBackdrop{bgFile = 'Interface\\Tooltips\\UI-Tooltip-Background', tile = false, insets = {left = 0, right = 0, top = 0, bottom = 0},}
@@ -590,7 +588,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		CLCDK:SetupMoveFunction(CLCDK.RuneBar)
 		
 		local function CreateRuneBar()
-			frame = CreateFrame('StatusBar', nil, CLCDK.RuneBarHolder)
+			frame = CreateFrame('StatusBar', nil, CLCDK.RuneBarHolder, BackdropTemplateMixin and "BackdropTemplate")
 			frame:SetHeight(80)
 			frame:SetWidth(8)
 			frame:SetOrientation("VERTICAL")
@@ -612,7 +610,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 			frame.Spark.c.lock = false
 			return frame
 		end		
-		CLCDK.RuneBarHolder = CreateFrame("Button", "CLCDK.RuneBarHolder", CLCDK)
+		CLCDK.RuneBarHolder = CreateFrame("Button", "CLCDK.RuneBarHolder", CLCDK, BackdropTemplateMixin and "BackdropTemplate")
 		CLCDK.RuneBarHolder:SetHeight(100)
 		CLCDK.RuneBarHolder:SetWidth(110)
 		CLCDK.RuneBarHolder:SetFrameStrata("BACKGROUND")
@@ -620,7 +618,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		CLCDK.RuneBarHolder:SetBackdropColor(0, 0, 0, 0.5)
 		
 		--Create Runic Power frame
-		CLCDK.RunicPower = CreateFrame("Button", "CLCDK.RunicPower", CLCDK)
+		CLCDK.RunicPower = CreateFrame("Button", "CLCDK.RunicPower", CLCDK, BackdropTemplateMixin and "BackdropTemplate")
 		CLCDK.RunicPower:SetHeight(23)
 		CLCDK.RunicPower:SetWidth(47)	
 		CLCDK.RunicPower:SetBackdrop{bgFile = 'Interface\\Tooltips\\UI-Tooltip-Background', tile = false, insets = {left = 0, right = 0, top = 0, bottom = 0},}
@@ -632,7 +630,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		CLCDK:SetupMoveFunction(CLCDK.RunicPower)
 		
 		--Create frome for Diseases with 2 icons for their respective disease
-		CLCDK.Disease = CreateFrame("Button", "CLCDK.Disease", CLCDK)
+		CLCDK.Disease = CreateFrame("Button", "CLCDK.Disease", CLCDK, BackdropTemplateMixin and "BackdropTemplate")
 		CLCDK.Disease:SetHeight(24)
 		CLCDK.Disease:SetWidth(47)	
 		CLCDK.Disease:SetFrameStrata("BACKGROUND")
@@ -651,7 +649,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		CLCDK:SetupMoveFunction(CLCDK.Move)	
 		
 		--Create backdrop for move
-		CLCDK.MoveBackdrop = CreateFrame('Frame', nil, CLCDK)
+		CLCDK.MoveBackdrop = CreateFrame('Frame', nil, CLCDK, BackdropTemplateMixin and "BackdropTemplate")
 		CLCDK.MoveBackdrop:SetHeight(47)
 		CLCDK.MoveBackdrop:SetWidth(47)
 		CLCDK.MoveBackdrop:SetFrameStrata("BACKGROUND")
@@ -719,9 +717,11 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				
 				--if its on a target then its a debuff, otherwise its a buff
 				if Cooldowns.Buffs[CLCDK_Settings.CD[Current_Spec][location][1]][1] == "target" then
-					_, _, icon, count, _, dur, expirationTime = UnitDebuff("target", CLCDK_Settings.CD[Current_Spec][location][1])
+					_, icon, count, _, dur, expirationTime = CLCDK:FindTargetDebuff(CLCDK_Settings.CD[Current_Spec][location][1])
+					--print(CLCDK_Settings.CD[Current_Spec][location][1])
+					--print(CLCDK:FindTargetDebuff(CLCDK_Settings.CD[Current_Spec][location][1]))
 				else
-					_, _, icon, count, _, dur, expirationTime = UnitBuff(Cooldowns.Buffs[CLCDK_Settings.CD[Current_Spec][location][1]][1], CLCDK_Settings.CD[Current_Spec][location][1])
+					_, icon, count, _, dur, expirationTime = AuraUtil.FindAuraByName(CLCDK_Settings.CD[Current_Spec][location][1], Cooldowns.Buffs[CLCDK_Settings.CD[Current_Spec][location][1]][1])
 				end	
 				frame.Icon:SetTexture(icon)
 				
@@ -924,8 +924,8 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		if CLCDK_Settings.Disease then			
 			CLCDK.Disease:SetAlpha(1)
 			local diseaseTime = 0;
-			if UnitCanAttack("player", "target") and (not UnitIsDead("target")) then							
-				local expires = select(7,UnitDebuff("TARGET", CLCDK:GetSpecDisease(), nil, "PLAYER"))
+			if UnitCanAttack("player", "target") and (not UnitIsDead("target")) and (Current_Spec ~= SPEC_UNKNOWN) then							
+				local expires = select(6, AuraUtil.FindAuraByName(CLCDK:GetSpecDisease(), "TARGET", "PLAYER"))
 				if  expires ~= nil and (expires - curtime) > 0 then
 					diseaseTime = expires - curtime
 				end				
@@ -979,6 +979,24 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 					end
 				end				
 				--print(select(1, UnitBuff("player", i)).." "..select(11, UnitBuff("player", i)))
+			end
+		end
+	end
+	
+	function CLCDK:FindPlayerBuff(spellName)
+		for i=1,40 do
+			local name, icon, count, debuffType, duration, expirationTime = UnitBuff("PLAYER", i);
+			if (name == spellName) then
+				return name, icon, count, debuffType, duration, expirationTime
+			end
+		end
+	end
+	
+	function CLCDK:FindTargetDebuff(spellName)
+		for i=1,40 do
+			local name, icon, count, debuffType, duration, expirationTime = UnitDebuff("TARGET", i);
+			if (name == spellName) then
+				return name, icon, count, debuffType, duration, expirationTime
 			end
 		end
 	end
@@ -1039,23 +1057,25 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 
 		--Determines if Dieseases need to be refreshed or applied
 		function CLCDK:GetDisease(icon)		
-			local expires = select(7,UnitDebuff("TARGET", CLCDK:GetSpecDisease(), nil, "PLAYER"))
+			local expires = select(6, AuraUtil.FindAuraByName(CLCDK:GetSpecDisease(), "TARGET", "PLAYER"))
 			if  expires ~= nil then	expires = expires - curtime end	
 			return (expires == nil or expires < 2)
 		end
 
 		--Function to determine rotation for Unholy Spec
 		function CLCDK:UnholyMove(icon)			
-			--[[
-			Virulent Plague maintained at all times via Outbreak.
-			Death Coil with Sudden Doom procs.
-			Apocalypse with 7+ Festering Wound.
-			Scourge Strike to burst Festering Wound.
-			Festering Strike to apply Festering Wound.
-			Death Coil to dump Runic Power.]]--
-		
+			--[[			
+				Virulent Plague (Maintain on target [refresh using Outbreak])
+				Cast Dark Transformation Icon Dark Transformation off cooldown.
+				Cast Apocalypse Icon Apocalypse when you have 4 stacks of Festering Wound Icon Festering Wounds
+				Death Coil (With Sudden Doom procs or when >80 Runic Power)
+				Clawing Shadows (If talented) or Scourge Strike (When 1 or more Festering Wound)
+				Festering Strike
+				Death Coil
+			]]--
 			--Rune Info
 			local numRunes = CLCDK:RuneCDs()
+			local runicPower = UnitPower("player");
 
 			-- Virulent Plague maintained at all times via Outbreak.		
 			local disease = CLCDK:GetDisease(icon)	
@@ -1069,35 +1089,30 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 			end
 			
 			-- Death Coil with Sudden Doom procs.
-			if (UnitBuff("PLAYER",spells["Sudden Doom"]) ~= nil) then
+			if (AuraUtil.FindAuraByName(spells["Sudden Doom"], "PLAYER") ~= nil or runicPower >= 80) then
 				return CLCDK:GetRangeandIcon(icon, spells["Death Coil"])
 			end	
-
-			local numFestWounds = select(4, UnitDebuff("TARGET", spells["Festering Wound"]))
+			
+			local numFestWounds = select(3, CLCDK:FindTargetDebuff(spells["Festering Wound"]))
 			if numFestWounds == nil then numFestWounds = 0 end
 			
 			--Apocalypse
-			if (numFestWounds >= 6 and isOffCD(GetSpellCooldown(spells["Apocalypse"]))) then						
+			if (numFestWounds >= 4 and isOffCD(GetSpellCooldown(spells["Apocalypse"]))) then						
 				return CLCDK:GetRangeandIcon(icon, spells["Apocalypse"])				
-			end			
-						
-			-- Death Coil if close to cap. 2 runes plus 3 rp / sec
-			if (UnitPower("player") >= (maxPower - 23)) then
-				return CLCDK:GetRangeandIcon(icon, spells["Death Coil"])
-			end	
+			end
 			
 			--Scourge Strike
-			if (numRunes >= 1 and numFestWounds > 1) then		
+			if (numRunes >= 1 and numFestWounds >= 1) then		
 				return CLCDK:GetRangeandIcon(icon, spells["Scourge Strike"])				
 			end		
 			
 			--Festering Strike if not enough festering wounds
-			if (numRunes >= 2 and numFestWounds <= 4) then						
+			if (numRunes >= 2) then						
 				return CLCDK:GetRangeandIcon(icon, spells["Festering Strike"])				
 			end			
 			
 			-- Death Coil
-			if UnitPower("player") >= 45 then
+			if (UnitPower("player") >= 40) then
 				return CLCDK:GetRangeandIcon(icon, spells["Death Coil"])
 			end	
 
@@ -1154,11 +1169,46 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		end
 		
 		function CLCDK:BloodMove(icon)
-			return nil				
+			--[[
+			Before engaging anything, use Rune Tap Icon Rune Tap a second before you get meleed for the first time.
+			Use Marrowrend Icon Marrowrend if your Bone Shield Icon Bone Shield is about to expire.
+			Use Death Strike Icon Death Strike if your health is low, or to avoid capping Runic Power.
+			Use Blooddrinker Icon Blooddrinker.
+			Use Blood Boil Icon Blood Boil if any nearby enemies do not have your Blood Plague Icon Blood Plague disease, or you have 2 charges of Blood Boil.
+			Use Marrowrend Icon Marrowrend if you have 6 or fewer stacks of Bone Shield Icon Bone Shield.
+			Use Death and Decay Icon Death and Decay if you are fighting 3 or more enemies.
+			Use Heart Strike Icon Heart Strike if you have 3 or more Runes.
+			Use Blood Boil Icon Blood Boil.
+			]]--
+			
+			--Rune Info
+			local numRunes = CLCDK:RuneCDs()
+			local runicPower = UnitPower("player");
+			
+			
+			-- Death Coil with Sudden Doom procs.
+			local name, icon, count, debuffType, duration, expirationTime = CLCDK:FindPlayerBuff(spells["Bone Shield"])
+			if ((duration == nil or duration < 3) and numRunes >= 2) then
+				--return CLCDK:GetRangeandIcon(icon, spells["Marrowrend"])
+			end	
+			
+			return nil			
 		end	
 
-		function CLCDK:BlankMove(icon)
-			return nil				
+		function CLCDK:BlankMove(icon)	
+			local numRunes = CLCDK:RuneCDs()					
+			
+			if (UnitPower("player") >= 90) then
+				return CLCDK:GetRangeandIcon(icon, spells["Death Coil"])
+			end	
+			
+			if (numRunes >= 1) then
+				return CLCDK:GetRangeandIcon(icon, spells["Rune Strike"])
+			end		
+			
+			if (UnitPower("player") >= 40) then
+				return CLCDK:GetRangeandIcon(icon, spells["Death Coil"])
+			end				
 		end			
 	end
 	
@@ -1416,7 +1466,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				
 				[3] = false,
 				["CLCDK_CDRPanel_DD_CD3_One"] = {spells["Horn of Winter"], true},
-				["CLCDK_CDRPanel_DD_CD3_Two"] = {spells["Blood Charge"], true},
+				["CLCDK_CDRPanel_DD_CD3_Two"] = {spells["Festering Wound"], true},
 				
 				[4] = false,
 				["CLCDK_CDRPanel_DD_CD4_One"] = {CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT1, nil},
@@ -1611,7 +1661,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	function CLCDK_CDRPanel_DD_OnLoad(self, level)
 		--If specified level, or base
 		level = level or 1
-		
+				
 		--Template for an item in the dropdown box
 		local function CLCDK_CDRPanel_DD_Item (panel, spell, buff)	
 			info = {}
@@ -1629,7 +1679,6 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		--Function to add specs specific CDs
 		local function AddSpecCDs(Spec)
 			for i = 1, #Spec do
-				if debugg then print(i)end
 				if (Cooldowns.Buffs[Spec[i]] == nil or Cooldowns.Buffs[Spec[i]][2]) then					
 					UIDropDownMenu_AddButton(CLCDK_CDRPanel_DD_Item(self, Spec[i]), 2)
 				end	
@@ -1648,7 +1697,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 			
 			--Setup nested dropdowns
 			info.hasArrow = true
-			info.notClickable = 1
+			info.notCheckable = 1
 			
 			--Spec Specific CDs		
 			info.text = CLCDK_OPTIONS_CDR_CD_SPEC

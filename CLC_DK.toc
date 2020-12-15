@@ -1,6 +1,6 @@
-## Interface: 70300
+## Interface: 90002
 ## Author: Threk
-## Version: 7.3.0
+## Version: 9.0.2
 ## Title: CLC DK
 ## Notes: Death Knight Helper.
 ## SavedVariablesPerCharacter: CLCDK_Settings

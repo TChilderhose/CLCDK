@@ -128,7 +128,7 @@
 			
 			<!--RP -->	
 			<CheckButton name="CLCDK_FramePanel_RP" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_Rune_DD"><Offset><AbsDimension x="15" y="-35"/></Offset></Anchor></Anchors>
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_Rune"><Offset><AbsDimension x="15" y="-35"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
 						CLCDK_FramePanel_RP_Text:SetText(CLCDK_OPTIONS_FRAME_RP)
