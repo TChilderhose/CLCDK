@@ -1,4 +1,4 @@
-local debugg = true
+local debugg = false
 if select(2, UnitClass("player")) == "DEATHKNIGHT" then	
 	if debugg then print("CLCDK:Starting")end	
 	CLCDK_VERSION = 9.02
@@ -58,17 +58,21 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Raise Ally"] = 61999,
 		["Raise Dead"] = 46584,	
 		["Rune Strike"] = 210764,	
+		["Rune Tap"] = 194679,	
 		["Strangulate"] = 47476,	
 		["Unholy Strength"] = 53365,
 		["Unholy Frenzy"] = 207289,
 		
 		--Blood Only
-		["Blood Shield"] = 77535,	
+		["Bone Shield"] = 195181,	
+		["Blood Boil"] = 50842,	
 		["Dancing Rune Weapon"] = 49028,	
 		["Vampiric Blood"] = 55233,
 		["Marrowrend"] = 195182,
 		["Blooddrinker"] = 206931,
 		["Heart Strike"] = 206930,
+		["Crimson Scourge"] = 81136,
+		["Hemostasis"] = 273946,
 		
 		--Frost Only
 		["Freezing Fog"] = 59052,
@@ -177,13 +181,12 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				spells["Pillar of Frost"],			
 			},
 			BloodCDs = {
-				spells["Blood Shield"],
+				spells["Blood Boil"],
 				spells["Bone Shield"],	
 				spells["Crimson Scourge"],
 				spells["Dancing Rune Weapon"],
+				spells["Hemostasis"],
 				spells["Rune Tap"],	
-				spells["Scarlet Fever"],
-				spells["Lichborne"],
 				spells["Vampiric Blood"],
 			},
 			Buffs = {--List of Buffs
@@ -212,11 +215,13 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				[spells["Freezing Fog"]] = {"player", false},
 				[spells["Killing Machine"]] = {"player", false},
 				
-				--blood
-				[spells["Blood Shield"]] = {"player", false},	
-				--[spells["Bone Shield"]] = {"player", true},	
+				--blood	
+				[spells["Bone Shield"]] = {"player", true},	
 				[spells["Dancing Rune Weapon"]] = {"player", true},
 				[spells["Vampiric Blood"]] = {"player", true},								
+				[spells["Crimson Scourge"]] = {"player", false},
+				[spells["Hemostasis"]] = {"player", false},
+				[spells["Rune Tap"]] = {"player", true},				
 			},
 			Moves = {--List of Moves that can be watched when availible
 				spells["Blood Boil"],
@@ -255,167 +260,6 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		--Test trinket that doesnt exist
 		--AddTrinket(select(1, GetItemInfo(1)), {"Test Trinket"})
 		
-		--On-Use		
-		--Impatience of Youth
-		spells["Thrill of Victory"] = GetSpellInfo(91828)
-		AddTrinket(select(1, GetItemInfo(62469)), {spells["Thrill of Victory"], true, 62469})
-		
-		-- Vial of Stolen Memories
-		spells["Memory of Invincibility"] = GetSpellInfo(92213)
-		AddTrinket(select(1, GetItemInfo(59515)), {spells["Memory of Invincibility"], true, 59515})
-		
-		-- Figurine - King of Boars
-		spells["King of Boars"] = GetSpellInfo(73522)
-		AddTrinket(select(1, GetItemInfo(52351)), {spells["King of Boars"], true, 52351})
-		
-		-- Figurine - Earthen Guardian
-		spells["Earthen Guardian"] = GetSpellInfo(73550)
-		AddTrinket(select(1, GetItemInfo(52352)), {spells["Earthen Guardian"], true, 52352})
-		
-		-- Might of the Ocean
-		spells["Typhoon"] = GetSpellInfo(91340)
-		AddTrinket(select(1, GetItemInfo(56285)), {spells["Typhoon"], true, 56285})
-		
-		-- Magnetite Mirror
-		spells["Polarization"] = GetSpellInfo(91351)
-		AddTrinket(select(1, GetItemInfo(55814)), {spells["Polarization"], true, 55814})
-		
-		-- Mirror of Broken Images
-		spells["Image of Immortality"] = GetSpellInfo(92222)
-		AddTrinket(select(1, GetItemInfo(62466)), {spells["Image of Immortality"], true, 62466})
-		
-		--Essence of the Eternal Flame
-		spells["Essence of the Eternal Flame"] = GetSpellInfo(97010)
-		AddTrinket(select(1, GetItemInfo(69002)), {spells["Essence of the Eternal Flame"], true, 69002})
-		
-		--Moonwell Phial
-		spells["Summon Splashing Waters"] = GetSpellInfo(101492)
-		AddTrinket(select(1, GetItemInfo(70143)), {spells["Summon Splashing Waters"], true, 70143})
-		
-		-- Scales of Life
-		spells["Weight of a Feather"] = GetSpellInfo(97117)
-		AddTrinket(select(1, GetItemInfo(69109)), {spells["Weight of a Feather"], true, 69109})
-				
-		-- Rotting Skull
-		spells["Titanic Strength"] = GetSpellInfo(109746)
-		AddTrinket(select(1, GetItemInfo(77116)), {spells["Titanic Strength"], true, 77116})
-		
-		--Badge of Victory
-		spells["Call of Victory"] = GetSpellInfo(92224)
-		AddTrinket(select(1, GetItemInfo(64689)), {spells["Call of Victory"], true, 64689})--Bloodthirsty Gladiator's		
-		AddTrinket(select(1, GetItemInfo(61034)), {spells["Call of Victory"], true, 61034})--Vicious Gladiator's s9
-		AddTrinket(select(1, GetItemInfo(70519)), {spells["Call of Victory"], true, 70519})--Vicious Gladiator's s10
-		AddTrinket(select(1, GetItemInfo(70400)), {spells["Call of Victory"], true, 70400})--Ruthless Gladiator's s10
-		AddTrinket(select(1, GetItemInfo(72450)), {spells["Call of Victory"], true, 72450})--Ruthless Gladiator's s11
-		AddTrinket(select(1, GetItemInfo(73496)), {spells["Call of Victory"], true, 73496})--Cataclysmic Gladiator's s11
-		
-		--PvP Trinkets
-		spells["PvP Trinket"] = GetSpellInfo(42292)
-		AddTrinket(select(1, GetItemInfo(64794)), {spells["PvP Trinket"], true, 64794})--Bloodthirsty
-		AddTrinket(select(1, GetItemInfo(60807)), {spells["PvP Trinket"], true, 60807})--Vicious s9
-		AddTrinket(select(1, GetItemInfo(70607)), {spells["PvP Trinket"], true, 70607})--Vicious s10
-		AddTrinket(select(1, GetItemInfo(70395)), {spells["PvP Trinket"], true, 70395})--Ruthless s10
-		AddTrinket(select(1, GetItemInfo(72413)), {spells["PvP Trinket"], true, 72413})--Ruthless s11
-		AddTrinket(select(1, GetItemInfo(73537)), {spells["PvP Trinket"], true, 73537})--Cataclysmic s11
-		
-		AddTrinket(select(1, GetItemInfo(60795)), {spells["PvP Trinket"], true, 60795})
-		AddTrinket(select(1, GetItemInfo(60796)), {spells["PvP Trinket"], true, 60796})
-		AddTrinket(select(1, GetItemInfo(60797)), {spells["PvP Trinket"], true, 60797})
-		AddTrinket(select(1, GetItemInfo(60798)), {spells["PvP Trinket"], true, 60798})
-		
-		AddTrinket(select(1, GetItemInfo(51378)), {spells["PvP Trinket"], true, 51378})		
-		AddTrinket(select(1, GetItemInfo(51377)), {spells["PvP Trinket"], true, 51377})
-		
-		
-		--Stacking Buff	
-		--"License to Slay
-		spells["Slayer"] = GetSpellInfo(91810)
-		AddTrinket(select(1, GetItemInfo(58180)), {spells["Slayer"], false, 0, 0, false})
-		
-		-- Fury of Angerforge
-		spells["Forged Fury"] = GetSpellInfo(91836)
-		spells["Raw Fury"] = GetSpellInfo(91832)
-		AddTrinket(select(1, GetItemInfo(59461)), {spells["Forged Fury"], false, 120, 0, false, spells["Raw Fury"]})
-		
-		--Apparatus of Khaz'goroth
-		spells["Titanic Power"] = GetSpellInfo(96923)
-		spells["Blessing of Khaz'goroth"] = GetSpellInfo(97127)
-		AddTrinket(select(1, GetItemInfo(69113)), {spells["Blessing of Khaz'goroth"], false, 120, 0, false, spells["Titanic Power"]})
-
-		--Vessel of Acceleration
-		spells["Accelerated"] = GetSpellInfo(96980)
-		AddTrinket(select(1, GetItemInfo(68995)), {spells["Accelerated"], false, 0, 0, false})
-		
-		--Eye of Unmaking
-		spells["Titanic Strength"] = GetSpellInfo(109748)
-		AddTrinket(select(1, GetItemInfo(77977)), {spells["Titanic Strength"], false, 0, 0, false})
-		
-		--Resolve of Undying
-		spells["Preternatural Evasion"] = GetSpellInfo(109782)
-		AddTrinket(select(1, GetItemInfo(77998)), {spells["Preternatural Evasion"], false, 0, 0, false})
-		
-		
-		--ICD
-		-- Heart of Rage
-		spells["Rageheart"] = GetSpellInfo(92345)
-		AddTrinket(select(1, GetItemInfo(65072)), {spells["Rageheart"], false, 20*5, 0, false})
-		
-		-- Heart of Solace
-		spells["Heartened"] = GetSpellInfo(91363)
-		AddTrinket(select(1, GetItemInfo(55868)), {spells["Heartened"], false, 20*5, 0, false})	
-		
-		-- Crushing Weight
-		spells["Race Against Death"] = GetSpellInfo(92342)
-		AddTrinket(select(1, GetItemInfo(59506)), {spells["Race Against Death"], false, 15*5, 0, false})
-		
-		-- Symbiotic Worm
-		spells["Turn of the Worm"] = GetSpellInfo(92235)
-		AddTrinket(select(1, GetItemInfo(59332)), {spells["Turn of the Worm"], false, 30, 0, false})
-		
-		-- Bedrock Talisman
-		spells["Tectonic Shift"] = GetSpellInfo(92233)
-		AddTrinket(select(1, GetItemInfo(58182)), {spells["Tectonic Shift"], false, 30, 0, false})
-		
-		-- Porcelain Crab
-		spells["Hardened Shell"] = GetSpellInfo(92174)
-		AddTrinket(select(1, GetItemInfo(56280)), {spells["Hardened Shell"], false, 20*5, 0, false})
-		
-		-- Right Eye of Rajh
-		spells["Eye of Doom"] = GetSpellInfo(91368)
-		AddTrinket(select(1, GetItemInfo(56431)), {spells["Eye of Doom"], false, 10*5, 0, false})
-		
-		-- Rosary of Light
-		spells["Rosary of Light"] = GetSpellInfo(102660)
-		AddTrinket(select(1, GetItemInfo(72901)), {spells["Rosary of Light"], false, 20*5, 0, false})	
-		
-		-- Creche of the Final Dragon
-		spells["Find Weakness"] = GetSpellInfo(109744)
-		AddTrinket(select(1, GetItemInfo(77992)), {spells["Find Weakness"], false, 20*5, 0, false})
-		
-		-- Indomitable Pride
-		spells["Indomitable"] = GetSpellInfo(109786)
-		AddTrinket(select(1, GetItemInfo(78003)), {spells["Indomitable"], false, 60, 0, false})
-		
-		-- Soulshifter Vortex
-		spells["Haste"] = GetSpellInfo(109777)
-		AddTrinket(select(1, GetItemInfo(77990)), {spells["Haste"], false, 20*5, 0, false})
-		
-		-- Veil of Lies
-		spells["Veil of Lies"] = GetSpellInfo(102666)
-		AddTrinket(select(1, GetItemInfo(72900)), {spells["Veil of Lies"], false, 20*5, 0, false})
-		
-		--Spidersilk Spindle
-		spells["Loom of Fate"] = GetSpellInfo(97130)
-		AddTrinket(select(1, GetItemInfo(69138)), {spells["Loom of Fate"], false, 60, 0, false})
-		
-		--Master Pit Fighter
-		spells["Master Pit Fighter"] = GetSpellInfo(109996)
-		AddTrinket(select(1, GetItemInfo(74035)), {spells["Master Pit Fighter"], false, 20*5, 0, false})
-      
-		--Varo'then's Brooch
-		spells["Varo'then's Brooch"] = GetSpellInfo(102664)
-		AddTrinket(select(1, GetItemInfo(72899)), {spells["Varo'then's Brooch"], false, 20*5, 0, false})
-
 		if debugg then print("CLCDK:Trinkets Loaded")end
 		return loaded
 	end
@@ -822,6 +666,11 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 						if CLCDK_Settings.CDS then frame.c:SetCooldown(start, dur) end	
 						frame.Time:SetText(formatTime(t))
 					end	
+					
+					local chargeCount, chargeMax = GetSpellCharges(CLCDK_Settings.CD[Current_Spec][location][1])
+					if chargeMax ~= nil and chargeMax >= 1 then 
+						frame.Stack:SetText(chargeCount)
+					end	
 				end				
 			end
 			--if the icon is nil, then just hide the frame
@@ -1170,26 +1019,63 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		
 		function CLCDK:BloodMove(icon)
 			--[[
-			Before engaging anything, use Rune Tap Icon Rune Tap a second before you get meleed for the first time.
-			Use Marrowrend Icon Marrowrend if your Bone Shield Icon Bone Shield is about to expire.
-			Use Death Strike Icon Death Strike if your health is low, or to avoid capping Runic Power.
-			Use Blooddrinker Icon Blooddrinker.
-			Use Blood Boil Icon Blood Boil if any nearby enemies do not have your Blood Plague Icon Blood Plague disease, or you have 2 charges of Blood Boil.
-			Use Marrowrend Icon Marrowrend if you have 6 or fewer stacks of Bone Shield Icon Bone Shield.
-			Use Death and Decay Icon Death and Decay if you are fighting 3 or more enemies.
-			Use Heart Strike Icon Heart Strike if you have 3 or more Runes.
-			Use Blood Boil Icon Blood Boil.
+			Before engaging anything, use Rune Tap a second before you get meleed for the first time.
+			Use Marrowrend if your Bone Shield is about to expire.
+			Use Death Strike if your health is low, or to avoid capping Runic Power.
+			Use Blood Boil if any nearby enemies do not have your Blood Plague disease, or you have 2 charges of Blood Boil.
+			Use Marrowrend if you have 6 or fewer stacks of Bone Shield.
+			Use Heart Strike if you have 3 or more Runes.
+			Use Death and Decay if you have a Crimson Scourge proc.
+			Use Blood Boil.
 			]]--
 			
 			--Rune Info
 			local numRunes = CLCDK:RuneCDs()
 			local runicPower = UnitPower("player");
+			local curh, maxh = UnitHealth("player"), UnitHealthMax("player")
+			local perch
+			if maxh == 0 then
+				perch = -1
+			else
+				perch= (curh/maxh)*100
+			end
 			
+			local _, _, bs_count, _, bs_duration, _ = CLCDK:FindPlayerBuff(spells["Bone Shield"])
 			
-			-- Death Coil with Sudden Doom procs.
-			local name, icon, count, debuffType, duration, expirationTime = CLCDK:FindPlayerBuff(spells["Bone Shield"])
-			if ((duration == nil or duration < 3) and numRunes >= 2) then
-				--return CLCDK:GetRangeandIcon(icon, spells["Marrowrend"])
+			-- Use Marrowrend if your Bone Shield is about to expire.
+			if ((bs_duration == nil or bs_duration < 3) and numRunes >= 2) then
+				return CLCDK:GetRangeandIcon(icon, spells["Marrowrend"])
+			end	
+			
+			-- Use Death Strike if your health is low, or to avoid capping Runic Power.
+			if ((perch < 33 or runicPower > 80) and runicPower >= 45) then
+				return CLCDK:GetRangeandIcon(icon, spells["Death Strike"])
+			end	
+
+			-- Use Blood Boil if any nearby enemies do not have your Blood Plague disease, or you have 2 charges of Blood Boil.
+			local disease = CLCDK:GetDisease(icon)
+			if (disease and GetSpellCharges(spells["Blood Boil"]) >= 1) then 
+				return CLCDK:GetRangeandIcon(icon, spells["Blood Boil"]) 
+			end	
+			
+			-- Use Marrowrend if you have 6 or fewer stacks of Bone Shield.
+			if ((bs_count == nil or bs_count < 6) and numRunes >= 2) then
+				return CLCDK:GetRangeandIcon(icon, spells["Marrowrend"])
+			end	
+			
+			-- Use Heart Strike if you have 3 or more Runes.
+			if (numRunes >= 3) then
+				return CLCDK:GetRangeandIcon(icon, spells["Heart Strike"])
+			end	
+
+			-- Use Death and Decay if you have a Crimson Scourge proc.
+			if (CLCDK:FindPlayerBuff(spells["Crimson Scourge"]) ~= nil) then
+				return CLCDK:GetRangeandIcon(icon, spells["Death and Decay"])
+			end	
+	
+			-- Use Blood Boil.
+			if (GetSpellCharges(spells["Blood Boil"]) >= 1) then
+				return CLCDK:GetRangeandIcon(icon, spells["Blood Boil"])
 			end	
 			
 			return nil			
