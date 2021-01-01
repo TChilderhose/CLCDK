@@ -19,7 +19,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	--Variables
 	local loaded, mutex = false, false
 	local mousex, mousey
-	local font = 'Interface\\AddOns\\CLC_DK\\Font.ttf'
+	local font = 'Interface\\AddOns\\CLC_DK\\iosevka-fixed-extendedheavy.ttf'
 	local GetTime = GetTime
 	local darksim = {0, 0}
 	local simtime = 0
@@ -918,44 +918,45 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				Cast Dark Transformation Icon Dark Transformation off cooldown.
 				Cast Apocalypse Icon Apocalypse when you have 4 stacks of Festering Wound Icon Festering Wounds
 				Death Coil (With Sudden Doom procs or when >80 Runic Power)
-				Clawing Shadows (If talented) or Scourge Strike (When 1 or more Festering Wound)
+				Scourge Strike (When 1 or more Festering Wound)
 				Festering Strike
 				Death Coil
 			]]--
+			
 			--Rune Info
 			local numRunes = CLCDK:RuneCDs()
 			local runicPower = UnitPower("player");
 
-			-- Virulent Plague maintained at all times via Outbreak.		
+			-- Virulent Plague (Maintain on target [refresh using Outbreak])
 			local disease = CLCDK:GetDisease(icon)	
 			if disease and numRunes >= 1 then 
 				return CLCDK:GetRangeandIcon(icon, spells["Outbreak"]) 
 			end	
 			
-			-- Dark Transformation		
+			-- Cast Dark Transformation Icon Dark Transformation off cooldown.	
 			if (isOffCD (GetSpellCooldown(spells["Dark Transformation"]))) then
 				return CLCDK:GetRangeandIcon(icon, spells["Dark Transformation"])
 			end
-			
-			-- Death Coil with Sudden Doom procs.
-			if (AuraUtil.FindAuraByName(spells["Sudden Doom"], "PLAYER") ~= nil or runicPower >= 80) then
-				return CLCDK:GetRangeandIcon(icon, spells["Death Coil"])
-			end	
-			
+
 			local numFestWounds = select(3, CLCDK:FindTargetDebuff(spells["Festering Wound"]))
 			if numFestWounds == nil then numFestWounds = 0 end
 			
-			--Apocalypse
+			-- Cast Apocalypse Icon Apocalypse when you have 4 stacks of Festering Wound Icon Festering Wounds
 			if (numFestWounds >= 4 and isOffCD(GetSpellCooldown(spells["Apocalypse"]))) then						
 				return CLCDK:GetRangeandIcon(icon, spells["Apocalypse"])				
 			end
 			
-			--Scourge Strike
+			-- Death Coil (With Sudden Doom procs or when >80 Runic Power)
+			if (AuraUtil.FindAuraByName(spells["Sudden Doom"], "PLAYER") ~= nil or runicPower >= 80) then
+				return CLCDK:GetRangeandIcon(icon, spells["Death Coil"])
+			end	
+			
+			-- Scourge Strike (When 1 or more Festering Wound)
 			if (numRunes >= 1 and numFestWounds >= 1) then		
 				return CLCDK:GetRangeandIcon(icon, spells["Scourge Strike"])				
 			end		
 			
-			--Festering Strike if not enough festering wounds
+			-- Festering Strike
 			if (numRunes >= 2) then						
 				return CLCDK:GetRangeandIcon(icon, spells["Festering Strike"])				
 			end			
