@@ -85,7 +85,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Sindragosa's Fury"] = 190778,	
 		["Gathering Storm"] = 194912,	
 		["Remorseless Winter"] = 196770,
-								
+
 		--Unholy Only
 		["Anti-Magic Zone"] = 51052,
 		["Dark Transformation"] = 63560,
@@ -99,6 +99,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Festering Wound"] = 194310,--Legion
 		["Apocalypse"] = 220143,--Legion
 		["Scourge of Worlds"] = 191748,--Legion
+		["Soul Reaper"] = 343294,
 
 		--Tier Sets
 		
@@ -116,6 +117,11 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		["Troll"] = 26297,--Berserking
 		["BloodElf"] = 28730,--Arcane Torrent
 		["Goblin"] = 69070,--Rocket Jump
+		
+		
+		--Covenant
+		["Fleshcraft"] = 324631,
+		["Abomination Limb"] = 315443,
 	}
 	
 	local spells
@@ -238,7 +244,11 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				spells["Pestilence"],
 				spells["Plague Strike"],
 				spells["Scourge Strike"],
-			},				
+			},	
+			Covenant = {
+				spells["Fleshcraft"],
+				spells["Abomination Limb"],			
+			}
 		}
 		if debugg then print("CLCDK:Cooldowns Loaded")end
 		return;
@@ -264,18 +274,26 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		return loaded
 	end
 	
-	--In: timeleft - seconds
+	--In: seconds - seconds
 	--Out: formated string of hours, minutes and seconds
-	local function formatTime(timeleft)
-		if timeleft > 3600 then
-			return format("%dh:%dm", timeleft/3600, ((timeleft%3600)/60))
-		elseif timeleft > 600 then 
-			return format("%dm", timeleft/60)
-		elseif timeleft > 60 then 
-			return format("%d:%2.2d", timeleft/60, timeleft%60)
+	local DAY, HOUR, MINUTE = 86400, 3600, 60
+	local function GetTimeText(seconds)
+		if seconds > DAY then
+			return format("|cffffffff%dd|r", seconds/DAY), HOUR
+		elseif seconds > MINUTE*100 then 	
+			return format("|cffffffff%dh|r", (seconds/HOUR + 1)), MINUTE	
+		elseif seconds > MINUTE*5 then 
+			return format("|cffffffff%dm|r", (seconds/MINUTE + 1)), 1
+		elseif seconds > MINUTE then
+			return format("|cffffffff%d:%2.2d|r", seconds/MINUTE, (seconds%MINUTE)), 0.5
+		elseif seconds > 5 then 
+			return format("|cffffffff%d|r", seconds%MINUTE), 0.25
+		elseif seconds > 0 then 
+			return format("|cffff0000%0.1f|r", seconds%MINUTE), 0.1
+		else
+			return "", 1
 		end	
-		return timeleft
-	end		
+	end
 	
 	--In: start- when the spell cd started  dur- duration of the cd
 	--Out: returns if the spell is or will be off cd in the next GCD
@@ -537,7 +555,8 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 					frame.Icon:SetTexture(CLCDK:GetNextMove(frame.Icon))
 				else
 					frame.Icon:SetTexture(nil)
-				end			
+				end
+				
 			elseif CLCDK_Settings.CD[Current_Spec][location][IS_BUFF] then --Buff/DeBuff			
 				local icon, count, dur, expirationTime		
 				if CLCDK_Settings.CD[Current_Spec][location][1] == spells["Dark Simulacrum"] then
@@ -572,12 +591,11 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 				--If not an aura, set time
 				if icon ~= nil and ceil(expirationTime - curtime) > 0 then				
 					frame.Icon:SetVertexColor(0.5, 0.5, 0.5, 1)
-					frame.Time:SetText(formatTime(ceil(expirationTime - curtime)))
+					if not CLCDK_Settings.CDS then frame.Time:SetText(GetTimeText(ceil(expirationTime - curtime))) end
 					if CLCDK_Settings.CD[Current_Spec][location][1] == spells["Blood Shield"] then count = bsamount end
 					if count > 1 then frame.Stack:SetText(count) end	
 				end
-				
-				
+
 				
 			elseif inTable(Cooldowns.Moves, CLCDK_Settings.CD[Current_Spec][location][1]) then --Move
 				icon = GetSpellTexture(CLCDK_Settings.CD[Current_Spec][location][1])
@@ -591,6 +609,8 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 					end	
 				end		
 				frame.Icon:SetTexture(icon)
+
+
 			elseif CLCDK_Settings.CD[Current_Spec][location][1] == CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT1 or
 				CLCDK_Settings.CD[Current_Spec][location][1] == CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT2 then --Trinkets
 				
@@ -617,7 +637,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 					if icon ~= nil then
 						frame.Icon:SetTexture(icon)
 						frame.Icon:SetVertexColor(0.5, 0.5, 0.5, 1)
-						frame.Time:SetText(formatTime(ceil(expirationTime - curtime)))
+						if not CLCDK_Settings.CDS then frame.Time:SetText(GetTimeText(ceil(expirationTime - curtime))) end
 						if count > 1 then frame.Stack:SetText(count) end	
 						if (not altbuff) and (not trink[5]) then trink[5] = true; trink[4] = curtime end					
 						
@@ -636,12 +656,14 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 						if t > 0 and active == 1 and dur > 7 then
 							frame.Icon:SetVertexColor(0.5, 0.5, 0.5, 1)
 							if CLCDK_Settings.CDS then frame.c:SetCooldown(start, dur) end	
-							frame.Time:SetText(formatTime(t))
+							if not CLCDK_Settings.CDS then frame.Time:SetText(GetTimeText(t)) end
 						end
 					end
 				else
 					frame.Icon:SetTexture(nil)
 				end
+				
+				
 			elseif  CLCDK_Settings.CD[Current_Spec][location][1] == CLCDK_OPTIONS_CDR_RACIAL then
 				icon = CLCDK:GetRangeandIcon(frame.Icon, spells[PLAYER_RACE])
 				frame.Icon:SetTexture(icon)
@@ -651,7 +673,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 					if active == 1 and dur > 7 then
 						frame.Icon:SetVertexColor(0.5, 0.5, 0.5, 1)
 						if CLCDK_Settings.CDS then frame.c:SetCooldown(start, dur) end	
-						frame.Time:SetText(formatTime(t))
+						if not CLCDK_Settings.CDS then frame.Time:SetText(GetTimeText(t)) end
 					end	
 				end				
 				
@@ -664,7 +686,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 					if active == 1 and dur > 7 then
 						frame.Icon:SetVertexColor(0.5, 0.5, 0.5, 1)
 						if CLCDK_Settings.CDS then frame.c:SetCooldown(start, dur) end	
-						frame.Time:SetText(formatTime(t))
+						if not CLCDK_Settings.CDS then frame.Time:SetText(GetTimeText(t)) end
 					end	
 					
 					local chargeCount, chargeMax = GetSpellCharges(CLCDK_Settings.CD[Current_Spec][location][1])
@@ -843,7 +865,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	
 	function CLCDK:FindTargetDebuff(spellName)
 		for i=1,40 do
-			local name, icon, count, debuffType, duration, expirationTime = UnitDebuff("TARGET", i);
+			local name, icon, count, debuffType, duration, expirationTime = UnitDebuff("TARGET", i, "PLAYER");
 			if (name == spellName) then
 				return name, icon, count, debuffType, duration, expirationTime
 			end
@@ -1611,6 +1633,11 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 			info.value = {["Level1_Key"] = "Trinkets";}
 			UIDropDownMenu_AddButton(info)	
 			
+			--Covenant		
+			info.text = CLCDK_OPTIONS_CDR_COVENANT		
+			info.value = {["Level1_Key"] = "Covenant";}
+			UIDropDownMenu_AddButton(info)	
+			
 		--If nested menu
 		elseif level == 2 then
 			--Check what the "parent" is
@@ -1647,6 +1674,9 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 			elseif key == "Trinkets" then		
 				UIDropDownMenu_AddButton(CLCDK_CDRPanel_DD_Item(self, CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT1), 2)
 				UIDropDownMenu_AddButton(CLCDK_CDRPanel_DD_Item(self, CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT2), 2)
+				
+			elseif key == "Covenant" then
+				AddSpecCDs(Cooldowns.Covenant)
 			end
 		end
 	end	

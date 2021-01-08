@@ -72,6 +72,7 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT1 = "Trinket Slot 1"
 	CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT2 = "Trinket Slot 2"
 	CLCDK_OPTIONS_CDR_RACIAL = "Racial"
+	CLCDK_OPTIONS_CDR_COVENANT = "Covenant"
 	
 	CLCDK_OPTIONS_DT = "Disease Tracker Options"
 	CLCDK_OPTIONS_DT_ENABLE = "Enable"	
