@@ -11,5 +11,16 @@ Localization\localization.cn.lua
 Localization\localization.tw.lua
 Localization\localization.br.lua
 
+
 CLC_DK_Options.xml
+
+StaticVariables.lua
+Utilities.lua
+Icons.lua
+Spells.lua
+Cooldowns.lua
+Priority.lua
+Options.lua
+
+
 CLC_DK.lua

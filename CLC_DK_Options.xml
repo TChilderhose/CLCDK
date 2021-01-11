@@ -1,5 +1,5 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
-
+<Ui xmlns="http://www.blizzard.com/wow/ui/">	
+	<Script file="Options.lua"/>
 	<CheckButton name="CLCK_CheckButtonTemplate" virtual="true" inherits="InterfaceOptionsBaseCheckButtonTemplate">
 		<Layers>
 			<Layer level="ARTWORK">
@@ -9,7 +9,7 @@
 			</Layer>
 		</Layers>		
 		<Scripts>
-			<OnClick>CLCDK:OptionsOkay();</OnClick>
+			<OnClick>CLCDK_OptionsOkay();</OnClick>
 		</Scripts>
 	</CheckButton>
 	
@@ -34,11 +34,11 @@
 			</Layers>					
 			<Scripts>
 				<OnEnterPressed>
-					CLCDK:OptionsOkay()
+					CLCDK_OptionsOkay()
 					self:ClearFocus()
 				</OnEnterPressed>
 				<OnEscapePressed>
-					CLCDK:OptionsOkay()
+					CLCDK_OptionsOkay()
 					self:ClearFocus()
 				</OnEscapePressed>
 			</Scripts>				
@@ -48,8 +48,8 @@
 		<Scripts>
 			<OnLoad>
 				self.name = "CLC DK"
-				self.okay = function() CLCDK:OptionsOkay(); end
-				self.default = function() CLCDK:SetDefaults(); end	
+				self.okay = function() CLCDK_OptionsOkay(); end
+				self.default = function() CLCDK_SetDefaults(); end	
 			</OnLoad>
 			<OnShow>
 				local f = _G["CLCDK_FramePanel"];
@@ -223,7 +223,7 @@
 				<Size><AbsDimension x="120" y="22"/></Size>
 				<Anchors><Anchor point="BOTTOMLEFT"><Offset><AbsDimension x="15" y="15" /></Offset></Anchor></Anchors>
 				<Scripts>
-					<OnClick>CLCDK:SetDefaults()</OnClick>
+					<OnClick>CLCDK_SetDefaults()</OnClick>
 				</Scripts>
 			</Button>   
 
@@ -232,7 +232,7 @@
 				<Size><AbsDimension x="120" y="22"/></Size>
 				<Anchors><Anchor point="LEFT" relativeTo="CLCDK_FramePanel_Reset" relativePoint="RIGHT"><Offset><AbsDimension x="5" y="0" /></Offset></Anchor></Anchors>
 				<Scripts>
-					<OnClick>CLCDK:SetLocationDefault()</OnClick>
+					<OnClick>CLCDK_SetLocationDefault()</OnClick>
 				</Scripts>
 			</Button> 
 		</Frames>		
@@ -405,7 +405,7 @@
 				<Size><AbsDimension x="120" y="22"/></Size>
 				<Anchors><Anchor point="BOTTOMLEFT"><Offset><AbsDimension x="15" y="15" /></Offset></Anchor></Anchors>
 				<Scripts>
-					<OnClick>CLCDK:SetDefaults()</OnClick>
+					<OnClick>CLCDK_SetDefaults()</OnClick>
 				</Scripts>
 			</Button>  
 		</Frames>		
