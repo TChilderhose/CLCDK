@@ -2,77 +2,65 @@ local _, CLCDK = ...
 
 CLCDK.SPELL_LOOKUP = {
 	["Anti-Magic Shell"] = 48707,
-	["Army of the Dead"] = 42650,
-	["Blood Plague"] = 55078,
-	["Blood Strike"] = 45902,
-	["Dark Command"] = 56222,
-	["Dark Simulacrum"] = 77606, --Cata
-	["Dark Succor"] = 101568,
+	["Anti-Magic Zone"] = 51052,
 	["Death and Decay"] = 43265,
+	["Chains of Ice"] = 45524,
+	["Control Undead"] = 111673,
+	["Dark Command"] = 56222,
 	["Death Coil"] = 47541,
 	["Death Grip"] = 49576,
-	["Death Pact"] = 48743,
 	["Death Strike"] = 49998,
-	["Empower Rune Weapon"] = 47568,
-	["Festering Strike"] = 85948,	--Cata
-	["Frost Fever"] = 55095,
-	["Horn of Winter"] = 57330,
+	["Death's Advance"] = 48265,
 	["Icebound Fortitude"] = 48792,
 	["Lichborne"] = 49039,
+	["Sacrificial Pact"] = 327574,
 	["Mind Freeze"] = 47528,
-	["Necrotic Strike"] = 73975, --Cata
-	["Obliterate"] = 49020,
-	["Outbreak"] = 77575, --Cata
-	["Pestilence"] = 50842,
+	["Path of Frost"] = 3714,
 	["Raise Ally"] = 61999,
-	["Raise Dead"] = 46584,
-	["Rune Strike"] = 210764,
-	["Rune Tap"] = 194679,
-	["Strangulate"] = 47476,
+	["Raise Dead"] = 46584,		
 	["Unholy Strength"] = 53365,
-	["Unholy Frenzy"] = 207289,
-
-	--Blood Only
-	["Bone Shield"] = 195181,
-	["Blood Boil"] = 50842,
-	["Dancing Rune Weapon"] = 49028,
-	["Vampiric Blood"] = 55233,
-	["Marrowrend"] = 195182,
-	["Blooddrinker"] = 206931,
-	["Heart Strike"] = 206930,
-	["Crimson Scourge"] = 81136,
-	["Hemostasis"] = 273946,
-
-	--Frost Only
-	["Freezing Fog"] = 59052,
-	["Frost Strike"] = 49143,
-	["Howling Blast"] = 49184,
-	["Killing Machine"] = 51124,
-	["Pillar of Frost"] = 51271,
-	["Rime"] = 59057,
-	["Razorice"] = 51714,
-	["Sindragosa's Fury"] = 190778,
-	["Gathering Storm"] = 194912,
-	["Remorseless Winter"] = 196770,
-
+	
+	
 	--Unholy Only
-	["Anti-Magic Zone"] = 51052,
+	["Apocalypse"] = 220143,	
+	["Army of the Dead"] = 42650,
 	["Dark Transformation"] = 63560,
-	["Desolation"] = 63583,
 	["Epidemic"] = 207317,
-	["Gnaw"] =  91800,
+	["Festering Strike"] = 85948,
+	["Festering Wound"] = 194310,
+	["Outbreak"] = 77575,
 	["Runic Corruption"] = 51460,
 	["Scourge Strike"] = 55090,
-	["Sudden Doom"] = 81340,
-	["Summon Gargoyle"] = 49206,
-	["Virulent Plague"] = 191587,--Legion
-	["Festering Wound"] = 194310,--Legion
-	["Apocalypse"] = 220143,--Legion
-	["Scourge of Worlds"] = 191748,--Legion
 	["Soul Reaper"] = 343294,
+	["Sudden Doom"] = 81340,
 	["Unholy Blight"] = 115989,
-
-	--Tier Sets
+	["Virulent Plague"] = 191587,
+	["Wraith Walk"] = 212552,
+	
+	
+	--Blood Only
+	["Blood Boil"] = 50842,
+	["Blood Plague"] = 55078,
+	["Bone Shield"] = 195181,
+	["Dancing Rune Weapon"] = 49028,
+	["Heart Strike"] = 206930,
+	["Marrowrend"] = 195182,
+	["Rune Tap"] = 194679,
+	["Vampiric Blood"] = 55233,
+	
+	
+	--Frost Only
+	["Empower Rune Weapon"] = 47568,
+	["Frost Fever"] = 55095,
+	["Frost Strike"] = 49143,
+	["Gathering Storm"] = 194912,
+	["Howling Blast"] = 49184,
+	["Killing Machine"] = 51124,
+	["Obliterate"] = 49020,
+	["Pillar of Frost"] = 51271,
+	["Remorseless Winter"] = 196770,
+	["Rime"] = 59057,
+	
 
 	--Racials
 	["Human"] = 59752,--Every Man for Himself

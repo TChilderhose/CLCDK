@@ -104,11 +104,6 @@ function CLCDK_CDRPanel_DD_OnLoad(self, level)
 		info.value = {["Level1_Key"] = "Tier";}
 		UIDropDownMenu_AddButton(info)
 
-		--Trinkets
-		info.text = CLCDK_OPTIONS_CDR_CD_TRINKETS
-		info.value = {["Level1_Key"] = "Trinkets";}
-		UIDropDownMenu_AddButton(info)
-
 		--Covenant
 		info.text = CLCDK_OPTIONS_CDR_COVENANT
 		info.value = {["Level1_Key"] = "Covenant";}
@@ -137,19 +132,6 @@ function CLCDK_CDRPanel_DD_OnLoad(self, level)
 					UIDropDownMenu_AddButton(CLCDK_CDRPanel_DD_Item(self, CLCDK.Cooldowns.Moves[i]), 2)
 				end
 			end
-
-		elseif key == "Tier" then
-			info.hasArrow = false
-
-			--info.text = "==T9=="
-			--info.isTitle  = 1
-			--info.notCheckable = 1
-			--UIDropDownMenu_AddButton(info, 2)
-			--UIDropDownMenu_AddButton(CLCDK_CDRPanel_DD_Item(self, CLCDK.Spells["T9 2pc"], true), 2)
-
-		elseif key == "Trinkets" then
-			UIDropDownMenu_AddButton(CLCDK_CDRPanel_DD_Item(self, CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT1), 2)
-			UIDropDownMenu_AddButton(CLCDK_CDRPanel_DD_Item(self, CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT2), 2)
 
 		elseif key == "Covenant" then
 			AddSpecCDs(CLCDK.Cooldowns.Covenant)
@@ -331,7 +313,6 @@ function CLCDK.CheckSettings()
 	if CLCDK_Settings.Location["CLCDK.CD3"] == nil then	CLCDK_Settings.Location["CLCDK.CD3"] = {Point = "TOPRIGHT",Rel = "CLCDK.CD1",RelPoint = "TOPLEFT", X = -2, Y = 0, Scale = 1} end
 	if CLCDK_Settings.Location["CLCDK.CD4"] == nil then	CLCDK_Settings.Location["CLCDK.CD4"] = {Point = "TOPLEFT",Rel = "CLCDK.CD2",RelPoint = "TOPRIGHT",X = 2,Y = 0, Scale = 1} end
 	if CLCDK_Settings.Location["CLCDK.RuneBar"] == nil then	CLCDK_Settings.Location["CLCDK.RuneBar"] = {Point = "Top",Rel = "CLCDK",RelPoint = "Top",X = 0,Y = -2, Scale = 1} end
-	if CLCDK_Settings.Location["CLCDK.RuneBarHolder"] == nil then CLCDK_Settings.Location["CLCDK.RuneBarHolder"] = {Point = "BottomLeft",Rel = "CLCDK",RelPoint = "TopLeft",X = 0,Y = 0, Scale = 0.86} end
 	if CLCDK_Settings.Location["CLCDK.RunicPower"] == nil then CLCDK_Settings.Location["CLCDK.RunicPower"] = {Point = "TOPRIGHT",Rel = "CLCDK.RuneBar",RelPoint = "BOTTOMRIGHT",X = 0,Y = 0, Scale = 1} end
 	if CLCDK_Settings.Location["CLCDK.Move"] == nil then CLCDK_Settings.Location["CLCDK.Move"] = {Point = "TOPLEFT",Rel = "CLCDK.RuneBar",RelPoint = "BOTTOMLEFT",X = 0,Y = 0, Scale = 1} end
 	if CLCDK_Settings.Location["CLCDK.Disease"] == nil then CLCDK_Settings.Location["CLCDK.Disease"]= {Point = "TOPRIGHT",Rel = "CLCDK.RunicPower",RelPoint = "BOTTOMRIGHT",X = 0,Y = 0, Scale = 1} end
@@ -391,12 +372,12 @@ function CLCDK.CooldownDefaults()
 			["CLCDK_CDRPanel_DD_CD2_Two"] = {CLCDK.Spells["Sudden Doom"], true},
 
 			[3] = false,
-			["CLCDK_CDRPanel_DD_CD3_One"] = {CLCDK.Spells["Horn of Winter"], true},
+			["CLCDK_CDRPanel_DD_CD3_One"] = {CLCDK.Spells["Death Strike"], nil},
 			["CLCDK_CDRPanel_DD_CD3_Two"] = {CLCDK.Spells["Festering Wound"], true},
 
 			[4] = false,
-			["CLCDK_CDRPanel_DD_CD4_One"] = {CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT1, nil},
-			["CLCDK_CDRPanel_DD_CD4_Two"] = {CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT2, nil},
+			["CLCDK_CDRPanel_DD_CD4_One"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
+			["CLCDK_CDRPanel_DD_CD4_Two"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
 		},
 
 		[CLCDK.SPEC_FROST] = {
@@ -415,12 +396,12 @@ function CLCDK.CooldownDefaults()
 			["CLCDK_CDRPanel_DD_CD2_Two"] = {CLCDK.Spells["Freezing Fog"], true},
 
 			[3] = false,
-			["CLCDK_CDRPanel_DD_CD3_One"] = {CLCDK.Spells["Horn of Winter"], true},
+			["CLCDK_CDRPanel_DD_CD3_One"] = {CLCDK.Spells["Death Strike"], true},
 			["CLCDK_CDRPanel_DD_CD3_Two"] = {CLCDK.Spells["Blood Charge"], true},
 
 			[4] = false,
-			["CLCDK_CDRPanel_DD_CD4_One"] = {CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT1, nil},
-			["CLCDK_CDRPanel_DD_CD4_Two"] = {CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT2, nil},
+			["CLCDK_CDRPanel_DD_CD4_One"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
+			["CLCDK_CDRPanel_DD_CD4_Two"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
 		},
 
 		[CLCDK.SPEC_BLOOD] = {
@@ -443,8 +424,8 @@ function CLCDK.CooldownDefaults()
 			["CLCDK_CDRPanel_DD_CD3_Two"] = {CLCDK.Spells["Blood Charge"], true},
 
 			[4] = false,
-			["CLCDK_CDRPanel_DD_CD4_One"] = {CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT1, nil},
-			["CLCDK_CDRPanel_DD_CD4_Two"] = {CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT2, nil},
+			["CLCDK_CDRPanel_DD_CD4_One"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
+			["CLCDK_CDRPanel_DD_CD4_Two"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
 		},
 
 		[CLCDK.SPEC_UNKNOWN] = {
@@ -467,13 +448,13 @@ function CLCDK.CooldownDefaults()
 			["CLCDK_CDRPanel_DD_CD3_Two"] = {CLCDK.Spells["Blood Tap"], nil},
 
 			[4] = false,
-			["CLCDK_CDRPanel_DD_CD4_One"] = {CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT1, nil},
-			["CLCDK_CDRPanel_DD_CD4_Two"] = {CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT2, nil},
+			["CLCDK_CDRPanel_DD_CD4_One"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
+			["CLCDK_CDRPanel_DD_CD4_Two"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
 		},
 	}
 end
 
-	
+
 
 -----Slash Command----- 
 SLASH_CLCDK1 = '/clcdk'

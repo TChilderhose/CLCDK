@@ -81,7 +81,7 @@ function CLCDK.UnholyMove(frame)
 	end
 
 	-- If nothing else can be done
-	return nil
+	return frame.Icon:SetTexture(nil)
 end
 
 function CLCDK.FrostMove(frame)
@@ -97,6 +97,7 @@ function CLCDK.FrostMove(frame)
 
 	--Rune Info
 	local numRunes = CLCDK.RuneCDs()
+	local runicPower = UnitPower("player");
 
 	if (UnitBuff("PLAYER",CLCDK.Spells["Pillar of Frost"]) ~= nil and
 		UnitBuff("PLAYER",CLCDK.Spells["Unholy Strength"]) ~= nil	and
@@ -117,7 +118,7 @@ function CLCDK.FrostMove(frame)
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Obliterate"])
 	end
 
-	if (UnitPower("player") >= 80) then
+	if (runicPower >= 80) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Frost Strike"])
 	end
 
@@ -125,11 +126,11 @@ function CLCDK.FrostMove(frame)
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Obliterate"])
 	end
 
-	if (UnitPower("player") >= 25) then
+	if (runicPower >= 25) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Frost Strike"])
 	end
 
-	return nil
+	return frame.Icon:SetTexture(nil)
 end
 
 function CLCDK.BloodMove(frame)
@@ -193,13 +194,14 @@ function CLCDK.BloodMove(frame)
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Blood Boil"])
 	end
 
-	return nil
+	return frame.Icon:SetTexture(nil)
 end
 
 function CLCDK.BlankMove(frame)
 	local numRunes = CLCDK.RuneCDs()
+	local runicPower = UnitPower("player");
 
-	if (UnitPower("player") >= 90) then
+	if (runicPower >= 90) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Death Coil"])
 	end
 
@@ -207,7 +209,9 @@ function CLCDK.BlankMove(frame)
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Rune Strike"])
 	end
 
-	if (UnitPower("player") >= 40) then
+	if (runicPower >= 40) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Death Coil"])
 	end
+	
+	return frame.Icon:SetTexture(nil)
 end

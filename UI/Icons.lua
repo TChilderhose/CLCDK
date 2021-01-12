@@ -1,6 +1,6 @@
 local _, CLCDK = ...
 
-function CLCDK.CreateIcon(name, parent, spellname, size)
+function CLCDK.CreateIcon(name, parent, size)
 	frame = CreateFrame('Button', name, parent, BackdropTemplateMixin and "BackdropTemplate")
 	frame:SetWidth(size)
 	frame:SetHeight(size)
@@ -12,26 +12,23 @@ function CLCDK.CreateIcon(name, parent, spellname, size)
 
 	frame.Icon = frame:CreateTexture("$parentIcon", "DIALOG")
 	frame.Icon:SetAllPoints()
-	frame.Icon:SetTexture(GetSpellTexture(spellname))
+	frame.Icon:SetTexture(nil)
 
 	frame.Time = frame:CreateFontString(nil, 'OVERLAY')
 	frame.Time:SetPoint("CENTER",frame, 1, 0)
 	frame.Time:SetJustifyH("CENTER")
-	frame.Time:SetFont(CLCDK.FONT, 14, "OUTLINE")
+	frame.Time:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_M, "OUTLINE")
 
 	frame.Stack = frame:CreateFontString(nil, 'OVERLAY')
 	frame.Stack:SetPoint("BOTTOMRIGHT",frame, 3, 1)
 	frame.Stack:SetJustifyH("CENTER")
-	frame.Stack:SetFont(CLCDK.FONT, 10, "OUTLINE")
+	frame.Stack:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_S, "OUTLINE")
 
 	frame:EnableMouse(false)
 
 	return frame
 end
 
---Determines if player is in range with spell and sets colour and icon accordingly
---In: icon: icon in which to change the vertex colour of   move: spellID of spell to be cast next
---Out: returns the texture of the icon (probably unessesary since icon is now being passed in, will look into it more)
 function CLCDK.SetRangeandIcon(icon, move)
 	if move ~= nil then
 		icon:SetTexture(GetSpellTexture(move))
@@ -83,12 +80,12 @@ function CLCDK.HandlePriority(frame)
 end
 
 function CLCDK.HandleBuff(frame, action, target)
-	local icon, count, dur, expirationTime
+	local icon, count, expirationTime
 
 	if target == "target" then
-		_, icon, count, _, dur, expirationTime = CLCDK.FindTargetDebuff(action)
+		_, icon, count, _, _, expirationTime = CLCDK.FindTargetDebuff(action)
 	else
-		_, icon, count, _, dur, expirationTime = AuraUtil.FindAuraByName(action, target)
+		_, icon, count, _, _, expirationTime = AuraUtil.FindAuraByName(action, target)
 	end
 
 	if expirationTime ~= nil and (expirationTime - CLCDK.CURRENT_TIME) > 0 then
@@ -106,7 +103,7 @@ function CLCDK.HandleCooldown(frame, action)
 	local chargeCount, chargeMax = GetSpellCharges(action)
 
 	local remaining = dur > CLCDK.CD_DURATION_THRESHOLD and (start + dur - CLCDK.CURRENT_TIME) or 0
-	local count =  chargeMax ~= nil and chargeMax >= 1 and chargeCount or 0
+	local count = chargeMax ~= nil and chargeMax >= 1 and chargeCount or 0
 
 	if CLCDK_Settings.CDS and dur > CLCDK.CD_DURATION_THRESHOLD then
 		frame.c:SetCooldown(start, dur)

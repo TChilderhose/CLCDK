@@ -34,8 +34,6 @@ function CLCDK.IsInTable(tabl, key)
 	return false
 end
 
-
-
 function CLCDK.IsOffCD(start, dur)
 	if (dur == nil) then dur = 0 end
 	return (dur + start - CLCDK.CURRENT_TIME - CLCDK.GCD <= 0)
@@ -52,6 +50,14 @@ function CLCDK.RuneCDs()
 	end
 	return numCool;
 end
+	
+function CLCDK.CheckSpec()
+	CLCDK.CURRENT_SPEC = GetSpecialization()
+	CLCDK.MAX_RP = UnitPowerMax("Player")
+
+	CLCDK.PrintDebug("Spec: "..CLCDK.CURRENT_SPEC)
+	CLCDK.OptionsRefresh()
+end
 
 function CLCDK.GetSpecDisease()
 	if (CLCDK.CURRENT_SPEC == CLCDK.SPEC_UNHOLY) then
@@ -65,7 +71,9 @@ end
 
 function CLCDK.GetDisease(icon)
 	local expires = select(6, AuraUtil.FindAuraByName(CLCDK.GetSpecDisease(CLCDK.CURRENT_SPEC), "TARGET", "PLAYER"))
-	if  expires ~= nil then	expires = expires - CLCDK.CURRENT_TIME end
+	if  expires ~= nil then	
+		expires = expires - CLCDK.CURRENT_TIME 
+	end
 	return (expires == nil or expires < 2)
 end
 
