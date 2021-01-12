@@ -6,10 +6,9 @@ function CLCDK.CreateIcon(name, parent, spellname, size)
 	frame:SetHeight(size)
 	frame:SetFrameStrata("BACKGROUND")
 
-	frame.Spell = spellname
-
-	frame.c = CreateFrame('Cooldown', nil, frame, BackdropTemplateMixin and "BackdropTemplate")
+	frame.c = CreateFrame('Cooldown', nil, frame, "CooldownFrameTemplate")
 	frame.c:SetAllPoints(frame)
+	frame.c:SetDrawEdge(false)
 
 	frame.Icon = frame:CreateTexture("$parentIcon", "DIALOG")
 	frame.Icon:SetAllPoints()
@@ -37,7 +36,7 @@ function CLCDK.SetRangeandIcon(icon, move)
 	if move ~= nil then
 		icon:SetTexture(GetSpellTexture(move))
 		if CLCDK_Settings.Range and IsSpellInRange(move, "target") == 0 then
-			icon:SetVertexColor(0.8, 0.05, 0.05, 1)
+			icon:SetVertexColor(196/255, 30/255, 58/255, 1) --DK Red
 		else
 			icon:SetVertexColor(1, 1, 1, 1)
 		end
@@ -103,13 +102,16 @@ end
 
 function CLCDK.HandleCooldown(frame, action)
 	local icon = GetSpellTexture(action)	
-	local start, total, _ =  GetSpellCooldown(action)
+	local start, dur, _ =  GetSpellCooldown(action)
 	local chargeCount, chargeMax = GetSpellCharges(action)
 
-	local duration = total > 7 and (start + total - CLCDK.CURRENT_TIME) or 0
+	local remaining = dur > CLCDK.CD_DURATION_THRESHOLD and (start + dur - CLCDK.CURRENT_TIME) or 0
 	local count =  chargeMax ~= nil and chargeMax >= 1 and chargeCount or 0
-
-	CLCDK.SetIconData(frame, icon, duration, count, CLCDK.IS_CD)
+	
+	if CLCDK_Settings.CDS and dur > CLCDK.CD_DURATION_THRESHOLD then 
+		frame.c:SetCooldown(start, dur) 
+	end	
+	CLCDK.SetIconData(frame, icon, remaining, count, CLCDK.IS_CD)
 end
 
 function CLCDK.HandleAbility(frame, action)

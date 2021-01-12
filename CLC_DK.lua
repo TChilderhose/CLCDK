@@ -341,9 +341,9 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 		--GCD
 		local start, dur = GetSpellCooldown(CLCDK.Spells["Death Coil"])
 		if dur ~= 0 and start ~= nil then
-			CLCDK.GCD =  dur - (CLCDK.CURRENT_TIME - start) + 0.1
+			CLCDK.GCD = dur - (CLCDK.CURRENT_TIME - start) + 0.1
 			if CLCDK_Settings.GCD then
-				CLCDK.Move.c:SetCooldown(start, dur)
+				CLCDK.Move.AOE.c:SetCooldown(start, dur)
 			end
 		else
 			CLCDK.GCD = 0
@@ -364,7 +364,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 				elseif cdtime <= 0 then
 					cdtime = "*"
 				end
-				RuneBar = RuneBar .. string.format("|cff808080%s|r", cdtime)
+				RuneBar = RuneBar .. string.format(CLCDK.COLOR_RUNES.."%s|r", cdtime)
 			end
 
 			CLCDK.RuneBar.Text:SetText(RuneBar)
@@ -373,7 +373,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 		--RunicPower
 		if CLCDK_Settings.RP then
 			CLCDK.RunicPower:SetAlpha(1)
-			CLCDK.RunicPower.Text:SetText(string.format("|cFF00D1FF%.3d|r", UnitPower("player")))
+			CLCDK.RunicPower.Text:SetText(string.format(CLCDK.COLOR_RUNIC_POWER.."%.3d|r", UnitPower("player")))
 		else
 			CLCDK.RunicPower:SetAlpha(0)
 		end
@@ -389,7 +389,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 				end
 			end
 
-			CLCDK.Disease.Text:SetText(string.format("|cff54BD47%.2d|r", diseaseTime))
+			CLCDK.Disease.Text:SetText(string.format(CLCDK.COLOR_GREEN .. "%.2d|r", diseaseTime))
 		else
 			CLCDK.Disease:SetAlpha(0)
 		end
@@ -411,14 +411,6 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 				CLCDK.UpdateCD(CDDisplayList[i], CLCDK.CD[CDDisplayList[i]])
 			else
 				CLCDK.CD[ceil(i/2)]:SetAlpha(0)
-			end
-		end
-
-		--GCD
-		if CLCDK_Settings.GCD then
-			local start, dur = GetSpellCooldown(CLCDK.Spells["Death Coil"])
-			if dur ~= 0 and start ~= nil then
-				CLCDK.Move.c:SetCooldown(start, dur)
 			end
 		end
 	end
@@ -454,9 +446,10 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 		CLCDK.MainFrame:SetAlpha(0)
 		CLCDK.CreateCDs()
 		CLCDK.CreateUI()
-		CLCDK.CheckSpec()
 		
 		CLCDK.InitializeOptions()
+		
+		CLCDK.CheckSpec()
 
 		mutex = nil
 		loaded = true

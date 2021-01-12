@@ -18,7 +18,7 @@ end
 
 
 --function to handle the View dropdown box
-local function CLCDK_FramePanel_ViewDD_OnLoad()
+function CLCDK_FramePanel_ViewDD_OnLoad()
 	info            = {}
 	info.text       = CLCDK_OPTIONS_FRAME_VIEW_NORM
 	info.value      = CLCDK_OPTIONS_FRAME_VIEW_NORM
@@ -44,8 +44,7 @@ local function CLCDK_FramePanel_ViewDD_OnLoad()
 	UIDropDownMenu_AddButton(info)
 end
 
---function to handle the CD dropdown boxes
-local function CLCDK_CDRPanel_DD_OnLoad(self, level)
+function CLCDK_CDRPanel_DD_OnLoad(self, level)
 	--If specified level, or base
 	level = level or 1
 

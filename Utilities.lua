@@ -6,19 +6,20 @@ function CLCDK.PrintDebug(text)
 	end
 end
 
+local DAY, HOUR, MINUTE = 86400, 3600, 60
 function CLCDK.GetTimeText(seconds)
-	if seconds > CLCDK.DAY then
-		return format("%dd", seconds/CLCDK.DAY), CLCDK.HOUR
-	elseif seconds > CLCDK.MINUTE*100 then
-		return format("%dh", (seconds/CLCDK.HOUR + 1)), CLCDK.MINUTE
-	elseif seconds > CLCDK.MINUTE*5 then
-		return format("%dm", (seconds/CLCDK.MINUTE + 1)), 1
-	elseif seconds > CLCDK.MINUTE then
-		return format("%d:%2.2d", seconds/CLCDK.MINUTE, (seconds%CLCDK.MINUTE)), 0.5
+	if seconds > DAY then
+		return format("%dd", seconds/DAY), HOUR
+	elseif seconds > MINUTE*100 then
+		return format("%dh", (seconds/HOUR + 1)), MINUTE
+	elseif seconds > MINUTE*5 then
+		return format("%dm", (seconds/MINUTE + 1)), 1
+	elseif seconds > MINUTE then
+		return format("%d:%2.2d", seconds/MINUTE, (seconds%MINUTE)), 0.5
 	elseif seconds > 5 then
-		return format("%d", seconds%CLCDK.MINUTE), 0.25
+		return format("%d", seconds%MINUTE), 0.25
 	elseif seconds > 0 then
-		return format("%0.1f", seconds%CLCDK.MINUTE), 0.1
+		return format("%0.1f", seconds%MINUTE), 0.1
 	else
 		return "", 1
 	end
