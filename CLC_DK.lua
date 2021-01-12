@@ -274,13 +274,13 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 			else --Cooldown or Racial
 				if action == CLCDK_OPTIONS_CDR_RACIAL then
 					action = CLCDK.Spells[CLCDK.PLAYER_RACE]
-				end		
-			
+				end
+
 				if CLCDK.Cooldowns.Buffs[action] ~= nil and CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1]) then
 					return
 				end
 				CLCDK.HandleCooldown(frame, action)
-				
+
 			end
 			--if the icon is nil, then just hide the frame
 			if frame.Icon:GetTexture() == nil then
@@ -414,7 +414,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 			end
 		end
 	end
-		
+
 	--Function to check spec and gylphs and adjust settings accordingly
 	function CLCDK.CheckSpec()
 		--Set all settings to default
@@ -446,9 +446,9 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 		CLCDK.MainFrame:SetAlpha(0)
 		CLCDK.CreateCDs()
 		CLCDK.CreateUI()
-		
+
 		CLCDK.InitializeOptions()
-		
+
 		CLCDK.CheckSpec()
 
 		mutex = nil
@@ -473,7 +473,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 	--Main function to run addon
 	CLCDK.MainFrame:SetScript("OnUpdate", function()
 		CLCDK.CURRENT_TIME = GetTime()
-		
+
 		if (CLCDK.CURRENT_TIME - updatetimer >= CLCDK.UPDATE_INTERVAL) then
 			updatetimer = CLCDK.CURRENT_TIME
 
@@ -483,7 +483,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 					CLCDK.PrintDebug("Launchtime Set")
 				end
 				CLCDK.Initialize()
-				
+
 			elseif loaded then
 				--Check if visibility conditions are met, if so update the information in the addon
 				if (not UnitHasVehicleUI("player")) and
@@ -520,6 +520,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 	end)
 else
 	CLCDK.PrintDebug("Not a DK")
+	wipe(CLCDK)
 	CLCDK = nil
 	CLCDK_Options = nil
 	CLCDK_FramePanel = nil

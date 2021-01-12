@@ -33,7 +33,7 @@ function CLCDK.UnholyMove(frame)
 	if disease and numRunes >= 1 then
 		if (frame.AOE ~= nil and (CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Unholy Blight"])))) then
 			CLCDK.SetRangeandIcon(frame.AOE.Icon, CLCDK.Spells["Unholy Blight"])
-		end	
+		end
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Outbreak"])
 	end
 
@@ -54,13 +54,13 @@ function CLCDK.UnholyMove(frame)
 	if (AuraUtil.FindAuraByName(CLCDK.Spells["Sudden Doom"], "PLAYER") ~= nil or runicPower >= 80) then
 		if (frame.AOE ~= nil) then
 			CLCDK.SetRangeandIcon(frame.AOE.Icon, CLCDK.Spells["Epidemic"])
-		end	
+		end
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Death Coil"])
 	end
-	
+
 	if (frame.AOE ~= nil and (CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Death and Decay"])))) then
 		CLCDK.SetRangeandIcon(frame.AOE.Icon, CLCDK.Spells["Death and Decay"])
-	end	
+	end
 
 	-- Scourge Strike (When 1 or more Festering Wound)
 	if (numRunes >= 1 and numFestWounds >= 1) then
@@ -76,7 +76,7 @@ function CLCDK.UnholyMove(frame)
 	if (UnitPower("player") >= 40) then
 		if (frame.AOE ~= nil) then
 			CLCDK.SetRangeandIcon(frame.AOE.Icon, CLCDK.Spells["Epidemic"])
-		end	
+		end
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Death Coil"])
 	end
 

@@ -49,14 +49,14 @@ function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 	frame.Icon:SetTexture(icon)
 	if duration > 0 then
 		frame.Icon:SetVertexColor(0.5, 0.5, 0.5, 1)
-		
+
 		local color = nil
 		if iconType == CLCDK.IS_BUFF then
 			color = CLCDK.COLOR_GREEN
 		else
 			color = duration < 5 and CLCDK.COLOR_RED or CLCDK.COLOR_WHITE
 		end
-		
+
 		frame.Time:SetText(color .. CLCDK.GetTimeText(duration) .. "|r")
 	else
 		frame.Icon:SetVertexColor(1, 1, 1, 1)
@@ -84,33 +84,33 @@ end
 
 function CLCDK.HandleBuff(frame, action, target)
 	local icon, count, dur, expirationTime
-	
+
 	if target == "target" then
 		_, icon, count, _, dur, expirationTime = CLCDK.FindTargetDebuff(action)
 	else
 		_, icon, count, _, dur, expirationTime = AuraUtil.FindAuraByName(action, target)
 	end
-	
+
 	if expirationTime ~= nil and (expirationTime - CLCDK.CURRENT_TIME) > 0 then
 		CLCDK.SetIconData(frame, icon, (expirationTime - CLCDK.CURRENT_TIME), count, CLCDK.IS_BUFF)
 		return true
 	end
-	
+
 	frame.Icon:SetTexture(nil)
 	return false
 end
 
 function CLCDK.HandleCooldown(frame, action)
-	local icon = GetSpellTexture(action)	
+	local icon = GetSpellTexture(action)
 	local start, dur, _ =  GetSpellCooldown(action)
 	local chargeCount, chargeMax = GetSpellCharges(action)
 
 	local remaining = dur > CLCDK.CD_DURATION_THRESHOLD and (start + dur - CLCDK.CURRENT_TIME) or 0
 	local count =  chargeMax ~= nil and chargeMax >= 1 and chargeCount or 0
-	
-	if CLCDK_Settings.CDS and dur > CLCDK.CD_DURATION_THRESHOLD then 
-		frame.c:SetCooldown(start, dur) 
-	end	
+
+	if CLCDK_Settings.CDS and dur > CLCDK.CD_DURATION_THRESHOLD then
+		frame.c:SetCooldown(start, dur)
+	end
 	CLCDK.SetIconData(frame, icon, remaining, count, CLCDK.IS_CD)
 end
 

@@ -99,8 +99,8 @@ CLCDK.Spells = {}
 
 function CLCDK.LoadSpells()
 	CLCDK.PrintDebug("CLCDK.LoadSpells")
-	if CLCDK.Spells ~= nil then 
-		wipe(CLCDK.Spells) 
+	if CLCDK.Spells ~= nil then
+		wipe(CLCDK.Spells)
 	end
 	CLCDK.Spells = {}
 

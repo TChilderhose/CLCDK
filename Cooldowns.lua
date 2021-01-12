@@ -3,8 +3,8 @@ local _, CLCDK = ...
 CLCDK.Cooldowns = {}
 
 function CLCDK.LoadCooldowns()
-	if CLCDK.Cooldowns~= nil then 
-		wipe(CLCDK.Cooldowns) 
+	if CLCDK.Cooldowns~= nil then
+		wipe(CLCDK.Cooldowns)
 	end
 	CLCDK.Cooldowns = {}
 	CLCDK.Cooldowns = {
@@ -90,8 +90,8 @@ function CLCDK.LoadCooldowns()
 			[CLCDK.Spells["Crimson Scourge"]] = {"player", false},
 			[CLCDK.Spells["Hemostasis"]] = {"player", false},
 			[CLCDK.Spells["Rune Tap"]] = {"player", true},
-			
-			--racials			
+
+			--racials
 			[CLCDK.Spells["Orc"]] = {"player", true},
 
 			--Covenant
