@@ -85,7 +85,7 @@ function CLCDK.HandleBuff(frame, action, target)
 	if target == "target" then
 		_, icon, count, _, _, expirationTime = CLCDK.FindTargetDebuff(action)
 	else
-		_, icon, count, _, _, expirationTime = AuraUtil.FindAuraByName(action, target)
+		_, icon, count, _, _, expirationTime = CLCDK.FindBuff(action, target)
 	end
 
 	if expirationTime ~= nil and (expirationTime - CLCDK.CURRENT_TIME) > 0 then
@@ -99,10 +99,10 @@ end
 
 function CLCDK.HandleCooldown(frame, action)
 	local icon = GetSpellTexture(action)
-	local start, dur, _ =  GetSpellCooldown(action)
+	local start, dur = GetSpellCooldown(action)
 	local chargeCount, chargeMax = GetSpellCharges(action)
 
-	local remaining = dur > CLCDK.CD_DURATION_THRESHOLD and (start + dur - CLCDK.CURRENT_TIME) or 0
+	local remaining = dur > CLCDK.CD_DURATION_THRESHOLD and CLCDK.GetCDTime(start, dur) or 0
 	local count = chargeMax ~= nil and chargeMax >= 1 and chargeCount or 0
 
 	if CLCDK_Settings.CDS and dur > CLCDK.CD_DURATION_THRESHOLD then

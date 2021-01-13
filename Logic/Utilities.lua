@@ -9,19 +9,19 @@ end
 local DAY, HOUR, MINUTE = 86400, 3600, 60
 function CLCDK.GetTimeText(seconds)
 	if seconds > DAY then
-		return format("%dd", seconds/DAY), HOUR
+		return format("%dd", seconds/DAY)
 	elseif seconds > MINUTE*100 then
-		return format("%dh", (seconds/HOUR + 1)), MINUTE
+		return format("%dh", (seconds/HOUR + 1))
 	elseif seconds > MINUTE*5 then
-		return format("%dm", (seconds/MINUTE + 1)), 1
+		return format("%dm", (seconds/MINUTE + 1))
 	elseif seconds > MINUTE then
-		return format("%d:%2.2d", seconds/MINUTE, (seconds%MINUTE)), 0.5
+		return format("%d:%2.2d", seconds/MINUTE, (seconds%MINUTE))
 	elseif seconds > 5 then
-		return format("%d", seconds%MINUTE), 0.25
+		return format("%d", seconds%MINUTE)
 	elseif seconds > 0 then
-		return format("%0.1f", seconds%MINUTE), 0.1
+		return format("%0.1f", seconds%MINUTE)
 	else
-		return "", 1
+		return ""
 	end
 end
 
@@ -34,21 +34,24 @@ function CLCDK.IsInTable(tabl, key)
 	return false
 end
 
-function CLCDK.IsOffCD(start, dur)
+function CLCDK.GetCDTime(start, dur)
 	if (dur == nil) then dur = 0 end
-	return (dur + start - CLCDK.CURRENT_TIME - CLCDK.GCD <= 0)
+	return dur + start - CLCDK.CURRENT_TIME
+end
+
+function CLCDK.IsOffCD(start, dur)	
+	return ((CLCDK.GetCDTime(start, dur) - CLCDK.GCD) <= 0)
 end
 
 function CLCDK.RuneCDs()
-	local numCool = 0
+	local numRunesReady = 0
 	for i = 1, 6 do
-		local start, dur, cool = GetRuneCooldown(i)
-		local tempTime = (dur - (CLCDK.CURRENT_TIME - start + CLCDK.GCD))
-		if (cool or tempTime < 0) then
-			numCool = numCool + 1
+		local start, dur, runeReady = GetRuneCooldown(i)
+		if (runeReady or CLCDK.IsOffCD(start, dur)) then
+			numRunesReady = numRunesReady + 1
 		end
 	end
-	return numCool;
+	return numRunesReady;
 end
 	
 function CLCDK.CheckSpec()
@@ -69,17 +72,19 @@ function CLCDK.GetSpecDisease()
 	end
 end
 
-function CLCDK.GetDisease(icon)
-	local expires = select(6, AuraUtil.FindAuraByName(CLCDK.GetSpecDisease(CLCDK.CURRENT_SPEC), "TARGET", "PLAYER"))
-	if  expires ~= nil then	
-		expires = expires - CLCDK.CURRENT_TIME 
-	end
-	return (expires == nil or expires < 2)
+function CLCDK.GetDiseaseRemaining()
+	local expires = select(6, CLCDK.FindTargetDebuff(CLCDK.GetSpecDisease(CLCDK.CURRENT_SPEC)))
+	if expires == nil then return 0 end	
+	return (expires - CLCDK.CURRENT_TIME)
 end
 
 function CLCDK.FindPlayerBuff(spellName)
+	return CLCDK.FindBuff(spellName, "player")
+end
+
+function CLCDK.FindBuff(spellName, unit)
 	for i=1,40 do
-		local name, icon, count, debuffType, duration, expirationTime = UnitBuff("PLAYER", i);
+		local name, icon, count, debuffType, duration, expirationTime = UnitBuff(unit, i);
 		if (name == spellName) then
 			return name, icon, count, debuffType, duration, expirationTime
 		end

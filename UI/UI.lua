@@ -44,7 +44,7 @@ function CLCDK.CreateUI()
 	CLCDK.Move = CLCDK.CreateIcon('CLCDK.Move', CLCDK.MainFrame, 47)
 	CLCDK.SetupMoveFunction(CLCDK.Move)
 	
-	CLCDK.Move.AOE = CLCDK.CreateIcon('CLCDK.AOE', CLCDK.Move, 47)
+	CLCDK.Move.AOE = CLCDK.CreateIcon('CLCDK.Move.AOE', CLCDK.Move, 47)
 	CLCDK.Move.AOE:SetAllPoints(CLCDK.Move)
 	CLCDK.Move.AOE.Icon:SetMask("Interface\\AddOns\\CLC_DK\\Media\\Mask")
 
@@ -70,7 +70,7 @@ function CLCDK.UpdateUI()
 	--GCD
 	local start, dur = GetSpellCooldown(CLCDK.Spells["Death Coil"])
 	if dur ~= 0 and start ~= nil then
-		CLCDK.GCD = dur - (CLCDK.CURRENT_TIME - start) + 0.1
+		CLCDK.GCD = CLCDK.GetCDTime(start, dur) + CLCDK.UPDATE_INTERVAL
 		if CLCDK_Settings.GCD then
 			CLCDK.Move.AOE.c:SetCooldown(start, dur)
 		end
@@ -81,17 +81,16 @@ function CLCDK.UpdateUI()
 	--Runes
 	CLCDK.RuneBar:SetAlpha((CLCDK_Settings.Rune and 1) or 0)
 	if CLCDK_Settings.Rune then
-		local RuneBar = ""
-		local place = 1
+		local RuneBar, cdtime = "", ""
 		for i = 1, 6 do
-			local start, cooldown = GetRuneCooldown(i)
-			local cdtime = start + cooldown - CLCDK.CURRENT_TIME
-
-			cdtime = math.ceil(cdtime)
-			if cdtime >= cooldown or cdtime >= 10 then
-				cdtime = "X"
-			elseif cdtime <= 0 then
-				cdtime = "*"
+			local start, dur, runeReady = GetRuneCooldown(i)
+			if (runeReady) then
+				cdtime = "*"			
+			else
+				cdtime = math.ceil(CLCDK.GetCDTime(start, dur))
+				if cdtime >= 10 then
+					cdtime = "X"
+				end
 			end
 			RuneBar = RuneBar .. cdtime
 		end
@@ -112,12 +111,8 @@ function CLCDK.UpdateUI()
 		CLCDK.Disease:SetAlpha(1)
 		local diseaseTime = 0;
 		if UnitCanAttack("player", "target") and (not UnitIsDead("target")) and (CLCDK.CURRENT_SPEC ~= CLCDK.SPEC_UNKNOWN) then
-			local expires = select(6, AuraUtil.FindAuraByName(CLCDK.GetSpecDisease(), "TARGET", "PLAYER"))
-			if expires ~= nil and (expires - CLCDK.CURRENT_TIME) > 0 then
-				diseaseTime = expires - CLCDK.CURRENT_TIME
-			end
+			diseaseTime = CLCDK.GetDiseaseRemaining()
 		end
-
 		CLCDK.Disease.Text:SetText(string.format(CLCDK.COLOR_GREEN .. "%.2d|r", diseaseTime))
 	else
 		CLCDK.Disease:SetAlpha(0)

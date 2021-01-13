@@ -1,30 +1,6 @@
 local name, CLCDK = ...
 
 function CLCDK.SetupMoveFunction(frame)
-	frame.Drag = CreateFrame("Button", "ResizeGrip", frame) -- Grip Buttons from Omen2
-	frame.Drag:SetFrameLevel(frame:GetFrameLevel() + 100)
-	frame.Drag:SetNormalTexture("Interface\\AddOns\\CLC_DK\\Media\\ResizeGrip")
-	frame.Drag:SetHighlightTexture("Interface\\AddOns\\CLC_DK\\Media\\ResizeGrip")
-	frame.Drag:SetWidth(26)
-	frame.Drag:SetHeight(26)
-	frame.Drag:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 7, -7)
-	frame.Drag:EnableMouse(true)
-	frame.Drag:Show()
-	frame.Drag:SetScript("OnMouseDown", function(self,button)
-		if (not CLCDK_Settings.Locked) and button == "LeftButton" then
-			mousex, mousey = GetCursorPosition()
-			resize = self:GetParent()
-		end
-	end)
-
-	frame.Drag:SetScript("OnMouseUp", function(self,button)
-		if (not CLCDK_Settings.Locked) and button == "LeftButton" then
-			self:StopMovingOrSizing()
-			CLCDK_Settings.Location[(self:GetParent()):GetName()].Scale = (self:GetParent()):GetScale()
-			resize, mousex, mousey = nil, nil, nil
-		end
-	end)
-
 	frame:EnableMouse(false)
 	frame:SetMovable(true)
 
@@ -48,13 +24,6 @@ function CLCDK.MoveFrame(self)
 	self:SetPoint(CLCDK_Settings.Location[self:GetName()].Point, CLCDK_Settings.Location[self:GetName()].Rel, CLCDK_Settings.Location[self:GetName()].RelPoint, CLCDK_Settings.Location[self:GetName()].X, CLCDK_Settings.Location[self:GetName()].Y)
 	self:SetBackdropColor(0, 0, 0, CLCDK_Settings.Trans)
 	self:EnableMouse((not CLCDK_Settings.Locked) and ((not CLCDK_Settings.LockedPieces) or (CLCDK_Settings.Location[self:GetName()].Rel == nil)))
-	if CLCDK_Settings.Locked then
-		self.Drag:SetAlpha(0)
-		self.Drag:EnableMouse(0)
-	else
-		self.Drag:SetAlpha(1)
-		self.Drag:EnableMouse(1)
-	end
 
 	if CLCDK_Settings.Location[self:GetName()].Scale ~= nil then
 		self:SetScale(CLCDK_Settings.Location[self:GetName()].Scale)

@@ -29,8 +29,7 @@ function CLCDK.UnholyMove(frame)
 	local runicPower = UnitPower("player");
 
 	-- Virulent Plague (Maintain on target [refresh using Outbreak])
-	local disease = CLCDK.GetDisease(frame)
-	if disease and numRunes >= 1 then
+	if CLCDK.GetDiseaseRemaining() < 2 and numRunes >= 1 then
 		if (frame.AOE ~= nil and (CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Unholy Blight"])))) then
 			CLCDK.SetRangeandIcon(frame.AOE.Icon, CLCDK.Spells["Unholy Blight"])
 		end
@@ -51,7 +50,7 @@ function CLCDK.UnholyMove(frame)
 	end
 
 	-- Death Coil (With Sudden Doom procs or when >80 Runic Power)
-	if (AuraUtil.FindAuraByName(CLCDK.Spells["Sudden Doom"], "PLAYER") ~= nil or runicPower >= 80) then
+	if (CLCDK.FindPlayerBuff(CLCDK.Spells["Sudden Doom"]) ~= nil or runicPower >= 80) then
 		if (frame.AOE ~= nil) then
 			CLCDK.SetRangeandIcon(frame.AOE.Icon, CLCDK.Spells["Epidemic"])
 		end
@@ -169,8 +168,7 @@ function CLCDK.BloodMove(frame)
 	end
 
 	-- Use Blood Boil if any nearby enemies do not have your Blood Plague disease, or you have 2 charges of Blood Boil.
-	local disease = CLCDK.GetDisease(frame)
-	if (disease and GetSpellCharges(CLCDK.Spells["Blood Boil"]) >= 1) then
+	if (CLCDK.GetDiseaseRemaining() < 2 and GetSpellCharges(CLCDK.Spells["Blood Boil"]) >= 1) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Blood Boil"])
 	end
 

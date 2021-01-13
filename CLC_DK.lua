@@ -13,8 +13,6 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 	local GetTime = GetTime
 	local mutex = false
 	local timeSinceLastUpdate = 0	
-	local mousex, mousey
-	local resize = nil	
 
 	CLCDK.MainFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
 	CLCDK.MainFrame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
@@ -39,19 +37,6 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 					CLCDK.UpdateUI()
 				else
 					CLCDK.MainFrame:SetAlpha(0)
-				end
-
-				if resize ~= nil then
-					local x, y = GetCursorPosition()
-					local sizex = (x - mousex + resize:GetWidth())/resize:GetWidth()
-					local sizey = (mousey - y + resize:GetHeight())/resize:GetHeight()
-					if sizex < sizey then
-						if sizex > 1 then
-							resize:SetScale(sizex)
-						end
-					elseif sizey > 1 then
-						resize:SetScale(sizey)
-					end
 				end
 				
 			elseif (not CLCDK.LOADED) and (not mutex) then
