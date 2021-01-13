@@ -83,18 +83,22 @@ function CLCDK.FindPlayerBuff(spellName)
 end
 
 function CLCDK.FindBuff(spellName, unit)
-	for i=1,40 do
+	for i = 1, 40 do
 		local name, icon, count, debuffType, duration, expirationTime = UnitBuff(unit, i);
-		if (name == spellName) then
+		if (name == nil) then
+			break
+		elseif (name == spellName) then
 			return name, icon, count, debuffType, duration, expirationTime
 		end
 	end
 end
 
 function CLCDK.FindTargetDebuff(spellName)
-	for i=1,40 do
+	for i = 1, 40 do
 		local name, icon, count, debuffType, duration, expirationTime = UnitDebuff("TARGET", i, "PLAYER");
-		if (name == spellName) then
+		if (name == nil) then
+			break
+		elseif (name == spellName) then
 			return name, icon, count, debuffType, duration, expirationTime
 		end
 	end

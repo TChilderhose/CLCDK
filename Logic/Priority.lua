@@ -155,7 +155,7 @@ function CLCDK.BloodMove(frame)
 		perch= (curh/maxh)*100
 	end
 
-	local _, _, bs_count, _, bs_duration, _ = CLCDK.FindPlayerBuff(CLCDK.Spells["Bone Shield"])
+	local _, _, bs_count, _, bs_duration = CLCDK.FindPlayerBuff(CLCDK.Spells["Bone Shield"])
 
 	-- Use Marrowrend if your Bone Shield is about to expire.
 	if ((bs_duration == nil or bs_duration < 3) and numRunes >= 2) then
