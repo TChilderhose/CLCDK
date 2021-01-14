@@ -18,7 +18,6 @@ function CLCDK.LoadCooldowns()
 			CLCDK.Spells["Mind Freeze"],
 			CLCDK.Spells["Raise Ally"],
 			CLCDK.Spells["Raise Dead"],
-			CLCDK.Spells["Strangulate"],
 			CLCDK.Spells["Unholy Strength"],
 		},
 		UnholyCDs = {
@@ -28,7 +27,6 @@ function CLCDK.LoadCooldowns()
 			CLCDK.Spells["Festering Wound"],
 			CLCDK.Spells["Outbreak"],
 			CLCDK.Spells["Runic Corruption"],
-			CLCDK.Spells["Scourge of Worlds"],
 			CLCDK.Spells["Soul Reaper"],
 			CLCDK.Spells["Sudden Doom"],
 			CLCDK.Spells["Unholy Blight"],
@@ -61,6 +59,7 @@ function CLCDK.LoadCooldowns()
 			[CLCDK.Spells["Dark Transformation"]] = {"pet", true},
 			[CLCDK.Spells["Festering Wound"]] = {"target", false},
 			[CLCDK.Spells["Runic Corruption"]] = {"player", false},
+			[CLCDK.Spells["Soul Reaper"]] = {"target", true},
 			[CLCDK.Spells["Sudden Doom"]] = {"player", false},
 			[CLCDK.Spells["Virulent Plague"]] = {"target", false},
 			[CLCDK.Spells["Unholy Blight"]] = {"player", true},
@@ -102,6 +101,11 @@ function CLCDK.LoadCooldowns()
 		Covenant = {
 			CLCDK.Spells["Fleshcraft"],
 			CLCDK.Spells["Abomination Limb"],
+		},
+		
+		--by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
+		LowDuration = {
+			CLCDK.Spells["Soul Reaper"],
 		}
 	}
 	CLCDK.PrintDebug("Cooldowns Loaded")

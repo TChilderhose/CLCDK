@@ -103,3 +103,14 @@ function CLCDK.FindTargetDebuff(spellName)
 		end
 	end
 end
+
+function CLCDK.GetUnitHealthPct(unit)
+	local curh, maxh = UnitHealth(unit), UnitHealthMax(unit)
+	local perch
+	if maxh == 0 then
+		perch = -1
+	else
+		perch= (curh/maxh)*100
+	end
+	return perch;
+end

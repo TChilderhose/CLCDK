@@ -48,10 +48,12 @@ function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 		frame.Icon:SetVertexColor(0.5, 0.5, 0.5, 1)
 
 		local color = nil
-		if iconType == CLCDK.IS_BUFF then
+		if (iconType == CLCDK.IS_BUFF) then
 			color = CLCDK.COLOR_GREEN
-		else
-			color = duration < 5 and CLCDK.COLOR_RED or CLCDK.COLOR_WHITE
+		elseif (duration < 5) then
+			color = CLCDK.COLOR_RED
+		else			
+			color = CLCDK.COLOR_WHITE
 		end
 
 		frame.Time:SetText(color .. CLCDK.GetTimeText(duration) .. "|r")
@@ -98,17 +100,20 @@ function CLCDK.HandleBuff(frame, action, target)
 end
 
 function CLCDK.HandleCooldown(frame, action)
-	local icon = GetSpellTexture(action)
 	local start, dur = GetSpellCooldown(action)
 	local chargeCount, chargeMax = GetSpellCharges(action)
-
-	local remaining = dur > CLCDK.CD_DURATION_THRESHOLD and CLCDK.GetCDTime(start, dur) or 0
 	local count = chargeMax ~= nil and chargeMax >= 1 and chargeCount or 0
 
-	if CLCDK_Settings.CDS and dur > CLCDK.CD_DURATION_THRESHOLD then
-		frame.c:SetCooldown(start, dur)
+	--by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
+	local remaining = 0	
+	if (dur > CLCDK.CD_DURATION_THRESHOLD or CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action)) then
+		if (CLCDK_Settings.CDS) then
+			frame.c:SetCooldown(start, dur)
+		end
+		remaining = CLCDK.GetCDTime(start, dur)
 	end
-	CLCDK.SetIconData(frame, icon, remaining, count, CLCDK.IS_CD)
+	
+	CLCDK.SetIconData(frame, GetSpellTexture(action), remaining, count, CLCDK.IS_CD)
 end
 
 function CLCDK.HandleAbility(frame, action)

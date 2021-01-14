@@ -51,6 +51,7 @@ function CLCDK_CDRPanel_DD_OnLoad(self, level)
 	--Template for an item in the dropdown box
 	local function CLCDK_CDRPanel_DD_Item (panel, spell, buff)
 		info = {}
+		--CLCDK.PrintDebug(spell)
 		info.text = spell .. ((buff and " (Buff)") or "")
 		info.value = spell .. ((buff and " (Buff)") or "")
 		info.func = function()

@@ -68,7 +68,7 @@ function CLCDK.UpdateUI()
 	end
 
 	--GCD
-	local start, dur = GetSpellCooldown(CLCDK.Spells["Death Coil"])
+	local start, dur = GetSpellCooldown(CLCDK.GCD_SPELL_ID)
 	if dur ~= 0 and start ~= nil then
 		CLCDK.GCD = CLCDK.GetCDTime(start, dur) + CLCDK.UPDATE_INTERVAL
 		if CLCDK_Settings.GCD then

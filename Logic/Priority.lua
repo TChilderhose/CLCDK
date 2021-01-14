@@ -27,6 +27,11 @@ function CLCDK.UnholyMove(frame)
 	--Rune Info
 	local numRunes = CLCDK.RuneCDs()
 	local runicPower = UnitPower("player");
+		
+	-- Soul Reaper when in execute range
+	if (numRunes >= 1 and CLCDK.GetUnitHealthPct("target") <= 35 and CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Soul Reaper"]))) then
+		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Soul Reaper"])
+	end	
 
 	-- Virulent Plague (Maintain on target [refresh using Outbreak])
 	if CLCDK.GetDiseaseRemaining() < 2 and numRunes >= 1 then
@@ -45,8 +50,12 @@ function CLCDK.UnholyMove(frame)
 	if numFestWounds == nil then numFestWounds = 0 end
 
 	-- Cast Apocalypse Icon Apocalypse when you have 4 stacks of Festering Wound Icon Festering Wounds
-	if (numFestWounds >= 4 and CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Apocalypse"]))) then
-		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Apocalypse"])
+	if (CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Apocalypse"]))) then
+		if (numFestWounds >= 4) then
+			return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Apocalypse"])
+		elseif (numRunes >= 2) then
+			return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Festering Strike"])		
+		end
 	end
 
 	-- Death Coil (With Sudden Doom procs or when >80 Runic Power)
