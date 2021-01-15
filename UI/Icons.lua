@@ -107,7 +107,7 @@ function CLCDK.HandleCooldown(frame, action)
 
 	--by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
 	local remaining = 0	
-	if (dur > CLCDK.CD_DURATION_THRESHOLD or (dur > 1 and CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action))) then
+	if (dur > CLCDK.CD_DURATION_THRESHOLD or (dur > 1.5 and CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action))) then
 		if (CLCDK_Settings.CDS) then
 			frame.c:SetCooldown(start, dur)
 		end

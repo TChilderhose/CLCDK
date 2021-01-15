@@ -24,23 +24,25 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 
 	CLCDK.MainFrame:SetScript("OnUpdate", function(_, elapsed)
 		timeSinceLastUpdate = timeSinceLastUpdate + elapsed
-		if (timeSinceLastUpdate > CLCDK.UPDATE_INTERVAL) then
+		if (not mutex and timeSinceLastUpdate > CLCDK.UPDATE_INTERVAL) then
+			mutex = true
+			timeSinceLastUpdate = 0
+			
 			if CLCDK.LOADED then
 				--Check if visibility conditions are met, if so update the information in the addon
-				if (not UnitHasVehicleUI("player")) and
-						((InCombatLockdown() and CLCDK_Settings.VScheme == CLCDK_OPTIONS_FRAME_VIEW_NORM) or
+				if (not UnitHasVehicleUI("player")) and (
+						(CLCDK_Settings.VScheme == CLCDK_OPTIONS_FRAME_VIEW_NORM and InCombatLockdown()) or
 						(CLCDK_Settings.VScheme == CLCDK_OPTIONS_FRAME_VIEW_SHOW) or
-						(not CLCDK_Settings.Locked) or
-						(CLCDK_Settings.VScheme ~= CLCDK_OPTIONS_FRAME_VIEW_HIDE and UnitCanAttack("player", "target") and (not UnitIsDead("target")))) then
+						(CLCDK_Settings.VScheme ~= CLCDK_OPTIONS_FRAME_VIEW_HIDE and UnitCanAttack("player", "target") and (not UnitIsDead("target"))) or
+						(not CLCDK_Settings.Locked)) then
 					CLCDK.CURRENT_TIME = GetTime()
 					CLCDK.UpdateUI()
 				else
 					CLCDK.MainFrame:SetAlpha(0)
 				end
 				
-			elseif (not CLCDK.LOADED) and (not mutex) then
+			elseif (not CLCDK.LOADED) then
 				CLCDK.PrintDebug("Initialize")
-				mutex = true
 
 				CLCDK.LoadSpells()
 				CLCDK.LoadCooldowns()
@@ -53,15 +55,15 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 
 				CLCDK.InitializeOptions()
 
-				mutex = nil
 				CLCDK.LOADED = true
 
 				collectgarbage()
 			end
 			
-			timeSinceLastUpdate = 0
+			mutex = false
 		end
 	end)
+
 else
 	CLCDK.PrintDebug("Not a DK")
 	wipe(CLCDK)
