@@ -25,8 +25,6 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 	CLCDK.MainFrame:SetScript("OnUpdate", function(_, elapsed)
 		timeSinceLastUpdate = timeSinceLastUpdate + elapsed
 		if (timeSinceLastUpdate > CLCDK.UPDATE_INTERVAL) then
-			CLCDK.CURRENT_TIME = GetTime()
-
 			if CLCDK.LOADED then
 				--Check if visibility conditions are met, if so update the information in the addon
 				if (not UnitHasVehicleUI("player")) and
@@ -34,6 +32,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 						(CLCDK_Settings.VScheme == CLCDK_OPTIONS_FRAME_VIEW_SHOW) or
 						(not CLCDK_Settings.Locked) or
 						(CLCDK_Settings.VScheme ~= CLCDK_OPTIONS_FRAME_VIEW_HIDE and UnitCanAttack("player", "target") and (not UnitIsDead("target")))) then
+					CLCDK.CURRENT_TIME = GetTime()
 					CLCDK.UpdateUI()
 				else
 					CLCDK.MainFrame:SetAlpha(0)
