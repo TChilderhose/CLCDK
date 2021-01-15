@@ -34,7 +34,7 @@ function CLCDK.UnholyMove(frame)
 	end	
 
 	-- Virulent Plague (Maintain on target [refresh using Outbreak])
-	if CLCDK.GetDiseaseRemaining() < 2 and numRunes >= 1 then
+	if CLCDK.GetSpecDiseaseRemaining() < 2 and numRunes >= 1 then
 		if (frame.AOE ~= nil and (CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Unholy Blight"])))) then
 			CLCDK.SetRangeandIcon(frame.AOE.Icon, CLCDK.Spells["Unholy Blight"])
 		end
@@ -177,7 +177,7 @@ function CLCDK.BloodMove(frame)
 	end
 
 	-- Use Blood Boil if any nearby enemies do not have your Blood Plague disease, or you have 2 charges of Blood Boil.
-	if (CLCDK.GetDiseaseRemaining() < 2 and GetSpellCharges(CLCDK.Spells["Blood Boil"]) >= 1) then
+	if (CLCDK.GetSpecDiseaseRemaining() < 2 and GetSpellCharges(CLCDK.Spells["Blood Boil"]) >= 1) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Blood Boil"])
 	end
 

@@ -35,11 +35,13 @@ function CLCDK.IsInTable(tabl, key)
 end
 
 function CLCDK.GetCDTime(start, dur)
-	if (dur == nil) then dur = 0 end
+	if (dur == nil or dur == 0) then
+		return 0
+	end
 	return dur + start - CLCDK.CURRENT_TIME
 end
 
-function CLCDK.IsOffCD(start, dur)	
+function CLCDK.IsOffCD(start, dur)
 	return ((CLCDK.GetCDTime(start, dur) - CLCDK.GCD) <= 0)
 end
 
@@ -53,7 +55,7 @@ function CLCDK.RuneCDs()
 	end
 	return numRunesReady;
 end
-	
+
 function CLCDK.CheckSpec()
 	CLCDK.CURRENT_SPEC = GetSpecialization()
 	CLCDK.MAX_RP = UnitPowerMax("Player")
@@ -72,9 +74,9 @@ function CLCDK.GetSpecDisease()
 	end
 end
 
-function CLCDK.GetDiseaseRemaining()
+function CLCDK.GetSpecDiseaseRemaining()
 	local expires = select(6, CLCDK.FindTargetDebuff(CLCDK.GetSpecDisease(CLCDK.CURRENT_SPEC)))
-	if expires == nil then return 0 end	
+	if expires == nil then return 0 end
 	return (expires - CLCDK.CURRENT_TIME)
 end
 
@@ -106,11 +108,9 @@ end
 
 function CLCDK.GetUnitHealthPct(unit)
 	local curh, maxh = UnitHealth(unit), UnitHealthMax(unit)
-	local perch
 	if maxh == 0 then
-		perch = -1
+		return -1
 	else
-		perch= (curh/maxh)*100
+		return (curh/maxh)*100
 	end
-	return perch;
 end

@@ -111,7 +111,7 @@ function CLCDK.UpdateUI()
 		CLCDK.Disease:SetAlpha(1)
 		local diseaseTime = 0;
 		if UnitCanAttack("player", "target") and (not UnitIsDead("target")) and (CLCDK.CURRENT_SPEC ~= CLCDK.SPEC_UNKNOWN) then
-			diseaseTime = CLCDK.GetDiseaseRemaining()
+			diseaseTime = CLCDK.GetSpecDiseaseRemaining()
 		end
 		CLCDK.Disease.Text:SetText(string.format(CLCDK.COLOR_GREEN .. "%.2d|r", diseaseTime))
 	else
