@@ -86,10 +86,13 @@ end
 
 function CLCDK.FindBuff(spellName, unit)
 	for i = 1, 40 do
-		local name, icon, count, debuffType, duration, expirationTime = UnitBuff(unit, i);
+		local name, icon, count, debuffType, duration, expirationTime, _, _, _, _, _, _, _, _, _, additionalData = UnitBuff(unit, i);		
 		if (name == nil) then
 			break
 		elseif (name == spellName) then
+			if ((count == nil or count == 0) and CLCDK.IsInTable(CLCDK.Cooldowns.SpecialStackCount, spellName)) then
+				count = additionalData
+			end
 			return name, icon, count, debuffType, duration, expirationTime
 		end
 	end

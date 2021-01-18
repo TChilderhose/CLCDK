@@ -74,6 +74,7 @@ function CLCDK.UpdateCD(location, frame)
 			end
 
 			if CLCDK.Cooldowns.Buffs[action] ~= nil and CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1]) then
+				frame.c:SetCooldown(0,0)
 				return
 			end
 			CLCDK.HandleCooldown(frame, action)

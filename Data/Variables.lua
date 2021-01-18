@@ -8,8 +8,8 @@ CLCDK.PLAYER_CLASS = select(2, UnitClass("player"))
 
 CLCDK.FONT = 'Interface\\AddOns\\CLC_DK\\Media\\iosevka-fixed-extendedheavy.ttf'
 CLCDK.FONT_SIZE_L = 18
-CLCDK.FONT_SIZE_M = 14
-CLCDK.FONT_SIZE_S = 10
+CLCDK.FONT_SIZE_M = 12
+CLCDK.FONT_SIZE_S = 8
 
 CLCDK.SPEC_BLOOD = 1
 CLCDK.SPEC_FROST = 2

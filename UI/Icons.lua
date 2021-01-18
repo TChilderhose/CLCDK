@@ -6,10 +6,11 @@ function CLCDK.CreateIcon(name, parent, size)
 	frame:SetHeight(size)
 	frame:SetFrameStrata("BACKGROUND")
 
-	frame.c = CreateFrame('Cooldown', nil, frame, "CooldownFrameTemplate")
+	frame.c = CreateFrame('Cooldown', name .. ".c", frame, "CooldownFrameTemplate")
 	frame.c:SetAllPoints(frame)
 	frame.c:SetDrawEdge(false)
 	frame.c:SetDrawBling(false)
+	frame.c:SetFrameStrata("BACKGROUND")
 
 	frame.Icon = frame:CreateTexture("$parentIcon", "DIALOG")
 	frame.Icon:SetAllPoints()
@@ -46,15 +47,18 @@ end
 function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 	frame.Icon:SetTexture(icon)
 	if duration > 0 then
-		frame.Icon:SetVertexColor(0.5, 0.5, 0.5, 1)
-
 		local color = nil
 		if (iconType == CLCDK.IS_BUFF) then
+			frame.Icon:SetVertexColor(0.5, 0.5, 0.5, 1)
 			color = CLCDK.COLOR_GREEN
-		elseif (duration < 5) then
-			color = CLCDK.COLOR_RED
-		else			
-			color = CLCDK.COLOR_WHITE
+			
+		elseif (iconType == CLCDK.IS_CD) then
+			frame.Icon:SetVertexColor(1, 1, 1, 1)
+			if (duration < 5) then
+				color = CLCDK.COLOR_RED
+			else			
+				color = CLCDK.COLOR_WHITE
+			end
 		end
 
 		frame.Time:SetText(color .. CLCDK.GetTimeText(duration) .. "|r")
@@ -63,7 +67,7 @@ function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 		frame.Time:SetText("")
 	end
 
-	if stackCount > 1 then
+	if stackCount ~= null and stackCount > 1 then
 		frame.Stack:SetText(stackCount)
 	else
 		frame.Stack:SetText("")

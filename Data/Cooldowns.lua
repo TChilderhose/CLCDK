@@ -106,6 +106,10 @@ function CLCDK.LoadCooldowns()
 		--by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
 		LowDuration = {
 			CLCDK.Spells["Soul Reaper"],
+		},
+		
+		SpecialStackCount = {
+			CLCDK.Spells["Fleshcraft"],
 		}
 	}
 	CLCDK.PrintDebug("Cooldowns Loaded")
