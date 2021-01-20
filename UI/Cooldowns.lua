@@ -62,7 +62,7 @@ function CLCDK.UpdateCD(location, frame)
 		if action == CLCDK_OPTIONS_CDR_CD_PRIORITY then --Priority
 			CLCDK.HandlePriority(frame)
 
-		elseif CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][CLCDK.IS_BUFF] and not CLCDK.Cooldowns.Buffs[action][2] then --Buff/DeBuff
+		elseif CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][CLCDK.IS_BUFF] and CLCDK.Cooldowns.Buffs[action] ~= null and not CLCDK.Cooldowns.Buffs[action][2] then --Buff/DeBuff
 			CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1])
 
 		elseif CLCDK.IsInTable(CLCDK.Cooldowns.Moves, action) then --Move
@@ -74,7 +74,7 @@ function CLCDK.UpdateCD(location, frame)
 			end
 
 			if CLCDK.Cooldowns.Buffs[action] ~= nil and CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1]) then
-				frame.c:SetCooldown(0,0)
+				frame.c:SetCooldown(-1,-1)
 				return
 			end
 			CLCDK.HandleCooldown(frame, action)

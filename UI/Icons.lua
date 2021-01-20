@@ -15,13 +15,13 @@ function CLCDK.CreateIcon(name, parent, size)
 	frame.Icon = frame:CreateTexture("$parentIcon", "DIALOG")
 	frame.Icon:SetAllPoints()
 	frame.Icon:SetTexture(nil)
-
-	frame.Time = frame:CreateFontString(nil, 'OVERLAY')
+	
+	frame.Time = frame.c:CreateFontString(nil, 'OVERLAY')
 	frame.Time:SetPoint("CENTER",frame, 1, 0)
 	frame.Time:SetJustifyH("CENTER")
 	frame.Time:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_M, "OUTLINE")
 
-	frame.Stack = frame:CreateFontString(nil, 'OVERLAY')
+	frame.Stack = frame.c:CreateFontString(nil, 'OVERLAY')
 	frame.Stack:SetPoint("BOTTOMRIGHT",frame, 3, 1)
 	frame.Stack:SetJustifyH("CENTER")
 	frame.Stack:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_S, "OUTLINE")
@@ -46,14 +46,13 @@ end
 
 function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 	frame.Icon:SetTexture(icon)
+	
 	if duration > 0 then
 		local color = nil
 		if (iconType == CLCDK.IS_BUFF) then
-			frame.Icon:SetVertexColor(0.5, 0.5, 0.5, 1)
 			color = CLCDK.COLOR_GREEN
 			
 		elseif (iconType == CLCDK.IS_CD) then
-			frame.Icon:SetVertexColor(1, 1, 1, 1)
 			if (duration < 5) then
 				color = CLCDK.COLOR_RED
 			else			
@@ -63,7 +62,6 @@ function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 
 		frame.Time:SetText(color .. CLCDK.GetTimeText(duration) .. "|r")
 	else
-		frame.Icon:SetVertexColor(1, 1, 1, 1)
 		frame.Time:SetText("")
 	end
 
@@ -111,7 +109,7 @@ function CLCDK.HandleCooldown(frame, action)
 
 	--by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
 	local remaining = 0	
-	if (dur > CLCDK.CD_DURATION_THRESHOLD or (dur > 1.5 and CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action))) then
+	if (dur ~= nil and (dur > CLCDK.CD_DURATION_THRESHOLD or (dur > 1.5 and CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action)))) then
 		if (CLCDK_Settings.CDS) then
 			frame.c:SetCooldown(start, dur)
 		end

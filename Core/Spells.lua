@@ -50,6 +50,7 @@ CLCDK.SPELL_LOOKUP = {
 	
 	
 	--Frost Only
+	["Breath of Sindragosa"] = 152279,
 	["Empower Rune Weapon"] = 47568,
 	["Frost Fever"] = 55095,
 	["Frost Strike"] = 49143,
@@ -59,7 +60,6 @@ CLCDK.SPELL_LOOKUP = {
 	["Obliterate"] = 49020,
 	["Pillar of Frost"] = 51271,
 	["Remorseless Winter"] = 196770,
-	["Rime"] = 59057,
 	
 
 	--Racials

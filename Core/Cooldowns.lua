@@ -33,11 +33,11 @@ function CLCDK.LoadCooldowns()
 			CLCDK.Spells["Wraith Walk"],
 		},
 		FrostCDs = {
-			CLCDK.Spells["Chilblains"],
+			CLCDK.Spells["Breath of Sindragosa"],
 			CLCDK.Spells["Empower Rune Weapon"],
-			CLCDK.Spells["Freezing Fog"],
 			CLCDK.Spells["Killing Machine"],
 			CLCDK.Spells["Pillar of Frost"],
+			CLCDK.Spells["Remorseless Winter"],
 		},
 		BloodCDs = {
 			CLCDK.Spells["Blood Boil"],
@@ -66,9 +66,12 @@ function CLCDK.LoadCooldowns()
 			[CLCDK.Spells["Wraith Walk"]] = {"player", true},
 
 			--frost
+			[CLCDK.Spells["Breath of Sindragosa"]] = {"player", true},
+			[CLCDK.Spells["Empower Rune Weapon"]] = {"player", true},
 			[CLCDK.Spells["Pillar of Frost"]] = {"player", true},
 			[CLCDK.Spells["Lichborne"]] = {"player", true},
 			[CLCDK.Spells["Killing Machine"]] = {"player", false},
+			[CLCDK.Spells["Remorseless Winter"]] = {"player", true},
 
 			--blood
 			[CLCDK.Spells["Bone Shield"]] = {"player", true},
@@ -109,6 +112,7 @@ function CLCDK.LoadCooldowns()
 		},
 		
 		SpecialStackCount = {
+			CLCDK.Spells["Anti-Magic Shell"],
 			CLCDK.Spells["Fleshcraft"],
 		}
 	}

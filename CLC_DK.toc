@@ -11,16 +11,15 @@ Localization\localization.cn.lua
 Localization\localization.tw.lua
 Localization\localization.br.lua
 
-Data\Cooldowns.lua
-Data\Variables.lua
-Data\Spells.lua
+Core\Cooldowns.lua
+Core\Variables.lua
+Core\Spells.lua
+Core\Priority.lua
+Core\Utilities.lua
 
-Options\Options.xml
-Options\Options.lua
-Options\Positioning.lua
-
-Logic\Priority.lua
-Logic\Utilities.lua
+Settings\Options.xml
+Settings\Options.lua
+Settings\Positioning.lua
 
 UI\Cooldowns.lua
 UI\Icons.lua

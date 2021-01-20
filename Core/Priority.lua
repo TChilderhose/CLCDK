@@ -94,39 +94,33 @@ end
 
 function CLCDK.FrostMove(frame)
 	--[[
-	Use Icon Sindragosa's Fury (with Pillar of Frost Icon Pillar of Frost, the proc from Rune of the Fallen Crusader Icon Rune of the Fallen Crusader, and 5 stacks of Razorice).
-	Use Remorseless Winter Icon Remorseless Winter on cooldown (for Gathering Storm Icon Gathering Storm).
-	Use Howling Blast Icon Howling Blast, only if you have a Rime Icon Rime proc.
-	Use Obliterate Icon Obliterate to avoid capping runes, or if you have a Killing Machine Icon Killing Machine proc.
-	Use Frost Strike Icon Frost Strike when you are about to cap Runic Power.
-	Use Obliterate Icon Obliterate.
-	Use Frost Strike Icon Frost Strike.
 	]]
 
 	--Rune Info
 	local numRunes = CLCDK.RuneCDs()
 	local runicPower = UnitPower("player");
 
-	if (UnitBuff("PLAYER",CLCDK.Spells["Pillar of Frost"]) ~= nil and
-		UnitBuff("PLAYER",CLCDK.Spells["Unholy Strength"]) ~= nil	and
-		UnitBuff("PLAYER",CLCDK.Spells["Razorice"]) ~= nil and
-		select(4, UnitBuff("PLAYER",CLCDK.Spells["Razorice"])) == 5) then
-		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Sindragosa's Fury"])
+	if (CLCDK.FindPlayerBuff(CLCDK.Spells["Rime"]) ~= nil or (CLCDK.GetSpecDiseaseRemaining() < 2 and numRunes >= 1)) then
+		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Howling Blast"])
 	end
-
+	
 	if (numRunes >= 1 and CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Remorseless Winter"]))) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Remorseless Winter"])
 	end
 
-	if (UnitBuff("PLAYER", CLCDK.Spells["Rime"]) ~= nil) then
-		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Howling Blast"])
-	end
-
-	if (UnitBuff("PLAYER",CLCDK.Spells["Killing Machine"]) ~= nil or numRunes > 4) then
+	if (numRunes > 4) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Obliterate"])
 	end
 
-	if (runicPower >= 80) then
+	if (runicPower >= 90) then
+		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Frost Strike"])
+	end
+	
+	if (CLCDK.FindPlayerBuff(CLCDK.Spells["Killing Machine"]) ~= nil) then
+		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Obliterate"])
+	end
+	
+	if (runicPower >= 70) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Frost Strike"])
 	end
 
