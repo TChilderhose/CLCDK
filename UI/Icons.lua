@@ -63,6 +63,7 @@ function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 		frame.Time:SetText(color .. CLCDK.GetTimeText(duration) .. "|r")
 	else
 		frame.Time:SetText("")
+		frame.c:SetCooldown(0, 0)
 	end
 
 	if stackCount ~= null and stackCount > 1 then
@@ -114,8 +115,8 @@ function CLCDK.HandleCooldown(frame, action)
 			frame.c:SetCooldown(start, dur)
 		end
 		remaining = CLCDK.GetCDTime(start, dur)
-	end
-	
+	end	
+		
 	CLCDK.SetIconData(frame, GetSpellTexture(action), remaining, count, CLCDK.IS_CD)
 end
 
