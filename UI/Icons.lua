@@ -25,10 +25,21 @@ function CLCDK.CreateIcon(name, parent, size)
 	frame.Stack:SetPoint("BOTTOMRIGHT",frame, 3, 1)
 	frame.Stack:SetJustifyH("CENTER")
 	frame.Stack:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_S, "OUTLINE")
-
+	
+	frame.start = 0
+	frame.dur = 0
+	
 	frame:EnableMouse(false)
 
 	return frame
+end
+
+function CLCDK.SetCooldown(frame, start, dur)
+	if (start ~= frame.start or dur ~= frame.dur) then
+		frame.c:SetCooldown(start, dur)
+		frame.start = start
+		frame.dur = dur
+	end
 end
 
 function CLCDK.SetRangeandIcon(icon, move)
@@ -63,7 +74,7 @@ function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 		frame.Time:SetText(color .. CLCDK.GetTimeText(duration) .. "|r")
 	else
 		frame.Time:SetText("")
-		frame.c:SetCooldown(0, 0)
+		CLCDK.SetCooldown(frame, 0, 0)
 	end
 
 	if stackCount ~= null and stackCount > 1 then
@@ -112,7 +123,7 @@ function CLCDK.HandleCooldown(frame, action)
 	local remaining = 0	
 	if (dur ~= nil and (dur > CLCDK.CD_DURATION_THRESHOLD or (dur > 1.5 and CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action)))) then
 		if (CLCDK_Settings.CDS) then
-			frame.c:SetCooldown(start, dur)
+			CLCDK.SetCooldown(frame, start, dur)
 		end
 		remaining = CLCDK.GetCDTime(start, dur)
 	end	
