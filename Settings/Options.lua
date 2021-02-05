@@ -308,7 +308,7 @@ function CLCDK.CheckSettings()
 
 	--Frame Location
 	if CLCDK_Settings.Location == nil then CLCDK_Settings.Location = {} end
-	if CLCDK_Settings.Location["CLCDK"] == nil then	CLCDK_Settings.Location["CLCDK"] = {Point = "Center", Rel = nil, RelPoint = "CENTER", X = 0, Y = -175, Scale = 1} end
+	if CLCDK_Settings.Location["CLCDK"] == nil then	CLCDK_Settings.Location["CLCDK"] = {Point = "Center", Rel = nil, RelPoint = "CENTER", X = 0, Y = -140, Scale = 1} end
 	if CLCDK_Settings.Location["CLCDK.CD1"] == nil then	CLCDK_Settings.Location["CLCDK.CD1"] = {Point = "TOPRIGHT",Rel = "CLCDK",RelPoint = "TOPLEFT", X = -1, Y = -3, Scale = 1} end
 	if CLCDK_Settings.Location["CLCDK.CD2"] == nil then	CLCDK_Settings.Location["CLCDK.CD2"] = {Point = "TOPLEFT",Rel = "CLCDK",RelPoint = "TOPRIGHT",X = 1,Y = -3, Scale = 1}	end
 	if CLCDK_Settings.Location["CLCDK.CD3"] == nil then	CLCDK_Settings.Location["CLCDK.CD3"] = {Point = "TOPRIGHT",Rel = "CLCDK.CD1",RelPoint = "TOPLEFT", X = -2, Y = 0, Scale = 1} end
@@ -333,7 +333,10 @@ function CLCDK_SetDefaults()
 	CLCDK.SetDefaults()
 end
 function CLCDK.SetDefaults()
-	if CLCDK_Settings ~= nil then wipe(CLCDK_Settings); CLCDK_Settings = nil end
+	if CLCDK_Settings ~= nil then 
+		wipe(CLCDK_Settings); 
+		CLCDK_Settings = nil 
+	end
 	CLCDK.CheckSettings()
 
 	CLCDK.OptionsRefresh()
@@ -344,7 +347,10 @@ function CLCDK_SetLocationDefault()
 	CLCDK.SetLocationDefault()
 end
 function CLCDK.SetLocationDefault()
-	if CLCDK_Settings.Location ~= nil then wipe(CLCDK_Settings.Location); CLCDK_Settings.Location = nil end
+	if CLCDK_Settings.Location ~= nil then 
+		wipe(CLCDK_Settings.Location); 
+		CLCDK_Settings.Location = nil 
+	end
 	CLCDK.CheckSettings()
 
 	CLCDK.OptionsRefresh()

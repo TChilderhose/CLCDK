@@ -42,7 +42,7 @@ function CLCDK.UnholyMove(frame)
 	end
 
 	-- Cast Dark Transformation Icon Dark Transformation off cooldown.
-	if (CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Dark Transformation"]))) then
+	if (UnitExists("pet") and CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Dark Transformation"]))) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Dark Transformation"])
 	end
 
