@@ -1,6 +1,6 @@
 local _, CLCDK = ...
 
-CLCDK.DEBUG = true
+CLCDK.DEBUG = false
 CLCDK.VERSION = 11.05
 
 CLCDK.PLAYER_RACE = select(2, UnitRace("player"))

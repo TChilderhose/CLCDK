@@ -16,12 +16,12 @@ function CLCDK.CreateIcon(name, parent, size)
 	frame.Icon:SetAllPoints()
 	frame.Icon:SetTexture(nil)
 	
-	frame.Time = frame.c:CreateFontString(nil, 'OVERLAY')
+	frame.Time = frame:CreateFontString(nil, 'OVERLAY')
 	frame.Time:SetPoint("CENTER", frame, 1, 0)
 	frame.Time:SetJustifyH("CENTER")
 	frame.Time:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_M, "OUTLINE")
 
-	frame.Stack = frame.c:CreateFontString(nil, 'OVERLAY')
+	frame.Stack = frame:CreateFontString(nil, 'OVERLAY')
 	frame.Stack:SetPoint("BOTTOMRIGHT", frame, 3, 1)
 	frame.Stack:SetJustifyH("CENTER")
 	frame.Stack:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_S, "OUTLINE")
@@ -119,16 +119,12 @@ function CLCDK.HandleCooldown(frame, action)
 	local chargeInfo = C_Spell.GetSpellCharges(action)
 	local count = chargeInfo ~= nil and chargeInfo.maxCharges >= 1 and chargeInfo.currentCharges or 0
 
+	CLCDK.SetIconData(frame, C_Spell.GetSpellTexture(action), 0, count, CLCDK.IS_CD)
+
 	--by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
-	local remaining = 0	
 	if (spellCooldownInfo ~= nil and (spellCooldownInfo.duration > CLCDK.CD_DURATION_THRESHOLD or (spellCooldownInfo.duration > 1.5 and CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action)))) then
-		if (CLCDK_Settings.CDS) then
-			CLCDK.SetCooldown(frame, spellCooldownInfo.startTime, spellCooldownInfo.duration)
-		end
-		remaining = CLCDK.GetCDTime(spellCooldownInfo.startTime, spellCooldownInfo.duration)
-	end	
-		
-	CLCDK.SetIconData(frame, C_Spell.GetSpellTexture(action), remaining, count, CLCDK.IS_CD)
+		CLCDK.SetCooldown(frame, spellCooldownInfo.startTime, spellCooldownInfo.duration)
+	end			
 end
 
 function CLCDK.HandleAbility(frame, action)

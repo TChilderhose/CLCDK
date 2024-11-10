@@ -156,7 +156,6 @@ function CLCDK.OptionsRefresh()
 	if CLCDK_Settings ~= nil and CLCDK_Settings.Version ~= nil and CLCDK_Settings.Version == CLCDK.VERSION then
 		--Frame
 		CLCDK_FramePanel_GCD:SetChecked(CLCDK_Settings.GCD)
-		CLCDK_FramePanel_CDS:SetChecked(CLCDK_Settings.CDS)
 		CLCDK_FramePanel_Range:SetChecked(CLCDK_Settings.Range)
 		CLCDK_FramePanel_Rune:SetChecked(CLCDK_Settings.Rune)
 		CLCDK_FramePanel_RP:SetChecked(CLCDK_Settings.RP)
@@ -223,7 +222,6 @@ function CLCDK.OptionsOkay()
 	if CLCDK_Settings ~= nil and (CLCDK_Settings.Version ~= nil and CLCDK_Settings.Version == CLCDK.VERSION) then
 		--Frame
 		CLCDK_Settings.GCD = CLCDK_FramePanel_GCD:GetChecked()
-		CLCDK_Settings.CDS = CLCDK_FramePanel_CDS:GetChecked()
 		CLCDK_Settings.Range = CLCDK_FramePanel_Range:GetChecked()
 		CLCDK_Settings.Rune = CLCDK_FramePanel_Rune:GetChecked()
 		CLCDK_Settings.RP = CLCDK_FramePanel_RP:GetChecked()

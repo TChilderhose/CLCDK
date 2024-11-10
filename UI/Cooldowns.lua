@@ -64,7 +64,6 @@ function CLCDK.UpdateCD(location, frame)
 				CLCDK.Cooldowns.Buffs[action] ~= nil and 
 				not CLCDK.Cooldowns.Buffs[action][2] then --Buff/DeBuff
 			CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1])
-			CLCDK.SetCooldown(frame, -1, -1)
 
 		elseif CLCDK.IsInTable(CLCDK.Cooldowns.Moves, action) then --Move
 			CLCDK.HandleAbility(frame, action)
@@ -75,7 +74,6 @@ function CLCDK.UpdateCD(location, frame)
 			end
 
 			if CLCDK.Cooldowns.Buffs[action] ~= nil and CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1]) then
-				CLCDK.SetCooldown(frame, -1, -1)
 				return
 			end
 			CLCDK.HandleCooldown(frame, action)
