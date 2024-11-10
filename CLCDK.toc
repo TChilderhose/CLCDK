@@ -1,6 +1,6 @@
-## Interface: 90002
+## Interface: 110005
 ## Author: Threk
-## Version: 9.0.2
+## Version: 11.0.5
 ## Title: CLC DK
 ## Notes: Death Knight Helper.
 ## SavedVariablesPerCharacter: CLCDK_Settings
@@ -25,4 +25,4 @@ UI\Cooldowns.lua
 UI\Icons.lua
 UI\UI.lua
 
-CLC_DK.lua
+CLCDK.lua

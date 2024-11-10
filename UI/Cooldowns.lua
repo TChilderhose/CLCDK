@@ -29,7 +29,6 @@ function CLCDK.CreateCDs()
 	--Create the Icons with desired paramaters
 	for i = 1, #CDDisplayList do
 		CLCDK.CD[CDDisplayList[i]] = CLCDK.CreateIcon(CDDisplayList[i].."Butt", CLCDK.MainFrame, 32)
-		CLCDK.CD[CDDisplayList[i]].Time:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_M, "OUTLINE")
 		CLCDK.CD[CDDisplayList[i]]:SetParent(CLCDK.CD[ceil(i/2)])
 		CLCDK.CD[CDDisplayList[i]]:EnableMouse(false)
 	end
@@ -56,14 +55,16 @@ function CLCDK.UpdateCD(location, frame)
 		CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1] ~= nil and
 		CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1] ~= CLCDK_OPTIONS_FRAME_VIEW_NONE then
 
-		local action = CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1]
-
+		local action = CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1]		
 		frame:SetAlpha(1)
 		if action == CLCDK_OPTIONS_CDR_CD_PRIORITY then --Priority
 			CLCDK.HandlePriority(frame)
 
-		elseif CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][CLCDK.IS_BUFF] and CLCDK.Cooldowns.Buffs[action] ~= null and not CLCDK.Cooldowns.Buffs[action][2] then --Buff/DeBuff
+		elseif CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][CLCDK.IS_BUFF] and 
+				CLCDK.Cooldowns.Buffs[action] ~= nil and 
+				not CLCDK.Cooldowns.Buffs[action][2] then --Buff/DeBuff
 			CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1])
+			CLCDK.SetCooldown(frame, -1, -1)
 
 		elseif CLCDK.IsInTable(CLCDK.Cooldowns.Moves, action) then --Move
 			CLCDK.HandleAbility(frame, action)
@@ -85,7 +86,8 @@ function CLCDK.UpdateCD(location, frame)
 		if frame.Icon:GetTexture() == nil then
 			frame:SetAlpha(0)
 		end
-	else
+	else		
+		CLCDK.PrintDebug("Nothing Set for ", CLCDK.CURRENT_SPEC, location)
 		CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1] = CLCDK_OPTIONS_FRAME_VIEW_NONE
 		frame:SetAlpha(0)
 	end

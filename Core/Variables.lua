@@ -1,12 +1,12 @@
 local _, CLCDK = ...
 
-CLCDK.DEBUG = false
-CLCDK.VERSION = 9.02
+CLCDK.DEBUG = true
+CLCDK.VERSION = 11.05
 
 CLCDK.PLAYER_RACE = select(2, UnitRace("player"))
 CLCDK.PLAYER_CLASS = select(2, UnitClass("player"))
 
-CLCDK.FONT = 'Interface\\AddOns\\CLC_DK\\Media\\iosevka-fixed-extendedheavy.ttf'
+CLCDK.FONT = 'Interface\\AddOns\\CLCDK\\Media\\iosevka-fixed-extendedheavy.ttf'
 CLCDK.FONT_SIZE_L = 18
 CLCDK.FONT_SIZE_M = 12
 CLCDK.FONT_SIZE_S = 8

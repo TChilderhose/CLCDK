@@ -94,32 +94,44 @@ end
 
 function CLCDK.FrostMove(frame)
 	--[[
+	Use Obliterate if you have a  Killing Machine proc.
+	Use Frost Strike to stack up your Icy Talons and  Unleashed Frenzy or if the buffs are about to fall off.
+	Use Remorseless Winter on cooldown.
+	Use Howling Blast, if you have a Rime proc.
+	Use Soul Reaper if the target is below 35% health and you have 3+ Runes.
+	Use Frost Strike, if you have 70+ Runic Power.
+	Use Obliterate.
+	Use Frost Strike.
 	]]
 
 	--Rune Info
 	local numRunes = CLCDK.RuneCDs()
 	local runicPower = UnitPower("player");
 
-	if (CLCDK.FindPlayerBuff(CLCDK.Spells["Rime"]) ~= nil or (CLCDK.GetSpecDiseaseRemaining() < 2 and numRunes >= 1)) then
-		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Howling Blast"])
+	if (numRunes >= 2 and CLCDK.FindPlayerBuff(CLCDK.Spells["Killing Machine"]) ~= nil) then
+		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Obliterate"])
 	end
 	
-	if (numRunes >= 1 and CLCDK.IsOffCD(GetSpellCooldown(CLCDK.Spells["Remorseless Winter"]))) then
+	local icyTalons = CLCDK.FindPlayerBuff(CLCDK.Spells["Icy Talons"])
+	local unleashedFrenzy = CLCDK.FindPlayerBuff(CLCDK.Spells["Unleashed Frenzy"])
+	if (icyTalons == nil or icyTalons.applications < 3 or unleashedFrenzy == nil or unleashedFrenzy.applications < 3) then
+		if (runicPower >= 30) then
+			return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Frost Strike"])
+		end
+	end
+
+	if (numRunes >= 1 and CLCDK.IsOffCD(C_Spell.GetSpellCooldown(CLCDK.Spells["Remorseless Winter"]))) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Remorseless Winter"])
 	end
 
-	if (numRunes > 4) then
-		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Obliterate"])
+	if (CLCDK.FindPlayerBuff(CLCDK.Spells["Rime"]) ~= nil) then
+		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Howling Blast"])
 	end
+	-- Soul Reaper when in execute range
+	if (numRunes >= 1 and CLCDK.GetUnitHealthPct("target") <= 35 and CLCDK.IsOffCD(C_Spell.GetSpellCooldown(CLCDK.Spells["Soul Reaper"]))) then
+		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Soul Reaper"])
+	end	
 
-	if (runicPower >= 90) then
-		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Frost Strike"])
-	end
-	
-	if (CLCDK.FindPlayerBuff(CLCDK.Spells["Killing Machine"]) ~= nil) then
-		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Obliterate"])
-	end
-	
 	if (runicPower >= 70) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Frost Strike"])
 	end
@@ -128,7 +140,7 @@ function CLCDK.FrostMove(frame)
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Obliterate"])
 	end
 
-	if (runicPower >= 25) then
+	if (runicPower >= 30) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Frost Strike"])
 	end
 

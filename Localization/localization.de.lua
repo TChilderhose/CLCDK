@@ -97,5 +97,5 @@
 	CLCDK_ABOUT_BR = "Brazilian Portuguese translation courtesy of Ansatsukenn - Gurubashi US"
 	CLCDK_ABOUT_CT = "Chinesische/Taiwanesische Übersetzung von yeah-chen"	
 	CLCDK_ABOUT_AUTHOR = "Author: Threk - Illidan US"
-	CLCDK_ABOUT_VERSION = "Version: ".. GetAddOnMetadata("CLC_DK", "Version")	
+	CLCDK_ABOUT_VERSION = "Version: ".. GetAddOnMetadata("CLCDK", "Version")	
 end

@@ -56,10 +56,13 @@ CLCDK.SPELL_LOOKUP = {
 	["Frost Strike"] = 49143,
 	["Gathering Storm"] = 194912,
 	["Howling Blast"] = 49184,
+	["Icy Talons"] = 194878,
 	["Killing Machine"] = 51124,
 	["Obliterate"] = 49020,
 	["Pillar of Frost"] = 51271,
 	["Remorseless Winter"] = 196770,
+	["Rime"] = 59057,
+	["Unleashed Frenzy"] = 376905,
 	
 
 	--Racials
@@ -94,7 +97,7 @@ function CLCDK.LoadSpells()
 
 	local info
 	for name, id in pairs (CLCDK.SPELL_LOOKUP) do
-		info = GetSpellInfo(id)
+		info = C_Spell.GetSpellInfo(id).name
 		if (info == nil) then
 			CLCDK.PrintDebug("Spell " .. name .. " is null")
 		else

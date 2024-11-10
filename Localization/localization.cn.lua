@@ -98,5 +98,5 @@
 	CLCDK_ABOUT_BR = "巴西葡萄牙语本地化 by Ansatsukenn - Gurubashi US"
 	CLCDK_ABOUT_CT = "简繁中文本地化 by yeah-chen"
 	CLCDK_ABOUT_AUTHOR = "作者: Threk - Illidan US"
-	CLCDK_ABOUT_VERSION = "版本: ".. GetAddOnMetadata("CLC_DK", "Version")
+	CLCDK_ABOUT_VERSION = "版本: ".. GetAddOnMetadata("CLCDK", "Version")
 end

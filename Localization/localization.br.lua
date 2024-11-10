@@ -1,6 +1,6 @@
 ﻿if (select(2, UnitClass("player")) == "DEATHKNIGHT" and GetLocale() == "ptBR" ) then
 	CLCDK_ADDONNAME = "CLC DK"
-	CLCDK_NAMEFONT = 'Interface\\AddOns\\CLC_DK\\Font.ttf'
+	CLCDK_NAMEFONT = 'Interface\\AddOns\\CLCDK\\Font.ttf'
 
 	CLCDK_OPTIONS_SPEC_NONE = "Presenca Atual: Nenhuma"
 	CLCDK_OPTIONS_SPEC_UNHOLY = "Presenca Atual: Profana"
@@ -98,5 +98,5 @@
 	CLCDK_ABOUT_BR = "Traducao Portugues Brasil, cortesia de Ansatsukenn - Gurubashi US"
 	CLCDK_ABOUT_CT = "Traducao Chines/Tailandes, cortesia de yeah-chen"	
 	CLCDK_ABOUT_AUTHOR = "Autor: Threk - Illidan US"
-	CLCDK_ABOUT_VERSION = "Versao: ".. GetAddOnMetadata("CLC_DK", "Version")
+	CLCDK_ABOUT_VERSION = "Versao: ".. GetAddOnMetadata("CLCDK", "Version")
 end

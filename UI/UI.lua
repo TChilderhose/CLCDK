@@ -46,7 +46,7 @@ function CLCDK.CreateUI()
 	
 	CLCDK.Move.AOE = CLCDK.CreateIcon('CLCDK.Move.AOE', CLCDK.Move, 47)
 	CLCDK.Move.AOE:SetAllPoints(CLCDK.Move)
-	CLCDK.Move.AOE.Icon:SetMask("Interface\\AddOns\\CLC_DK\\Media\\Mask")
+	CLCDK.Move.AOE.Icon:SetMask("Interface\\AddOns\\CLCDK\\Media\\Mask")
 
 	CLCDK.MoveBackdrop = CreateFrame('Frame', nil, CLCDK.MainFrame, BackdropTemplateMixin and "BackdropTemplate")
 	CLCDK.MoveBackdrop:SetHeight(47)
@@ -68,11 +68,11 @@ function CLCDK.UpdateUI()
 	end
 
 	--GCD
-	local start, dur = GetSpellCooldown(CLCDK.GCD_SPELL_ID)
-	if dur ~= 0 and start ~= nil then
-		CLCDK.GCD = CLCDK.GetCDTime(start, dur) + CLCDK.UPDATE_INTERVAL
+	local spellCooldownInfo = C_Spell.GetSpellCooldown(CLCDK.GCD_SPELL_ID)
+	if spellCooldownInfo.duration ~= 0 and spellCooldownInfo.startTime ~= nil then
+		CLCDK.GCD = CLCDK.GetCDTime(spellCooldownInfo.startTime, spellCooldownInfo.duration) + CLCDK.UPDATE_INTERVAL
 		if CLCDK_Settings.GCD then
-			CLCDK.Move.AOE.c:SetCooldown(start, dur)
+			CLCDK.Move.AOE.c:SetCooldown(spellCooldownInfo.startTime, spellCooldownInfo.duration)
 		end
 	else
 		CLCDK.GCD = 0

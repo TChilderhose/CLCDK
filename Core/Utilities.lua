@@ -41,15 +41,15 @@ function CLCDK.GetCDTime(start, dur)
 	return dur + start - CLCDK.CURRENT_TIME
 end
 
-function CLCDK.IsOffCD(start, dur)
-	return ((CLCDK.GetCDTime(start, dur) - CLCDK.GCD) <= 0)
+function CLCDK.IsOffCD(spellCooldownInfo)
+	return ((CLCDK.GetCDTime(spellCooldownInfo.startTime, spellCooldownInfo.duration) - CLCDK.GCD) <= 0)
 end
 
 function CLCDK.RuneCDs()
 	local numRunesReady = 0
 	for i = 1, 6 do
 		local start, dur, runeReady = GetRuneCooldown(i)
-		if (runeReady or CLCDK.IsOffCD(start, dur)) then
+		if (runeReady or (CLCDK.GetCDTime(start, dur) - CLCDK.GCD) <= 0) then
 			numRunesReady = numRunesReady + 1
 		end
 	end
@@ -75,36 +75,32 @@ function CLCDK.GetSpecDisease()
 end
 
 function CLCDK.GetSpecDiseaseRemaining()
-	local expires = select(6, CLCDK.FindTargetDebuff(CLCDK.GetSpecDisease(CLCDK.CURRENT_SPEC)))
-	if expires == nil then return 0 end
-	return (expires - CLCDK.CURRENT_TIME)
+	local aura = CLCDK.FindTargetDebuff(CLCDK.GetSpecDisease(CLCDK.CURRENT_SPEC))
+	if aura == nil then 
+		return 0 			
+	end
+	return (aura.expirationTime - CLCDK.CURRENT_TIME)
 end
 
-function CLCDK.FindPlayerBuff(spellName)
-	return CLCDK.FindBuff(spellName, "player")
+function CLCDK.FindPlayerBuff(spell)
+	return CLCDK.FindBuff(spell, "player")
 end
 
-function CLCDK.FindBuff(spellName, unit)
-	for i = 1, 40 do
-		local name, icon, count, debuffType, duration, expirationTime, _, _, _, _, _, _, _, _, _, additionalData = UnitBuff(unit, i);		
-		if (name == nil) then
-			break
-		elseif (name == spellName) then
-			if ((count == nil or count == 0) and CLCDK.IsInTable(CLCDK.Cooldowns.SpecialStackCount, spellName)) then
-				count = additionalData
-			end
-			return name, icon, count, debuffType, duration, expirationTime
+function CLCDK.FindBuff(spell, unit)
+	if (spell == nil) then return end
+	for i = 1, 40 do	
+		local aura = C_UnitAuras.GetBuffDataByIndex(unit, i);
+		if (aura ~= nil and aura.name == spell) then
+			return aura
 		end
 	end
 end
 
-function CLCDK.FindTargetDebuff(spellName)
+function CLCDK.FindTargetDebuff(spell)
 	for i = 1, 40 do
-		local name, icon, count, debuffType, duration, expirationTime = UnitDebuff("TARGET", i, "PLAYER");
-		if (name == nil) then
-			break
-		elseif (name == spellName) then
-			return name, icon, count, debuffType, duration, expirationTime
+		local aura = C_UnitAuras.GetDebuffDataByIndex("TARGET", i, "PLAYER");
+		if (aura ~= nil and aura.name == spell) then
+			return aura
 		end
 	end
 end

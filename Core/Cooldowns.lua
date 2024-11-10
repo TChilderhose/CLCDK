@@ -35,9 +35,12 @@ function CLCDK.LoadCooldowns()
 		FrostCDs = {
 			CLCDK.Spells["Breath of Sindragosa"],
 			CLCDK.Spells["Empower Rune Weapon"],
+			CLCDK.Spells["Icy Talons"],
 			CLCDK.Spells["Killing Machine"],
 			CLCDK.Spells["Pillar of Frost"],
 			CLCDK.Spells["Remorseless Winter"],
+			CLCDK.Spells["Rime"],
+			CLCDK.Spells["Unleashed Frenzy"],
 		},
 		BloodCDs = {
 			CLCDK.Spells["Blood Boil"],
@@ -69,9 +72,12 @@ function CLCDK.LoadCooldowns()
 			[CLCDK.Spells["Breath of Sindragosa"]] = {"player", true},
 			[CLCDK.Spells["Empower Rune Weapon"]] = {"player", true},
 			[CLCDK.Spells["Pillar of Frost"]] = {"player", true},
+			[CLCDK.Spells["Icy Talons"]] = {"player", false},
 			[CLCDK.Spells["Lichborne"]] = {"player", true},
 			[CLCDK.Spells["Killing Machine"]] = {"player", false},
 			[CLCDK.Spells["Remorseless Winter"]] = {"player", true},
+			[CLCDK.Spells["Rime"]] = {"player", false},
+			[CLCDK.Spells["Unleashed Frenzy"]] = {"player", false},
 
 			--blood
 			[CLCDK.Spells["Bone Shield"]] = {"player", true},
