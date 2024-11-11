@@ -34,7 +34,7 @@ function CLCDK.CreateIcon(name, parent, size)
 	return frame
 end
 
-function CLCDK.SetCooldown(frame, start, dur)
+function CLCDK.SetIconCooldown(frame, start, dur)
 	if (start ~= frame.start or dur ~= frame.dur) then
 		frame.c:SetCooldown(start, dur)
 		frame.start = start
@@ -74,7 +74,7 @@ function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 		frame.Time:SetText(color .. CLCDK.GetTimeText(duration) .. "|r")
 	else
 		frame.Time:SetText("")
-		CLCDK.SetCooldown(frame, 0, 0)
+		CLCDK.SetIconCooldown(frame, 0, 0)
 	end
 
 	if stackCount ~= nil and stackCount > 1 then
@@ -123,7 +123,7 @@ function CLCDK.HandleCooldown(frame, action)
 
 	--by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
 	if (spellCooldownInfo ~= nil and (spellCooldownInfo.duration > CLCDK.CD_DURATION_THRESHOLD or (spellCooldownInfo.duration > 1.5 and CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action)))) then
-		CLCDK.SetCooldown(frame, spellCooldownInfo.startTime, spellCooldownInfo.duration)
+		CLCDK.SetIconCooldown(frame, spellCooldownInfo.startTime, spellCooldownInfo.duration)
 	end			
 end
 

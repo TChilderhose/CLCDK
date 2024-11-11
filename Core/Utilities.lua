@@ -25,6 +25,17 @@ function CLCDK.GetTimeText(seconds)
 	end
 end
 
+function CLCDK.NumFormat(num)
+	if num >= 1000000000 then
+		num = format("%.2fb", num / 1000000000)
+	elseif num >= 1000000 then
+		num = format("%.2fm", num / 1000000)
+	elseif num >= 100000 then		
+		num = format("%.2fk", num / 1000)
+	end		
+	return num
+end
+
 function CLCDK.IsInTable(tabl, key)
 	for i = 1, #tabl do
 		if tabl[i] == key then
@@ -34,6 +45,25 @@ function CLCDK.IsInTable(tabl, key)
 	return false
 end
 
+function CLCDK.IsSpellNameOffCD(spellName)
+	return CLCDK.IsSpellInfoOffCD(C_Spell.GetSpellCooldown(CLCDK.Spells[spellName]))
+end
+
+function CLCDK.IsSpellInfoOffCD(spellCooldownInfo)
+	if spellCooldownInfo == nil then
+		return false
+	end
+	return CLCDK.IsOffCD(spellCooldownInfo.startTime, spellCooldownInfo.duration)
+end
+
+function CLCDK.IsOffCD(startTime, duration)
+	return CLCDK.GetCDTimeWithGCD(startTime, duration) <= 0
+end
+
+function CLCDK.GetCDTimeWithGCD(start, dur)
+	return CLCDK.GetCDTime(startTime, duration) - CLCDK.GCD
+end
+
 function CLCDK.GetCDTime(start, dur)
 	if (dur == nil or dur == 0) then
 		return 0
@@ -41,15 +71,11 @@ function CLCDK.GetCDTime(start, dur)
 	return dur + start - CLCDK.CURRENT_TIME
 end
 
-function CLCDK.IsOffCD(spellCooldownInfo)
-	return ((CLCDK.GetCDTime(spellCooldownInfo.startTime, spellCooldownInfo.duration) - CLCDK.GCD) <= 0)
-end
-
 function CLCDK.RuneCDs()
 	local numRunesReady = 0
 	for i = 1, 6 do
 		local start, dur, runeReady = GetRuneCooldown(i)
-		if (runeReady or (CLCDK.GetCDTime(start, dur) - CLCDK.GCD) <= 0) then
+		if (runeReady or CLCDK.IsOffCD(start, dur)) then
 			numRunesReady = numRunesReady + 1
 		end
 	end
@@ -82,8 +108,12 @@ function CLCDK.GetSpecDiseaseRemaining()
 	return (aura.expirationTime - CLCDK.CURRENT_TIME)
 end
 
-function CLCDK.FindPlayerBuff(spell)
-	return CLCDK.FindBuff(spell, "player")
+function CLCDK.FindPlayerBuff(spellName)
+	return CLCDK.FindBuff(CLCDK.Spells[spellName], "player")
+end
+
+function CLCDK.PlayerHasBuff(spellName)
+	return CLCDK.FindPlayerBuff(spellName) ~= nil
 end
 
 function CLCDK.FindBuff(spell, unit)

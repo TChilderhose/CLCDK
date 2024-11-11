@@ -110,11 +110,6 @@ function CLCDK_CDRPanel_DD_OnLoad(self, level)
 		-- info.value = {["Level1_Key"] = "Tier";}
 		-- UIDropDownMenu_AddButton(info)
 
-		--Covenant
-		-- info.text = CLCDK_OPTIONS_CDR_COVENANT
-		-- info.value = {["Level1_Key"] = "Covenant";}
-		-- UIDropDownMenu_AddButton(info)
-
 	--If nested menu
 	elseif level == 2 then
 		--Check what the "parent" is
@@ -139,8 +134,6 @@ function CLCDK_CDRPanel_DD_OnLoad(self, level)
 				end
 			end
 
-		elseif key == "Covenant" then
-			AddSpecCDs(CLCDK.Cooldowns.Covenant)
 		end
 	end
 end
@@ -199,9 +192,6 @@ function CLCDK.OptionsRefresh()
 		local expText = "<html><body>"
 				.."<p>"..CLCDK_ABOUT_BODY.."</p>"
 				.."<p><br/>"
-				.."|cffaaaaaa"..CLCDK_ABOUT_GER.."<br/>"
-				.."|cffaaaaaa"..CLCDK_ABOUT_BR.."<br/>"
-				.."|cffaaaaaa"..CLCDK_ABOUT_CT.."<br/>"
 				.."</p>"
 				.."</body></html>";
 		CLCDK_ABOUTHTML:SetText (expText);

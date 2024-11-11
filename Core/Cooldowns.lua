@@ -55,7 +55,9 @@ function CLCDK.LoadCooldowns()
 			--- How to use {who gets buff,  Is it also a CD?}
 			--normal
 			[CLCDK.Spells["Anti-Magic Shell"]] = {"player", true},
+			[CLCDK.Spells["Death and Decay"]] = {"player", true},
 			[CLCDK.Spells["Icebound Fortitude"]] = {"player", true},
+			[CLCDK.Spells["Obliteration"]] = {"player", false},
 			[CLCDK.Spells["Unholy Strength"]] = {"player", false},
 
 			--unholy
@@ -87,10 +89,6 @@ function CLCDK.LoadCooldowns()
 
 			--racials
 			[CLCDK.Spells["Orc"]] = {"player", true},
-
-			--covenant
-			[CLCDK.Spells["Fleshcraft"]] = {"player", true},
-			[CLCDK.Spells["Abomination Limb"]] = {"player", true},
 		},
 		Moves = {--List of Moves that can be watched when availible
 			CLCDK.Spells["Blood Boil"],
@@ -107,10 +105,6 @@ function CLCDK.LoadCooldowns()
 			CLCDK.Spells["Plague Strike"],
 			CLCDK.Spells["Scourge Strike"],
 		},
-		Covenant = {
-			CLCDK.Spells["Fleshcraft"],
-			CLCDK.Spells["Abomination Limb"],
-		},
 		
 		--by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
 		LowDuration = {
@@ -119,7 +113,6 @@ function CLCDK.LoadCooldowns()
 		
 		SpecialStackCount = {
 			CLCDK.Spells["Anti-Magic Shell"],
-			CLCDK.Spells["Fleshcraft"],
 		}
 	}
 	CLCDK.PrintDebug("Cooldowns Loaded")

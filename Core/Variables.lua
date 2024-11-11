@@ -6,7 +6,7 @@ CLCDK.VERSION = 11.05
 CLCDK.PLAYER_RACE = select(2, UnitRace("player"))
 CLCDK.PLAYER_CLASS = select(2, UnitClass("player"))
 
-CLCDK.FONT = 'Interface\\AddOns\\CLCDK\\Media\\iosevka-fixed-extendedheavy.ttf'
+CLCDK.FONT = 'Interface\\AddOns\\CLCDK\\Media\\CascadiaMono-2404.23.ttf'
 CLCDK.FONT_SIZE_L = 18
 CLCDK.FONT_SIZE_M = 12
 CLCDK.FONT_SIZE_S = 8
@@ -27,7 +27,7 @@ CLCDK.IS_BUFF = 2
 CLCDK.IS_CD = 3
 CLCDK.IS_ABILITY = 4
 
-CLCDK.UPDATE_INTERVAL = 0.066
+CLCDK.UPDATE_INTERVAL = 0.066 -- Target 15fps
 CLCDK.CD_DURATION_THRESHOLD = 10
 
 CLCDK.GCD_SPELL_ID = 61304 --This is a dummy spell specifically for the GCD.

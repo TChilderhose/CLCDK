@@ -1,6 +1,5 @@
 if select(2, UnitClass("player")) == "DEATHKNIGHT" then	
 	CLCDK_ADDONNAME = "CLC DK"
-	CLCDK_NAMEFONT = 'Interface\\AddOns\\CLCDK\\Font.ttf'
 
 	CLCDK_OPTIONS_SPEC_NONE = "Current Spec: None"
 	CLCDK_OPTIONS_SPEC_UNHOLY = "Current Spec: Unholy"
@@ -11,7 +10,6 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	
 	CLCDK_OPTIONS_FRAME = "Frame Options"	
 	CLCDK_OPTIONS_FRAME_GCD = "Show GCD Spiral"
-	CLCDK_OPTIONS_FRAME_CDS = "Show CD Spirals"
 	CLCDK_OPTIONS_FRAME_RANGE = "Show Range Colour"
 	CLCDK_OPTIONS_FRAME_RUNE = "Show Rune Bar"
 	CLCDK_OPTIONS_FRAME_RUNEBARS = "Show Graphical Runes"
@@ -72,7 +70,6 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 	CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT1 = "Trinket Slot 1"
 	CLCDK_OPTIONS_CDR_CD_TRINKETS_SLOT2 = "Trinket Slot 2"
 	CLCDK_OPTIONS_CDR_RACIAL = "Racial"
-	CLCDK_OPTIONS_CDR_COVENANT = "Covenant"
 	
 	CLCDK_OPTIONS_DT = "Disease Tracker Options"
 	CLCDK_OPTIONS_DT_ENABLE = "Enable"	
@@ -95,9 +92,6 @@ if select(2, UnitClass("player")) == "DEATHKNIGHT" then
 		
 	CLCDK_ABOUT = "About"
 	CLCDK_ABOUT_BODY = "Have Questions? Suggestions? or just want more information?<br/>Leave a comment on Curse.com or Wowinterface.com"
-	CLCDK_ABOUT_GER = "German translation courtesy of Baine"
-	CLCDK_ABOUT_BR = "Brazilian Portuguese translation courtesy of Ansatsukenn - Gurubashi US"
-	CLCDK_ABOUT_CT = "Chinese/Taiwan translation courtesy of yeah-chen"	
-	CLCDK_ABOUT_AUTHOR = "Author: Threk - Turalyon US"
+	CLCDK_ABOUT_AUTHOR = "Author: Threk - Illidan US"
 	CLCDK_ABOUT_VERSION = "Version: ".. C_AddOns.GetAddOnMetadata("CLCDK", "Version")
 end

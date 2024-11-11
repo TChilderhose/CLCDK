@@ -13,6 +13,7 @@ CLCDK.SPELL_LOOKUP = {
 	["Death's Advance"] = 48265,
 	["Icebound Fortitude"] = 48792,
 	["Lichborne"] = 49039,
+	["Obliteration"] = 207256,
 	["Sacrificial Pact"] = 327574,
 	["Mind Freeze"] = 47528,
 	["Path of Frost"] = 3714,
@@ -80,10 +81,6 @@ CLCDK.SPELL_LOOKUP = {
 	["BloodElf"] = 28730,--Arcane Torrent
 	["Goblin"] = 69070,--Rocket Jump
 
-
-	--Covenant
-	["Fleshcraft"] = 324631,
-	["Abomination Limb"] = 315443,
 }
 
 CLCDK.Spells = {}
