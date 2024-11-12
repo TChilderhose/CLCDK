@@ -60,7 +60,7 @@ function CLCDK.IsOffCD(startTime, duration)
 	return CLCDK.GetCDTimeWithGCD(startTime, duration) <= 0
 end
 
-function CLCDK.GetCDTimeWithGCD(start, dur)
+function CLCDK.GetCDTimeWithGCD(startTime, duration)
 	return CLCDK.GetCDTime(startTime, duration) - CLCDK.GCD
 end
 

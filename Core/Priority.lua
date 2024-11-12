@@ -25,7 +25,7 @@ function CLCDK.FrostMove(frame)
 	local runicPower = UnitPower("player");
 
 	-- Death and Decay - if no Death and Decay is active
-	if (frame.AOE ~= nil and numRunes >= 1 and ~CLCDK.PlayerHasBuff("Death and Decay") and CLCDK.IsSpellNameOffCD("Death and Decay")) then
+	if (frame.AOE ~= nil and numRunes >= 1 and not CLCDK.PlayerHasBuff("Death and Decay") and CLCDK.IsSpellNameOffCD("Death and Decay")) then
 		CLCDK.SetRangeandIcon(frame.AOE.Icon, CLCDK.Spells["Death and Decay"])
 	end
 

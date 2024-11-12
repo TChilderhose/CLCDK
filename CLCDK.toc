@@ -6,10 +6,6 @@
 ## SavedVariablesPerCharacter: CLCDK_Settings
 
 Localization\localization.lua
-Localization\localization.de.lua
-Localization\localization.cn.lua
-Localization\localization.tw.lua
-Localization\localization.br.lua
 
 Core\Cooldowns.lua
 Core\Variables.lua
