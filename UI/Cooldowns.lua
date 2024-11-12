@@ -51,17 +51,18 @@ function CLCDK.UpdateCD(location, frame)
 	frame.Stack:SetText("")
 
 	--If the option is not set to nothing
-	if 	CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location] ~= nil and 
-		CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1] ~= nil and
+	if 	CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location] and 
+		CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1] and
 		CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1] ~= CLCDK_OPTIONS_FRAME_VIEW_NONE then
 
 		local action = CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1]		
 		frame:SetAlpha(1)
+
 		if action == CLCDK_OPTIONS_CDR_CD_PRIORITY then --Priority
 			CLCDK.HandlePriority(frame)
 
 		elseif CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][CLCDK.IS_BUFF] and 
-				CLCDK.Cooldowns.Buffs[action] ~= nil and 
+				CLCDK.Cooldowns.Buffs[action] and 
 				not CLCDK.Cooldowns.Buffs[action][2] then --Buff/DeBuff
 			CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1])
 
@@ -73,11 +74,10 @@ function CLCDK.UpdateCD(location, frame)
 				action = CLCDK.Spells[CLCDK.PLAYER_RACE]
 			end
 
-			if CLCDK.Cooldowns.Buffs[action] ~= nil and CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1]) then
+			if CLCDK.Cooldowns.Buffs[action] and CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1]) then
 				return
 			end
 			CLCDK.HandleCooldown(frame, action)
-
 		end
 		
 		--if the icon is nil, then just hide the frame

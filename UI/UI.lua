@@ -3,7 +3,6 @@ local name, CLCDK = ...
 function CLCDK.CreateUI()
 	CLCDK.SetupMoveFunction(CLCDK.MainFrame)
 
-
 	CLCDK.RuneBar = CreateFrame("Button", "CLCDK.RuneBar", CLCDK.MainFrame, BackdropTemplateMixin and "BackdropTemplate")
 	CLCDK.RuneBar:SetHeight(23)
 	CLCDK.RuneBar:SetWidth(94)
@@ -14,7 +13,6 @@ function CLCDK.CreateUI()
 	CLCDK.RuneBar.Text:SetJustifyH("CENTER")
 	CLCDK.RuneBar.Text:SetFont(CLCDK.FONT_MONO, CLCDK.FONT_SIZE_L, "OUTLINE")
 	CLCDK.SetupMoveFunction(CLCDK.RuneBar)
-
 
 	CLCDK.RunicPower = CreateFrame("Button", "CLCDK.RunicPower", CLCDK.MainFrame, BackdropTemplateMixin and "BackdropTemplate")
 	CLCDK.RunicPower:SetHeight(23)
@@ -27,7 +25,6 @@ function CLCDK.CreateUI()
 	CLCDK.RunicPower.Text:SetFont(CLCDK.FONT_MONO, CLCDK.FONT_SIZE_L, "OUTLINE")
 	CLCDK.SetupMoveFunction(CLCDK.RunicPower)
 
-
 	CLCDK.Disease = CreateFrame("Button", "CLCDK.Disease", CLCDK.MainFrame, BackdropTemplateMixin and "BackdropTemplate")
 	CLCDK.Disease:SetHeight(24)
 	CLCDK.Disease:SetWidth(47)
@@ -39,7 +36,6 @@ function CLCDK.CreateUI()
 	CLCDK.Disease.Text:SetJustifyH("CENTER")
 	CLCDK.Disease.Text:SetFont(CLCDK.FONT_MONO, CLCDK.FONT_SIZE_L, "OUTLINE")
 	CLCDK.SetupMoveFunction(CLCDK.Disease)
-
 
 	CLCDK.Move = CLCDK.CreateIcon('CLCDK.Move', CLCDK.MainFrame, 47)
 	CLCDK.SetupMoveFunction(CLCDK.Move)
@@ -56,7 +52,6 @@ function CLCDK.CreateUI()
 	CLCDK.MoveBackdrop:SetBackdropColor(0, 0, 0, 0.5)
 	CLCDK.MoveBackdrop:SetAllPoints(CLCDK.Move)
 
-
 	CLCDK.PrintDebug("UI Created")
 end
 
@@ -69,7 +64,7 @@ function CLCDK.UpdateUI()
 
 	--GCD
 	local spellCooldownInfo = C_Spell.GetSpellCooldown(CLCDK.GCD_SPELL_ID)
-	if spellCooldownInfo.duration ~= 0 and spellCooldownInfo.startTime ~= nil then
+	if spellCooldownInfo and spellCooldownInfo.duration ~= 0 and spellCooldownInfo.startTime then
 		CLCDK.GCD = CLCDK.GetCDTime(spellCooldownInfo.startTime, spellCooldownInfo.duration) + CLCDK.UPDATE_INTERVAL
 		if CLCDK_Settings.GCD then
 			CLCDK.Move.AOE.c:SetCooldown(spellCooldownInfo.startTime, spellCooldownInfo.duration)
@@ -79,7 +74,6 @@ function CLCDK.UpdateUI()
 	end
 
 	--Runes
-	CLCDK.RuneBar:SetAlpha((CLCDK_Settings.Rune and 1) or 0)
 	if CLCDK_Settings.Rune then
 		local RuneBar, cdtime = "", ""
 		for i = 1, 6 do
@@ -95,7 +89,10 @@ function CLCDK.UpdateUI()
 			RuneBar = RuneBar .. cdtime
 		end
 
+		CLCDK.RuneBar:SetAlpha(1)
 		CLCDK.RuneBar.Text:SetText(CLCDK.COLOR_RUNES .. RuneBar .. "|r")
+	else
+		CLCDK.RuneBar:SetAlpha(0)
 	end
 
 	--RunicPower
@@ -109,11 +106,11 @@ function CLCDK.UpdateUI()
 	--Diseases
 	if CLCDK_Settings.Disease then
 		CLCDK.Disease:SetAlpha(1)
-		local diseaseTime = 0;
 		if UnitCanAttack("player", "target") and (not UnitIsDead("target")) and (CLCDK.CURRENT_SPEC ~= CLCDK.SPEC_UNKNOWN) then
-			diseaseTime = CLCDK.GetSpecDiseaseRemaining()
+			CLCDK.Disease.Text:SetText(string.format(CLCDK.COLOR_GREEN .. "%.2d|r", CLCDK.GetSpecDiseaseRemaining()))
+		else
+			CLCDK.Disease.Text:SetText(string.format(CLCDK.COLOR_GREEN .. "%.2d|r", 0))
 		end
-		CLCDK.Disease.Text:SetText(string.format(CLCDK.COLOR_GREEN .. "%.2d|r", diseaseTime))
 	else
 		CLCDK.Disease:SetAlpha(0)
 	end

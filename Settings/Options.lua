@@ -1,7 +1,8 @@
-local name, CLCDK = ...
+local _, CLCDK = ...
 
 function CLCDK.InitializeOptions()
 	CLCDK.PrintDebug("InitializeOptions Start")
+
 	CLCDK.AddCategory(CLCDK_Options)
 	CLCDK.AddCategory(CLCDK_FramePanel)
 	CLCDK.AddCategory(CLCDK_CDPanel)
@@ -13,13 +14,22 @@ function CLCDK.InitializeOptions()
 		UIDropDownMenu_Initialize(_G[CDDisplayList[i]], CLCDK_CDRPanel_DD_OnLoad)
 	end
 	UIDropDownMenu_Initialize(CLCDK_FramePanel_ViewDD, CLCDK_FramePanel_ViewDD_OnLoad)
+
 	CLCDK.PrintDebug("InitializeOptions Done")
 end
 
-function CLCDK.AddCategory(panel)
-	local category, layout = Settings.RegisterCanvasLayoutCategory(panel, panel.name, panel.name);
-	category.ID = panel.name
-	Settings.RegisterAddOnCategory(category);	
+function CLCDK.AddCategory(frame)
+	if frame.parent then
+        local category = Settings.GetCategory(frame.parent);
+        local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, frame.name, frame.name);
+        subcategory.ID = frame.name;
+        return subcategory, category;
+    else
+        local category = Settings.RegisterCanvasLayoutCategory(frame, frame.name, frame.name);
+        category.ID = frame.name;
+        Settings.RegisterAddOnCategory(category);
+        return category;
+    end
 end
 
 --function to handle the View dropdown box
@@ -73,7 +83,7 @@ function CLCDK_CDRPanel_DD_OnLoad(self, level)
 		for i = 1, #Spec do
 			if (CLCDK.Cooldowns.Buffs[Spec[i]] == nil or CLCDK.Cooldowns.Buffs[Spec[i]][2]) then
 				UIDropDownMenu_AddButton(CLCDK_CDRPanel_DD_Item(self, Spec[i]), 2)
-			elseif CLCDK.Cooldowns.Buffs[Spec[i]] ~= nil then
+			elseif CLCDK.Cooldowns.Buffs[Spec[i]] then
 				UIDropDownMenu_AddButton(CLCDK_CDRPanel_DD_Item(self, Spec[i], true), 2)
 			end
 		end
@@ -101,9 +111,9 @@ function CLCDK_CDRPanel_DD_OnLoad(self, level)
 		UIDropDownMenu_AddButton(info)
 
 		--Moves
-		-- info.text = CLCDK_OPTIONS_CDR_CD_MOVES
-		-- info.value = {["Level1_Key"] = "Moves";}
-		-- UIDropDownMenu_AddButton(info)
+		info.text = CLCDK_OPTIONS_CDR_CD_MOVES
+		info.value = {["Level1_Key"] = "Moves";}
+		UIDropDownMenu_AddButton(info)
 
 		--Tier Buffs
 		-- info.text = CLCDK_OPTIONS_CDR_CD_TIER
@@ -129,7 +139,7 @@ function CLCDK_CDRPanel_DD_OnLoad(self, level)
 
 		elseif key == "Moves" then
 			for i = 1, #CLCDK.Cooldowns.Moves do
-				if C_Spell.GetSpellTexture(CLCDK.Cooldowns.Moves[i].name) ~= nil then
+				if C_Spell.GetSpellTexture(CLCDK.Cooldowns.Moves[i].name) then
 					UIDropDownMenu_AddButton(CLCDK_CDRPanel_DD_Item(self, CLCDK.Cooldowns.Moves[i]), 2)
 				end
 			end
@@ -146,7 +156,7 @@ function CLCDK_OptionsRefresh()
 	CLCDK.OptionsRefresh()
 end
 function CLCDK.OptionsRefresh()
-	if CLCDK_Settings ~= nil and CLCDK_Settings.Version ~= nil and CLCDK_Settings.Version == CLCDK.VERSION then
+	if CLCDK_Settings and CLCDK_Settings.Version and CLCDK_Settings.Version == CLCDK.VERSION then
 		--Frame
 		CLCDK_FramePanel_GCD:SetChecked(CLCDK_Settings.GCD)
 		CLCDK_FramePanel_Range:SetChecked(CLCDK_Settings.Range)
@@ -174,14 +184,14 @@ function CLCDK.OptionsRefresh()
 		CLCDK_CDRPanel_DD_CD4:SetChecked(CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][4])
 
 		--Priority Dropdown
-		if CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_CDRPanel_DD_Priority"] ~= nil and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_CDRPanel_DD_Priority"][1] ~= nil then
+		if CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_CDRPanel_DD_Priority"] and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_CDRPanel_DD_Priority"][1] then
 			UIDropDownMenu_SetSelectedValue(CLCDK_CDRPanel_DD_Priority, CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_CDRPanel_DD_Priority"][1]..((CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_CDRPanel_DD_Priority"][CLCDK.IS_BUFF] and " (Buff)") or ""))
 			UIDropDownMenu_SetText(CLCDK_CDRPanel_DD_Priority, CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_CDRPanel_DD_Priority"][1]..((CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_CDRPanel_DD_Priority"][CLCDK.IS_BUFF] and " (Buff)") or ""))
 		end
 
 		--Cooldown Dropdown
 		for i = 1, #CDDisplayList do
-			if _G[CDDisplayList[i]] ~= nil and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]] ~= nil and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1].name ~= nil then
+			if _G[CDDisplayList[i]] and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]] and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1].name then
 				print(CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1].name)
 				UIDropDownMenu_SetSelectedValue(_G[CDDisplayList[i]], CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1].name..((CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][CLCDK.IS_BUFF] and " (Buff)") or ""))
 				UIDropDownMenu_SetText(_G[CDDisplayList[i]], CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1].name..((CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][CLCDK.IS_BUFF] and " (Buff)") or ""))
@@ -209,7 +219,7 @@ function CLCDK_OptionsOkay()
 	CLCDK.OptionsOkay()
 end
 function CLCDK.OptionsOkay()
-	if CLCDK_Settings ~= nil and (CLCDK_Settings.Version ~= nil and CLCDK_Settings.Version == CLCDK.VERSION) then
+	if CLCDK_Settings and (CLCDK_Settings.Version and CLCDK_Settings.Version == CLCDK.VERSION) then
 		--Frame
 		CLCDK_Settings.GCD = CLCDK_FramePanel_GCD:GetChecked()
 		CLCDK_Settings.Range = CLCDK_FramePanel_Range:GetChecked()
@@ -329,7 +339,7 @@ function CLCDK_SetDefaults()
 	CLCDK.SetDefaults()
 end
 function CLCDK.SetDefaults()
-	if CLCDK_Settings ~= nil then 
+	if CLCDK_Settings then 
 		wipe(CLCDK_Settings); 
 		CLCDK_Settings = nil 
 	end
@@ -343,7 +353,7 @@ function CLCDK_SetLocationDefault()
 	CLCDK.SetLocationDefault()
 end
 function CLCDK.SetLocationDefault()
-	if CLCDK_Settings.Location ~= nil then 
+	if CLCDK_Settings.Location then 
 		wipe(CLCDK_Settings.Location); 
 		CLCDK_Settings.Location = nil 
 	end
@@ -357,14 +367,13 @@ function CLCDK_CooldownDefaults()
 	CLCDK.CooldownDefaults()
 end
 function CLCDK.CooldownDefaults()
-	if CLCDK_Settings.CD ~= nil then wipe(CLCDK_Settings.CD) end
+	if CLCDK_Settings.CD then 
+		wipe(CLCDK_Settings.CD) 
+	end
+
 	CLCDK_Settings.CD = {
 		[CLCDK.SPEC_UNHOLY] = {
 			["CLCDK_CDRPanel_DD_Priority"] = {CLCDK_OPTIONS_CDR_CD_PRIORITY, nil},
-			Outbreak = true,
-			Horn = true,
-			RP = true,
-			SpecOption = true,
 
 			[1] = true,
 			["CLCDK_CDRPanel_DD_CD1_One"] = {CLCDK.Spells["Shadow Infusion"], true},
@@ -385,10 +394,6 @@ function CLCDK.CooldownDefaults()
 
 		[CLCDK.SPEC_FROST] = {
 			["CLCDK_CDRPanel_DD_Priority"] = {CLCDK_OPTIONS_CDR_CD_PRIORITY, nil},
-			Outbreak = false,
-			Horn = true,
-			RP = true,
-			SpecOption = true,
 
 			[1] = true,
 			["CLCDK_CDRPanel_DD_CD1_One"] = {CLCDK.Spells["Pillar of Frost"], nil},
@@ -409,10 +414,6 @@ function CLCDK.CooldownDefaults()
 
 		[CLCDK.SPEC_BLOOD] = {
 			["CLCDK_CDRPanel_DD_Priority"] = {CLCDK_OPTIONS_CDR_CD_PRIORITY, nil},
-			Outbreak = true,
-			Horn = false,
-			RP = true,
-			SpecOption = true,
 
 			[1] = true,
 			["CLCDK_CDRPanel_DD_CD1_One"] = {CLCDK.Spells["Bone Shield"], true},
@@ -433,10 +434,6 @@ function CLCDK.CooldownDefaults()
 
 		[CLCDK.SPEC_UNKNOWN] = {
 			["CLCDK_CDRPanel_DD_Priority"] = {CLCDK_OPTIONS_CDR_CD_PRIORITY, nil},
-			Outbreak = false,
-			Horn = true,
-			RP = true,
-			SpecOption = true,
 
 			[1] = true,
 			["CLCDK_CDRPanel_DD_CD1_One"] = {CLCDK.Spells["Horn of Winter"], nil},
@@ -462,6 +459,6 @@ end
 -----Slash Command----- 
 SLASH_CLCDK1 = '/clcdk'
 SlashCmdList["CLCDK"] = function()
-	InterfaceOptionsFrame_OpenToCategory(CLCDK_FramePanel)
+	Settings.OpenToCategory(CLCDK_FramePanel)
 	CLCDK.PrintDebug("Slash Command Used")
 end

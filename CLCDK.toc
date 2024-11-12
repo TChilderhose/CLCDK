@@ -5,10 +5,10 @@
 ## Notes: Death Knight Helper.
 ## SavedVariablesPerCharacter: CLCDK_Settings
 
+Constants.lua
+
 Localization\localization.lua
 
-Core\Cooldowns.lua
-Core\Variables.lua
 Core\Spells.lua
 Core\Priority.lua
 Core\Utilities.lua

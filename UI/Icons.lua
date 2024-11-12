@@ -43,7 +43,7 @@ function CLCDK.SetIconCooldown(frame, start, dur)
 end
 
 function CLCDK.SetRangeandIcon(icon, move)
-	if move ~= nil then
+	if move then
 		icon:SetTexture(C_Spell.GetSpellTexture(move))
 		if CLCDK_Settings.Range and C_Spell.IsSpellInRange(move, "target") == 0 then
 			icon:SetVertexColor(196/255, 30/255, 58/255, 1) --DK Red
@@ -77,7 +77,7 @@ function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 		CLCDK.SetIconCooldown(frame, 0, 0)
 	end
 
-	if stackCount ~= nil and stackCount > 1 then
+	if stackCount and stackCount > 1 then
 		frame.Stack:SetText(stackCount)
 	else
 		frame.Stack:SetText("")
@@ -85,7 +85,7 @@ function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 end
 
 function CLCDK.HandlePriority(frame)
-	if (frame.AOE ~= nil) then
+	if (frame.AOE) then
 		frame.AOE.Icon:SetTexture(nil)
 	end
 
@@ -105,7 +105,7 @@ function CLCDK.HandleBuff(frame, action, target)
 		aura = CLCDK.FindBuff(action, target)
 	end
 
-	if aura ~= nil and (aura.expirationTime - CLCDK.CURRENT_TIME) > 0 then
+	if aura and (aura.expirationTime - CLCDK.CURRENT_TIME) > 0 then
 		CLCDK.SetIconData(frame, aura.icon, (aura.expirationTime - CLCDK.CURRENT_TIME), aura.applications, CLCDK.IS_BUFF)
 		return true
 	end
@@ -117,12 +117,12 @@ end
 function CLCDK.HandleCooldown(frame, action)
 	local spellCooldownInfo = C_Spell.GetSpellCooldown(action)
 	local chargeInfo = C_Spell.GetSpellCharges(action)
-	local count = chargeInfo ~= nil and chargeInfo.maxCharges >= 1 and chargeInfo.currentCharges or 0
+	local count = chargeInfo and chargeInfo.maxCharges >= 1 and chargeInfo.currentCharges or 0
 
 	CLCDK.SetIconData(frame, C_Spell.GetSpellTexture(action), 0, count, CLCDK.IS_CD)
 
 	--by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
-	if (spellCooldownInfo ~= nil and (spellCooldownInfo.duration > CLCDK.CD_DURATION_THRESHOLD or (spellCooldownInfo.duration > 1.5 and CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action)))) then
+	if (spellCooldownInfo and (spellCooldownInfo.duration > CLCDK.CD_DURATION_THRESHOLD or (spellCooldownInfo.duration > 1.5 and CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action)))) then
 		CLCDK.SetIconCooldown(frame, spellCooldownInfo.startTime, spellCooldownInfo.duration)
 	end			
 end

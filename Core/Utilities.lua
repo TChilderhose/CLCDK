@@ -36,9 +36,9 @@ function CLCDK.NumFormat(num)
 	return num
 end
 
-function CLCDK.IsInTable(tabl, key)
-	for i = 1, #tabl do
-		if tabl[i] == key then
+function CLCDK.IsInTable(tbl, key)
+	for i = 1, #tbl do
+		if tbl[i] == key then
 			return true
 		end
 	end
@@ -73,8 +73,9 @@ end
 
 function CLCDK.RuneCDs()
 	local numRunesReady = 0
+	local start, dur, runeReady
 	for i = 1, 6 do
-		local start, dur, runeReady = GetRuneCooldown(i)
+		start, dur, runeReady = GetRuneCooldown(i)
 		if (runeReady or CLCDK.IsOffCD(start, dur)) then
 			numRunesReady = numRunesReady + 1
 		end
@@ -113,23 +114,34 @@ function CLCDK.FindPlayerBuff(spellName)
 end
 
 function CLCDK.PlayerHasBuff(spellName)
-	return CLCDK.FindPlayerBuff(spellName) ~= nil
+	return CLCDK.FindPlayerBuff(spellName)
 end
 
-function CLCDK.FindBuff(spell, unit)
-	if (spell == nil) then return end
-	for i = 1, 40 do	
-		local aura = C_UnitAuras.GetBuffDataByIndex(unit, i);
-		if (aura ~= nil and aura.name == spell) then
+function CLCDK.FindBuff(spellName, unit)
+	if (spellName == nil) then 
+		return nil
+	end
+	local aura
+	for i = 1, 99 do	
+		aura = C_UnitAuras.GetBuffDataByIndex(unit, i);
+		if aura == nil then
+			return nil
+		elseif aura.name == spellName then
 			return aura
 		end
 	end
 end
 
-function CLCDK.FindTargetDebuff(spell)
-	for i = 1, 40 do
-		local aura = C_UnitAuras.GetDebuffDataByIndex("TARGET", i, "PLAYER");
-		if (aura ~= nil and aura.name == spell) then
+function CLCDK.FindTargetDebuff(spellName)
+	if (spellName == nil) then 
+		return nil
+	end
+	local aura
+	for i = 1, 99 do
+		aura = C_UnitAuras.GetDebuffDataByIndex("TARGET", i, "PLAYER");
+		if aura == nil then
+			return nil
+		elseif aura.name == spellName then
 			return aura
 		end
 	end

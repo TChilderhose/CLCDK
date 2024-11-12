@@ -1,4 +1,4 @@
-local name, CLCDK = ...
+local _, CLCDK = ...
 
 function CLCDK.SetupMoveFunction(frame)
 	frame:EnableMouse(false)
@@ -25,7 +25,7 @@ function CLCDK.MoveFrame(self)
 	self:SetBackdropColor(0, 0, 0, CLCDK_Settings.Trans)
 	self:EnableMouse((not CLCDK_Settings.Locked) and ((not CLCDK_Settings.LockedPieces) or (CLCDK_Settings.Location[self:GetName()].Rel == nil)))
 
-	if CLCDK_Settings.Location[self:GetName()].Scale ~= nil then
+	if CLCDK_Settings.Location[self:GetName()].Scale then
 		self:SetScale(CLCDK_Settings.Location[self:GetName()].Scale)
 	else
 		CLCDK_Settings.Location[self:GetName()].Scale = 1

@@ -54,7 +54,7 @@
 			<OnShow>
 				local f = _G["CLCDK_FramePanel"];
 				if (f) then
-					InterfaceOptionsFrame_OpenToCategory (f)
+					Settings_OpenToCategory(f)
 					self:Hide();
 				end
 			</OnShow>
