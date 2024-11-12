@@ -12,7 +12,7 @@ function CLCDK.CreateUI()
 	CLCDK.RuneBar.Text = CLCDK.RuneBar:CreateFontString(nil, 'OVERLAY')
 	CLCDK.RuneBar.Text:SetPoint("TOP", CLCDK.RuneBar, "TOP", 0, -2)
 	CLCDK.RuneBar.Text:SetJustifyH("CENTER")
-	CLCDK.RuneBar.Text:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_L, "OUTLINE")
+	CLCDK.RuneBar.Text:SetFont(CLCDK.FONT_MONO, CLCDK.FONT_SIZE_L, "OUTLINE")
 	CLCDK.SetupMoveFunction(CLCDK.RuneBar)
 
 
@@ -24,7 +24,7 @@ function CLCDK.CreateUI()
 	CLCDK.RunicPower.Text = CLCDK.RunicPower:CreateFontString(nil, 'OVERLAY')
 	CLCDK.RunicPower.Text:SetPoint("TOP", CLCDK.RunicPower, "TOP", 0, -2)
 	CLCDK.RunicPower.Text:SetJustifyH("CENTER")
-	CLCDK.RunicPower.Text:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_L, "OUTLINE")
+	CLCDK.RunicPower.Text:SetFont(CLCDK.FONT_MONO, CLCDK.FONT_SIZE_L, "OUTLINE")
 	CLCDK.SetupMoveFunction(CLCDK.RunicPower)
 
 
@@ -37,7 +37,7 @@ function CLCDK.CreateUI()
 	CLCDK.Disease.Text = CLCDK.Disease:CreateFontString(nil, 'OVERLAY')
 	CLCDK.Disease.Text:SetPoint("TOP", CLCDK.Disease, "TOP", 0, -2)
 	CLCDK.Disease.Text:SetJustifyH("CENTER")
-	CLCDK.Disease.Text:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_L, "OUTLINE")
+	CLCDK.Disease.Text:SetFont(CLCDK.FONT_MONO, CLCDK.FONT_SIZE_L, "OUTLINE")
 	CLCDK.SetupMoveFunction(CLCDK.Disease)
 
 

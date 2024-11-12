@@ -19,12 +19,12 @@ function CLCDK.CreateIcon(name, parent, size)
 	frame.Time = frame:CreateFontString(nil, 'OVERLAY')
 	frame.Time:SetPoint("CENTER", frame, 1, 0)
 	frame.Time:SetJustifyH("CENTER")
-	frame.Time:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_M, "OUTLINE")
+	frame.Time:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_M, "THICKOUTLINE")
 
 	frame.Stack = frame:CreateFontString(nil, 'OVERLAY')
-	frame.Stack:SetPoint("BOTTOMRIGHT", frame, 3, 1)
+	frame.Stack:SetPoint("BOTTOMRIGHT", frame, 4, 1)
 	frame.Stack:SetJustifyH("CENTER")
-	frame.Stack:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_S, "OUTLINE")
+	frame.Stack:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_S, "THICKOUTLINE")
 	
 	frame.start = 0
 	frame.dur = 0
