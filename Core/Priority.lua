@@ -1,23 +1,22 @@
 local _, CLCDK = ...
 
 function CLCDK.GetNextMove(frame)
-	--Call correct function based on spec
 	if (CLCDK.CURRENT_SPEC == CLCDK.SPEC_UNHOLY) then
-		return CLCDK.UnholyMove(frame)
+		return UnholyMove(frame)
 	elseif (CLCDK.CURRENT_SPEC == CLCDK.SPEC_FROST) then
-		return CLCDK.FrostMove(frame)
+		return FrostMove(frame)
 	elseif (CLCDK.CURRENT_SPEC == CLCDK.SPEC_BLOOD) then
-		return CLCDK.BloodMove(frame)
+		return BloodMove(frame)
 	else
-		return CLCDK.BlankMove(frame)
+		return BlankMove(frame)
 	end
 end
 
-function CLCDK.UnholyMove(frame)
+local function UnholyMove(frame)
 	return frame.Icon:SetTexture(nil)
 end
 
-function CLCDK.FrostMove(frame)
+local function FrostMove(frame)
 	--https://www.method.gg/guides/frost-death-knight/playstyle-and-rotation
 
 	--Rune Info
@@ -25,25 +24,25 @@ function CLCDK.FrostMove(frame)
 	local runicPower = UnitPower("player");
 
 	-- Death and Decay - if no Death and Decay is active
-	if (frame.AOE and numRunes >= 1 and not CLCDK.PlayerHasBuff("Death and Decay") and CLCDK.IsSpellNameOffCD("Death and Decay")) then
+	if (frame.AOE and numRunes >= 1 and not CLCDK.GetPlayerBuff("Death and Decay") and CLCDK.IsSpellNameOffCD("Death and Decay")) then
 		CLCDK.SetRangeandIcon(frame.AOE.Icon, CLCDK.Spells["Death and Decay"])
 	end
 
 	-- Obliterate - if you have Killing Machine
-	if (numRunes >= 2 and CLCDK.PlayerHasBuff("Killing Machine")) then
+	if (numRunes >= 2 and CLCDK.GetPlayerBuff("Killing Machine")) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Obliterate"])
 	end
 
 	-- Frost Strike - If you are about to lose Icy Talons
 	if (runicPower >= 30) then
-		local icyTalons = CLCDK.FindPlayerBuff("Icy Talons")
+		local icyTalons = CLCDK.GetPlayerBuff("Icy Talons")
 		if (icyTalons == nil or icyTalons.applications < 3 ) then
 			return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Frost Strike"])
 		end
 	end
 
 	-- Obliteration Mode
-	if (CLCDK.PlayerHasBuff("Obliteration")) then
+	if (CLCDK.GetPlayerBuff("Obliteration")) then
 
 		-- Frost Strike - if you have =< 1 Rune
 		if (numRunes <= 1 and runicPower >= 30) then
@@ -51,7 +50,7 @@ function CLCDK.FrostMove(frame)
 		end
 
 		-- Howling Blast - if you have a Rime proc to trigger Killing Machine
-		if (CLCDK.PlayerHasBuff("Rime")) then
+		if (CLCDK.GetPlayerBuff("Rime")) then
 			return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Howling Blast"])
 		end
 
@@ -83,7 +82,7 @@ function CLCDK.FrostMove(frame)
 		end
 
 		-- Howling Blast - if you have a Rime proc
-		if (CLCDK.PlayerHasBuff("Rime")) then
+		if (CLCDK.GetPlayerBuff("Rime")) then
 			return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Howling Blast"])
 		end	
 	
@@ -107,12 +106,12 @@ function CLCDK.FrostMove(frame)
 	return frame.Icon:SetTexture(nil)
 end
 
-function CLCDK.BloodMove(frame)
+local function BloodMove(frame)
 	
 	return frame.Icon:SetTexture(nil)
 end
 
-function CLCDK.BlankMove(frame)
+local function BlankMove(frame)
 	
 	return frame.Icon:SetTexture(nil)
 end

@@ -116,10 +116,10 @@ function CLCDK.UpdateUI()
 	end
 
 	--Priority Icon
-	if CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_CDRPanel_DD_Priority"][1] ~= CLCDK_OPTIONS_FRAME_VIEW_NONE then
+	if CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"][1] ~= CLCDK_OPTIONS_FRAME_VIEW_NONE then
 		CLCDK.Move:SetAlpha(1)
 		CLCDK.MoveBackdrop:SetAlpha(1)
-		CLCDK.UpdateCD("CLCDK_CDRPanel_DD_Priority", CLCDK.Move)
+		CLCDK.UpdateCD("CLCDK_Options_DD_Priority", CLCDK.Move)
 	else
 		CLCDK.Move:SetAlpha(0)
 		CLCDK.MoveBackdrop:SetAlpha(0)

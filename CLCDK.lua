@@ -69,9 +69,5 @@ else
 	wipe(CLCDK)
 	CLCDK = nil
 	CLCDK_Options = nil
-	CLCDK_FramePanel = nil
-	CLCDK_CDRPanel = nil
-	CLCDK_CDPanel = nil
-	CLCDK_ABOUTPanel = nil
 	collectgarbage()
 end

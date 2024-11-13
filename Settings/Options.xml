@@ -24,26 +24,26 @@
 	</Button>
 	
 	<EditBox name="CLCK_EditBoxTemplate" virtual="true" autoFocus="false" inherits="InputBoxTemplate">
-			<Size><AbsDimension x="25" y="28"/></Size>
-			<Layers>
-				<Layer level="ARTWORK">
-					<FontString name="$Parent_Text" inherits="GameFontHighlight">
-					  <Anchors><Anchor point="LEFT" relativePoint="RIGHT"><Offset><AbsDimension x="5" y="1"/></Offset></Anchor></Anchors>
-					</FontString>
-				</Layer>
-			</Layers>					
-			<Scripts>
-				<OnEnterPressed>
-					CLCDK_OptionsOkay()
-					self:ClearFocus()
-				</OnEnterPressed>
-				<OnEscapePressed>
-					CLCDK_OptionsOkay()
-					self:ClearFocus()
-				</OnEscapePressed>
-			</Scripts>				
-		</EditBox>
-	
+		<Size><AbsDimension x="25" y="28"/></Size>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString name="$Parent_Text" inherits="GameFontHighlight">
+					<Anchors><Anchor point="LEFT" relativePoint="RIGHT"><Offset><AbsDimension x="5" y="1"/></Offset></Anchor></Anchors>
+				</FontString>
+			</Layer>
+		</Layers>					
+		<Scripts>
+			<OnEnterPressed>
+				CLCDK_OptionsOkay()
+				self:ClearFocus()
+			</OnEnterPressed>
+			<OnEscapePressed>
+				CLCDK_OptionsOkay()
+				self:ClearFocus()
+			</OnEscapePressed>
+		</Scripts>				
+	</EditBox>
+		
 	<Frame name="CLCDK_Options">
 		<Scripts>
 			<OnLoad>
@@ -51,87 +51,219 @@
 				self.okay = function() CLCDK_OptionsOkay(); end
 				self.default = function() CLCDK_SetDefaults(); end	
 			</OnLoad>
-			<OnShow>
-				local f = _G["CLCDK_FramePanel"];
-				if (f) then
-					Settings_OpenToCategory(f)
-					self:Hide();
-				end
-			</OnShow>
-		</Scripts>
-	</Frame>
-	
-	<Frame name="CLCDK_FramePanel">
-		<Scripts>
-			<OnLoad>
-				self.name = CLCDK_OPTIONS_FRAME	
-				self.parent = "CLC DK"
-			</OnLoad>
-			<OnShow>
-				local f = _G["CLCDK_CDRPanel"];
-				if (f) then	f:Hide();end
-				local f = _G["CLCDK_CDPanel"];
-				if (f) then	f:Hide();end
-				local f = _G["CLCDK_DTPanel"];
-				if (f) then	f:Hide();end
-			</OnShow>
 		</Scripts>
 	
 		<Layers>
 			<Layer level="ARTWORK">
-				<FontString name="CLCDK_CDRPanel_DD_Title" inherits="GameFontNormalLarge" text="CLCDK_ADDONNAME">
+				<FontString name="CLCDK_Options_DD_Title" inherits="GameFontNormalLarge" text="CLCDK_ADDONNAME">
 					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15" /></Offset></Anchor></Anchors>
+				</FontString>
+			</Layer>
+			
+			<Layer level="ARTWORK">
+				<FontString name="CLCDK_Options_Title_Spec" inherits="GameFontDisableSmall">
+					<Anchors><Anchor point="LEFT" relativeTo="CLCDK_Options_DD_Title" relativePoint="RIGHT"><Offset><AbsDimension x="5" y="0" /></Offset></Anchor></Anchors>
 				</FontString>
 			</Layer>
 		</Layers>		
 
-		<Frames>	
-			<!--GCD -->	
-			<CheckButton name="CLCDK_FramePanel_GCD" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_Title"><Offset><AbsDimension x="0" y="-30"/></Offset></Anchor></Anchors>
+		<Frames>				
+			<!--Priority DD-->	
+			<Button name="CLCDK_Options_DD_Priority" inherits="CLCK_DropDownTemplate">				
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_Title" ><Offset><AbsDimension x="-16" y="-40"/></Offset></Anchor></Anchors>
+				<Scripts>				
+					<OnLoad>
+						CLCDK_Options_DD_Priority_Text:SetText(CLCDK_OPTIONS_CDR_PRIORITY)
+						UIDropDownMenu_SetWidth(self, 160, 5)
+					</OnLoad>
+                </Scripts>
+            </Button>	
+			
+			<!--CD -->	
+			<CheckButton name="CLCDK_Options_DD_CD1" inherits="CLCK_CheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_Priority"><Offset><AbsDimension x="15" y="-50"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_GCD_Text:SetText(CLCDK_OPTIONS_FRAME_GCD)
+						CLCDK_Options_DD_CD1_Text:SetText(CLCDK_OPTIONS_CDR_CD1)
+					</OnLoad>
+				</Scripts>
+			</CheckButton>	
+			
+			<!--CD1_One DD -->			
+			<Button name="CLCDK_Options_DD_CD1_One" inherits="CLCK_DropDownTemplate">				
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD1"><Offset><AbsDimension x="-15" y="-42"/></Offset></Anchor></Anchors>						
+				<Scripts>				
+					<OnLoad>
+						CLCDK_Options_DD_CD1_One_Text:SetText(CLCDK_OPTIONS_CDR_CD_ONE)
+						UIDropDownMenu_SetWidth(self, 160, 5)
+					</OnLoad>
+                </Scripts>
+            </Button>
+			
+			<!-- CD1_Two DD -->			
+			<Button name="CLCDK_Options_DD_CD1_Two" inherits="CLCK_DropDownTemplate">				
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD1_One"><Offset><AbsDimension x="0" y="-45"/></Offset></Anchor></Anchors>
+				<Scripts>				
+					<OnLoad>
+						CLCDK_Options_DD_CD1_Two_Text:SetText(CLCDK_OPTIONS_CDR_CD_TWO)
+						UIDropDownMenu_SetWidth(self, 160, 5)
+					</OnLoad>
+                </Scripts>
+            </Button>	
+
+			<!--CD2-->	
+			<CheckButton name="CLCDK_Options_DD_CD2" inherits="CLCK_CheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD1"><Offset><AbsDimension x="200" y="0"/></Offset></Anchor></Anchors>
+				<Scripts>
+					<OnLoad>
+						CLCDK_Options_DD_CD2_Text:SetText(CLCDK_OPTIONS_CDR_CD2)
+					</OnLoad>
+				</Scripts>
+			</CheckButton>	
+			
+			<!--CD2_One DD -->			
+			<Button name="CLCDK_Options_DD_CD2_One" inherits="CLCK_DropDownTemplate">				
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD2"><Offset><AbsDimension x="-15" y="-42"/></Offset></Anchor></Anchors>
+				<Scripts>				
+					<OnLoad>
+						CLCDK_Options_DD_CD2_One_Text:SetText(CLCDK_OPTIONS_CDR_CD_ONE)
+						UIDropDownMenu_SetWidth(self, 160, 5)
+					</OnLoad>
+                </Scripts>
+            </Button>
+			
+			<!-- CD2_Two DD -->			
+			<Button name="CLCDK_Options_DD_CD2_Two" inherits="CLCK_DropDownTemplate">				
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD2_One" ><Offset><AbsDimension x="0" y="-45"/></Offset></Anchor></Anchors>
+				<Scripts>				
+					<OnLoad>
+						CLCDK_Options_DD_CD2_Two_Text:SetText(CLCDK_OPTIONS_CDR_CD_TWO)
+						UIDropDownMenu_SetWidth(self, 160, 5)
+					</OnLoad>
+                </Scripts>
+            </Button>		
+			
+			<!--CD3 -->	
+			<CheckButton name="CLCDK_Options_DD_CD3" inherits="CLCK_CheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD1_Two"><Offset><AbsDimension x="15" y="-50"/></Offset></Anchor></Anchors>
+				<Scripts>
+					<OnLoad>
+						CLCDK_Options_DD_CD3_Text:SetText(CLCDK_OPTIONS_CDR_CD3)
+					</OnLoad>
+				</Scripts>
+			</CheckButton>	
+			
+			<!--CD3_One DD -->			
+			<Button name="CLCDK_Options_DD_CD3_One" inherits="CLCK_DropDownTemplate">				
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD3"><Offset><AbsDimension x="-15" y="-42"/></Offset></Anchor></Anchors>						
+				<Scripts>				
+					<OnLoad>
+						CLCDK_Options_DD_CD3_One_Text:SetText(CLCDK_OPTIONS_CDR_CD_ONE)
+						UIDropDownMenu_SetWidth(self, 160, 5)
+					</OnLoad>
+                </Scripts>
+            </Button>
+			
+			<!-- CD3_Two DD -->			
+			<Button name="CLCDK_Options_DD_CD3_Two" inherits="CLCK_DropDownTemplate">				
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD3_One"><Offset><AbsDimension x="0" y="-45"/></Offset></Anchor></Anchors>
+				<Scripts>				
+					<OnLoad>
+						CLCDK_Options_DD_CD3_Two_Text:SetText(CLCDK_OPTIONS_CDR_CD_TWO)
+						UIDropDownMenu_SetWidth(self, 160, 5)
+					</OnLoad>
+                </Scripts>
+            </Button>	
+
+			<!--CD4-->	
+			<CheckButton name="CLCDK_Options_DD_CD4" inherits="CLCK_CheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD3"><Offset><AbsDimension x="200" y="0"/></Offset></Anchor></Anchors>
+				<Scripts>
+					<OnLoad>
+						CLCDK_Options_DD_CD4_Text:SetText(CLCDK_OPTIONS_CDR_CD4)
+					</OnLoad>
+				</Scripts>
+			</CheckButton>	
+			
+			<!--CD4_One DD -->			
+			<Button name="CLCDK_Options_DD_CD4_One" inherits="CLCK_DropDownTemplate">				
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD4"><Offset><AbsDimension x="-15" y="-42"/></Offset></Anchor></Anchors>
+				<Scripts>				
+					<OnLoad>
+						CLCDK_Options_DD_CD4_One_Text:SetText(CLCDK_OPTIONS_CDR_CD_ONE)
+						UIDropDownMenu_SetWidth(self, 160, 5)
+					</OnLoad>
+                </Scripts>
+            </Button>
+			
+			<!-- CD4_Two DD -->			
+			<Button name="CLCDK_Options_DD_CD4_Two" inherits="CLCK_DropDownTemplate">				
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_DD_CD4_One" ><Offset><AbsDimension x="0" y="-45"/></Offset></Anchor></Anchors>
+				<Scripts>				
+					<OnLoad>
+						CLCDK_Options_DD_CD4_Two_Text:SetText(CLCDK_OPTIONS_CDR_CD_TWO)
+						UIDropDownMenu_SetWidth(self, 160, 5)
+					</OnLoad>
+                </Scripts>
+            </Button>					
+			
+			<!--Reset -->	
+			<Button name="CLCDK_Options_Reset" inherits="UIPanelButtonTemplate"  Text="CLCDK_OPTIONS_RESET">
+				<Size><AbsDimension x="120" y="22"/></Size>
+				<Anchors><Anchor point="BOTTOMLEFT"><Offset><AbsDimension x="15" y="15" /></Offset></Anchor></Anchors>
+				<Scripts>
+					<OnClick>CLCDK_SetDefaults()</OnClick>
+				</Scripts>
+			</Button>  
+		</Frames>	
+
+		<Frames>	
+			<!--GCD -->	
+			<CheckButton name="CLCDK_Options_GCD" inherits="CLCK_CheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="0" y="-30"/></Offset></Anchor></Anchors>
+				<Scripts>
+					<OnLoad>
+						CLCDK_Options_GCD_Text:SetText(CLCDK_OPTIONS_FRAME_GCD)
 					</OnLoad>
 				</Scripts>
 			</CheckButton>	
 						
 			<!--Range -->	
-			<CheckButton name="CLCDK_FramePanel_Range" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_GCD"><Offset><AbsDimension x="0" y="-35"/></Offset></Anchor></Anchors>
+			<CheckButton name="CLCDK_Options_Range" inherits="CLCK_CheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_GCD"><Offset><AbsDimension x="0" y="-35"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_Range_Text:SetText(CLCDK_OPTIONS_FRAME_RANGE)
+						CLCDK_Options_Range_Text:SetText(CLCDK_OPTIONS_FRAME_RANGE)
 					</OnLoad>
 				</Scripts>
 			</CheckButton>	
 			
 			<!--Rune -->	
-			<CheckButton name="CLCDK_FramePanel_Rune" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_Range"><Offset><AbsDimension x="0" y="-35"/></Offset></Anchor></Anchors>
+			<CheckButton name="CLCDK_Options_Rune" inherits="CLCK_CheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_Range"><Offset><AbsDimension x="0" y="-35"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_Rune_Text:SetText(CLCDK_OPTIONS_FRAME_RUNE)
+						CLCDK_Options_Rune_Text:SetText(CLCDK_OPTIONS_FRAME_RUNE)
 					</OnLoad>
 				</Scripts>
 			</CheckButton>					
 			
 			<!--RP -->	
-			<CheckButton name="CLCDK_FramePanel_RP" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_Rune"><Offset><AbsDimension x="0" y="-35"/></Offset></Anchor></Anchors>
+			<CheckButton name="CLCDK_Options_RP" inherits="CLCK_CheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_Rune"><Offset><AbsDimension x="0" y="-35"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_RP_Text:SetText(CLCDK_OPTIONS_FRAME_RP)
+						CLCDK_Options_RP_Text:SetText(CLCDK_OPTIONS_FRAME_RP)
 					</OnLoad>
 				</Scripts>
 			</CheckButton>	
 			
 			<!--Disease -->	
-			<CheckButton name="CLCDK_FramePanel_Disease" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_RP"><Offset><AbsDimension x="0" y="-35"/></Offset></Anchor></Anchors>
+			<CheckButton name="CLCDK_Options_Disease" inherits="CLCK_CheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_RP"><Offset><AbsDimension x="0" y="-35"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_Disease_Text:SetText(CLCDK_OPTIONS_FRAME_DISEASE)
+						CLCDK_Options_Disease_Text:SetText(CLCDK_OPTIONS_FRAME_DISEASE)
 					</OnLoad>
 				</Scripts>
 			</CheckButton>	
@@ -139,77 +271,77 @@
 			
 		
 			<!-- Lock -->
-			<CheckButton name="CLCDK_FramePanel_Locked" inherits="CLCK_CheckButtonTemplate">
+			<CheckButton name="CLCDK_Options_Locked" inherits="CLCK_CheckButtonTemplate">
 				<Anchors><Anchor point="TOPRIGHT" ><Offset><AbsDimension x="-170" y="-45"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_Locked_Text:SetText(CLCDK_OPTIONS_FRAME_LOCKED)
+						CLCDK_Options_Locked_Text:SetText(CLCDK_OPTIONS_FRAME_LOCKED)
 					</OnLoad>
 				</Scripts>
 			</CheckButton>	
 
 			<!-- Lock Pieces Together -->
-			<CheckButton name="CLCDK_FramePanel_LockedPieces" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_Locked" ><Offset><AbsDimension x="0" y="-35"/></Offset></Anchor></Anchors>
+			<CheckButton name="CLCDK_Options_LockedPieces" inherits="CLCK_CheckButtonTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_Locked" ><Offset><AbsDimension x="0" y="-35"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_LockedPieces_Text:SetText(CLCDK_OPTIONS_FRAME_LOCKEDPIECES)
+						CLCDK_Options_LockedPieces_Text:SetText(CLCDK_OPTIONS_FRAME_LOCKEDPIECES)
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
 
 			<!--View Dropdown -->			
-			<Button name="CLCDK_FramePanel_ViewDD" inherits="CLCK_DropDownTemplate">				
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_LockedPieces" ><Offset><AbsDimension x="-15" y="-50"/></Offset></Anchor></Anchors>								
+			<Button name="CLCDK_Options_ViewDD" inherits="CLCK_DropDownTemplate">				
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_LockedPieces" ><Offset><AbsDimension x="-15" y="-50"/></Offset></Anchor></Anchors>								
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_ViewDD_Text:SetText(CLCDK_OPTIONS_FRAME_VIEW)
+						CLCDK_Options_ViewDD_Text:SetText(CLCDK_OPTIONS_FRAME_VIEW)
 						UIDropDownMenu_SetWidth(self, 125, 5)
 					</OnLoad>
 				</Scripts>
             </Button>
 
 			<!--Scale -->		
-			<EditBox name="CLCDK_FramePanel_Scale" inherits="CLCK_EditBoxTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_ViewDD" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="25" y="-5"/></Offset></Anchor></Anchors>
+			<EditBox name="CLCDK_Options_Scale" inherits="CLCK_EditBoxTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_ViewDD" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="25" y="-5"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_Scale_Text:SetText(CLCDK_OPTIONS_FRAME_SCALE)
+						CLCDK_Options_Scale_Text:SetText(CLCDK_OPTIONS_FRAME_SCALE)
 					</OnLoad>
 				</Scripts>			
 			</EditBox>
 
 			<!--Trans -->					
-			<EditBox name="CLCDK_FramePanel_NormalTrans" inherits="CLCK_EditBoxTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_Scale" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+			<EditBox name="CLCDK_Options_NormalTrans" inherits="CLCK_EditBoxTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_Scale" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_NormalTrans_Text:SetText(CLCDK_OPTIONS_FRAME_NORMALTRANS)
+						CLCDK_Options_NormalTrans_Text:SetText(CLCDK_OPTIONS_FRAME_NORMALTRANS)
 					</OnLoad>
 				</Scripts>		
 			</EditBox>
 			
-			<EditBox name="CLCDK_FramePanel_Trans" inherits="CLCK_EditBoxTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_NormalTrans" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+			<EditBox name="CLCDK_Options_Trans" inherits="CLCK_EditBoxTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_NormalTrans" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_Trans_Text:SetText(CLCDK_OPTIONS_FRAME_TRANS)
+						CLCDK_Options_Trans_Text:SetText(CLCDK_OPTIONS_FRAME_TRANS)
 					</OnLoad>
 				</Scripts>	
 			</EditBox>
 			
 			<!--Trans Combat -->		
-			<EditBox name="CLCDK_FramePanel_CombatTrans" inherits="CLCK_EditBoxTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_FramePanel_Trans" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+			<EditBox name="CLCDK_Options_CombatTrans" inherits="CLCK_EditBoxTemplate">
+				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_Options_Trans" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad>
-						CLCDK_FramePanel_CombatTrans_Text:SetText(CLCDK_OPTIONS_FRAME_COMBATTRANS)
+						CLCDK_Options_CombatTrans_Text:SetText(CLCDK_OPTIONS_FRAME_COMBATTRANS)
 					</OnLoad>
 				</Scripts>		
 			</EditBox>
 
 			<!--Reset -->	
-			<Button name="CLCDK_FramePanel_Reset" inherits="UIPanelButtonTemplate"  Text="CLCDK_OPTIONS_RESET">
+			<Button name="CLCDK_Options_Reset" inherits="UIPanelButtonTemplate"  Text="CLCDK_OPTIONS_RESET">
 				<Size><AbsDimension x="120" y="22"/></Size>
 				<Anchors><Anchor point="BOTTOMLEFT"><Offset><AbsDimension x="15" y="15" /></Offset></Anchor></Anchors>
 				<Scripts>
@@ -218,204 +350,16 @@
 			</Button>   
 
 			<!--Location Reset -->	
-			<Button name="CLCDK_FramePanel_LocationReset" inherits="UIPanelButtonTemplate"  Text="CLCDK_OPTIONS_RESETLOCATION">
+			<Button name="CLCDK_Options_LocationReset" inherits="UIPanelButtonTemplate"  Text="CLCDK_OPTIONS_RESETLOCATION">
 				<Size><AbsDimension x="120" y="22"/></Size>
-				<Anchors><Anchor point="LEFT" relativeTo="CLCDK_FramePanel_Reset" relativePoint="RIGHT"><Offset><AbsDimension x="5" y="0" /></Offset></Anchor></Anchors>
+				<Anchors><Anchor point="LEFT" relativeTo="CLCDK_Options_Reset" relativePoint="RIGHT"><Offset><AbsDimension x="5" y="0" /></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnClick>CLCDK_SetLocationDefault()</OnClick>
 				</Scripts>
 			</Button> 
 		</Frames>		
-	</Frame>
-		
-	<Frame name="CLCDK_CDPanel">
-		<Scripts>
-			<OnLoad>
-				self.name = CLCDK_OPTIONS_CD
-				self.parent = "CLC DK"		
-			</OnLoad>
-		</Scripts>
-	
-		<Layers>
-			<Layer level="ARTWORK">
-				<FontString name="CLCDK_CDPanel_DD_Title" inherits="GameFontNormalLarge" text="CLCDK_ADDONNAME">
-					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15" /></Offset></Anchor></Anchors>
-				</FontString>
-			</Layer>
-			
-			<Layer level="ARTWORK">
-				<FontString name="CLCDK_CDPanel_Title_Spec" inherits="GameFontDisableSmall">
-					<Anchors><Anchor point="LEFT" relativeTo="CLCDK_CDPanel_DD_Title" relativePoint="RIGHT"><Offset><AbsDimension x="5" y="0" /></Offset></Anchor></Anchors>
-				</FontString>
-			</Layer>
-		</Layers>		
 
-		<Frames>				
-			<!--Priority DD-->	
-			<Button name="CLCDK_CDRPanel_DD_Priority" inherits="CLCK_DropDownTemplate">				
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDPanel_DD_Title" ><Offset><AbsDimension x="-16" y="-40"/></Offset></Anchor></Anchors>
-				<Scripts>				
-					<OnLoad>
-						CLCDK_CDRPanel_DD_Priority_Text:SetText(CLCDK_OPTIONS_CDR_PRIORITY)
-						UIDropDownMenu_SetWidth(self, 160, 5)
-					</OnLoad>
-                </Scripts>
-            </Button>	
-			
-			<!--CD -->	
-			<CheckButton name="CLCDK_CDRPanel_DD_CD1" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_Priority"><Offset><AbsDimension x="15" y="-50"/></Offset></Anchor></Anchors>
-				<Scripts>
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD1_Text:SetText(CLCDK_OPTIONS_CDR_CD1)
-					</OnLoad>
-				</Scripts>
-			</CheckButton>	
-			
-			<!--CD1_One DD -->			
-			<Button name="CLCDK_CDRPanel_DD_CD1_One" inherits="CLCK_DropDownTemplate">				
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD1"><Offset><AbsDimension x="-15" y="-42"/></Offset></Anchor></Anchors>						
-				<Scripts>				
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD1_One_Text:SetText(CLCDK_OPTIONS_CDR_CD_ONE)
-						UIDropDownMenu_SetWidth(self, 160, 5)
-					</OnLoad>
-                </Scripts>
-            </Button>
-			
-			<!-- CD1_Two DD -->			
-			<Button name="CLCDK_CDRPanel_DD_CD1_Two" inherits="CLCK_DropDownTemplate">				
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD1_One"><Offset><AbsDimension x="0" y="-45"/></Offset></Anchor></Anchors>
-				<Scripts>				
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD1_Two_Text:SetText(CLCDK_OPTIONS_CDR_CD_TWO)
-						UIDropDownMenu_SetWidth(self, 160, 5)
-					</OnLoad>
-                </Scripts>
-            </Button>	
-
-			<!--CD2-->	
-			<CheckButton name="CLCDK_CDRPanel_DD_CD2" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD1"><Offset><AbsDimension x="200" y="0"/></Offset></Anchor></Anchors>
-				<Scripts>
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD2_Text:SetText(CLCDK_OPTIONS_CDR_CD2)
-					</OnLoad>
-				</Scripts>
-			</CheckButton>	
-			
-			<!--CD2_One DD -->			
-			<Button name="CLCDK_CDRPanel_DD_CD2_One" inherits="CLCK_DropDownTemplate">				
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD2"><Offset><AbsDimension x="-15" y="-42"/></Offset></Anchor></Anchors>
-				<Scripts>				
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD2_One_Text:SetText(CLCDK_OPTIONS_CDR_CD_ONE)
-						UIDropDownMenu_SetWidth(self, 160, 5)
-					</OnLoad>
-                </Scripts>
-            </Button>
-			
-			<!-- CD2_Two DD -->			
-			<Button name="CLCDK_CDRPanel_DD_CD2_Two" inherits="CLCK_DropDownTemplate">				
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD2_One" ><Offset><AbsDimension x="0" y="-45"/></Offset></Anchor></Anchors>
-				<Scripts>				
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD2_Two_Text:SetText(CLCDK_OPTIONS_CDR_CD_TWO)
-						UIDropDownMenu_SetWidth(self, 160, 5)
-					</OnLoad>
-                </Scripts>
-            </Button>		
-			
-			<!--CD3 -->	
-			<CheckButton name="CLCDK_CDRPanel_DD_CD3" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD1_Two"><Offset><AbsDimension x="15" y="-50"/></Offset></Anchor></Anchors>
-				<Scripts>
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD3_Text:SetText(CLCDK_OPTIONS_CDR_CD3)
-					</OnLoad>
-				</Scripts>
-			</CheckButton>	
-			
-			<!--CD3_One DD -->			
-			<Button name="CLCDK_CDRPanel_DD_CD3_One" inherits="CLCK_DropDownTemplate">				
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD3"><Offset><AbsDimension x="-15" y="-42"/></Offset></Anchor></Anchors>						
-				<Scripts>				
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD3_One_Text:SetText(CLCDK_OPTIONS_CDR_CD_ONE)
-						UIDropDownMenu_SetWidth(self, 160, 5)
-					</OnLoad>
-                </Scripts>
-            </Button>
-			
-			<!-- CD3_Two DD -->			
-			<Button name="CLCDK_CDRPanel_DD_CD3_Two" inherits="CLCK_DropDownTemplate">				
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD3_One"><Offset><AbsDimension x="0" y="-45"/></Offset></Anchor></Anchors>
-				<Scripts>				
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD3_Two_Text:SetText(CLCDK_OPTIONS_CDR_CD_TWO)
-						UIDropDownMenu_SetWidth(self, 160, 5)
-					</OnLoad>
-                </Scripts>
-            </Button>	
-
-			<!--CD4-->	
-			<CheckButton name="CLCDK_CDRPanel_DD_CD4" inherits="CLCK_CheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD3"><Offset><AbsDimension x="200" y="0"/></Offset></Anchor></Anchors>
-				<Scripts>
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD4_Text:SetText(CLCDK_OPTIONS_CDR_CD4)
-					</OnLoad>
-				</Scripts>
-			</CheckButton>	
-			
-			<!--CD4_One DD -->			
-			<Button name="CLCDK_CDRPanel_DD_CD4_One" inherits="CLCK_DropDownTemplate">				
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD4"><Offset><AbsDimension x="-15" y="-42"/></Offset></Anchor></Anchors>
-				<Scripts>				
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD4_One_Text:SetText(CLCDK_OPTIONS_CDR_CD_ONE)
-						UIDropDownMenu_SetWidth(self, 160, 5)
-					</OnLoad>
-                </Scripts>
-            </Button>
-			
-			<!-- CD4_Two DD -->			
-			<Button name="CLCDK_CDRPanel_DD_CD4_Two" inherits="CLCK_DropDownTemplate">				
-				<Anchors><Anchor point="TOPLEFT" relativeTo="CLCDK_CDRPanel_DD_CD4_One" ><Offset><AbsDimension x="0" y="-45"/></Offset></Anchor></Anchors>
-				<Scripts>				
-					<OnLoad>
-						CLCDK_CDRPanel_DD_CD4_Two_Text:SetText(CLCDK_OPTIONS_CDR_CD_TWO)
-						UIDropDownMenu_SetWidth(self, 160, 5)
-					</OnLoad>
-                </Scripts>
-            </Button>					
-			
-			<!--Reset -->	
-			<Button name="CLCDK_CDRPanel_Reset" inherits="UIPanelButtonTemplate"  Text="CLCDK_OPTIONS_RESET">
-				<Size><AbsDimension x="120" y="22"/></Size>
-				<Anchors><Anchor point="BOTTOMLEFT"><Offset><AbsDimension x="15" y="15" /></Offset></Anchor></Anchors>
-				<Scripts>
-					<OnClick>CLCDK_SetDefaults()</OnClick>
-				</Scripts>
-			</Button>  
-		</Frames>		
-	</Frame>
-		
-	<Frame name="CLCDK_ABOUTPanel">
-		<Scripts>
-			<OnLoad>
-				self.name = CLCDK_ABOUT
-				self.parent = "CLC DK"	
-			</OnLoad>
-		</Scripts>
-	
-		<Layers>
-			<Layer level="ARTWORK">
-				<FontString name="CLCDK_CDRPanel_DD_Title" inherits="GameFontNormalLarge" text="CLCDK_ADDONNAME">
-					<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15" /></Offset></Anchor></Anchors>
-				</FontString>
-			</Layer>
-			
+		<Layers>			
 			<Layer level="ARTWORK">
 				<FontString text="CLCDK_ABOUT_AUTHOR" inherits="GameFontDisableSmall" justifyH="LEFT">
 					<Anchors><Anchor point="BOTTOMLEFT"><Offset><AbsDimension x="15" y="25"/></Offset></Anchor></Anchors>

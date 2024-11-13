@@ -16,14 +16,14 @@ function CLCDK.CreateCDs()
 
 	--List of CD frame names, using the name of dropdown menu to allow easy saving and fetching
 	CDDisplayList = {
-		"CLCDK_CDRPanel_DD_CD1_One",
-		"CLCDK_CDRPanel_DD_CD1_Two",
-		"CLCDK_CDRPanel_DD_CD2_One",
-		"CLCDK_CDRPanel_DD_CD2_Two",
-		"CLCDK_CDRPanel_DD_CD3_One",
-		"CLCDK_CDRPanel_DD_CD3_Two",
-		"CLCDK_CDRPanel_DD_CD4_One",
-		"CLCDK_CDRPanel_DD_CD4_Two",
+		"CLCDK_Options_DD_CD1_One",
+		"CLCDK_Options_DD_CD1_Two",
+		"CLCDK_Options_DD_CD2_One",
+		"CLCDK_Options_DD_CD2_Two",
+		"CLCDK_Options_DD_CD3_One",
+		"CLCDK_Options_DD_CD3_Two",
+		"CLCDK_Options_DD_CD4_One",
+		"CLCDK_Options_DD_CD4_Two",
 	}
 
 	--Create the Icons with desired paramaters
