@@ -50,37 +50,37 @@ function CLCDK.IsInTable(tbl, key)
 end
 
 function CLCDK.IsSpellNameOffCD(spellName)
-	return IsSpellInfoOffCD(GetSpellCooldown(CLCDK.Spells[spellName]))
+	return GetSpellNameCDRemaining(spellName) <= 0
 end
 
-local function IsSpellInfoOffCD(spellCooldownInfo)
+function CLCDK.GetSpellNameCDRemaining(spellName)
+	return GetSpellInfoCDRemaining(GetSpellCooldown(CLCDK.Spells[spellName]))
+end
+
+local function GetSpellInfoCDRemaining(spellCooldownInfo)
 	if spellCooldownInfo == nil then
 		return false
 	end
-	return IsOffCD(spellCooldownInfo.startTime, spellCooldownInfo.duration)
-end
-
-local function IsOffCD(startTime, duration)
-	return GetCDTimeWithGCD(startTime, duration) <= 0
+	return GetCDTimeWithGCD(spellCooldownInfo.startTime, spellCooldownInfo.duration)
 end
 
 local function GetCDTimeWithGCD(startTime, duration)
 	return CLCDK.GetCDTime(startTime, duration) - CLCDK.GCD
 end
 
-function CLCDK.GetCDTime(start, dur)
-	if (dur == nil or dur == 0) then
+function CLCDK.GetCDTime(startTime, duration)
+	if (duration == nil or duration == 0) then
 		return 0
 	end
-	return dur + start - CLCDK.CURRENT_TIME
+	return duration + startTime - CLCDK.CURRENT_TIME
 end
 
 function CLCDK.RuneCDs()
 	local numRunesReady = 0
-	local start, dur, runeReady
+	local startTime, duration, runeReady
 	for i = 1, 6 do
-		start, dur, runeReady = GetRuneCooldown(i)
-		if (runeReady or IsOffCD(start, dur)) then
+		startTime, duration, runeReady = GetRuneCooldown(i)
+		if (runeReady or GetCDTimeWithGCD(startTime, duration) <= 0) then
 			numRunesReady = numRunesReady + 1
 		end
 	end
