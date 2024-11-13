@@ -1,6 +1,6 @@
 local _, CLCDK = ...
 
-local SPELL_LOOKUP = {
+local spellLookup = {
 	["Anti-Magic Shell"] = 48707,
 	["Anti-Magic Zone"] = 51052,
 	["Death and Decay"] = 43265,
@@ -91,7 +91,7 @@ function CLCDK.LoadSpells()
 	CLCDK.Spells = {}
 
 	local info
-	for name, id in pairs (CLCDK.SPELL_LOOKUP) do
+	for name, id in pairs(spellLookup) do
 		info = C_Spell.GetSpellInfo(id).name
 		if (info == nil) then
 			CLCDK.PrintDebug("Spell " .. name .. " is null")
