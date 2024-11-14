@@ -1,5 +1,7 @@
 local name, CLCDK = ...
 
+local GetSpellCooldown = C_Spell.GetSpellCooldown
+
 function CLCDK.CreateUI()
 	CLCDK.SetupMoveFunction(CLCDK.MainFrame)
 
@@ -39,7 +41,7 @@ function CLCDK.CreateUI()
 
 	CLCDK.Move = CLCDK.CreateIcon('CLCDK.Move', CLCDK.MainFrame, 47)
 	CLCDK.SetupMoveFunction(CLCDK.Move)
-	
+
 	CLCDK.Move.AOE = CLCDK.CreateIcon('CLCDK.Move.AOE', CLCDK.Move, 47)
 	CLCDK.Move.AOE:SetAllPoints(CLCDK.Move)
 	CLCDK.Move.AOE.Icon:SetMask("Interface\\AddOns\\CLCDK\\Media\\Mask")
@@ -63,7 +65,7 @@ function CLCDK.UpdateUI()
 	end
 
 	--GCD
-	local spellCooldownInfo = C_Spell.GetSpellCooldown(CLCDK.GCD_SPELL_ID)
+	local spellCooldownInfo = GetSpellCooldown(CLCDK.GCD_SPELL_ID)
 	if spellCooldownInfo and spellCooldownInfo.duration ~= 0 and spellCooldownInfo.startTime then
 		CLCDK.GCD = CLCDK.GetCDTime(spellCooldownInfo.startTime, spellCooldownInfo.duration) + CLCDK.UPDATE_INTERVAL
 		if CLCDK_Settings.GCD then
@@ -79,7 +81,7 @@ function CLCDK.UpdateUI()
 		for i = 1, 6 do
 			local start, dur, runeReady = GetRuneCooldown(i)
 			if (runeReady) then
-				cdtime = "*"			
+				cdtime = "*"
 			else
 				cdtime = math.ceil(CLCDK.GetCDTime(start, dur))
 				if cdtime >= 10 then
@@ -116,7 +118,7 @@ function CLCDK.UpdateUI()
 	end
 
 	--Priority Icon
-	if CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"][1] ~= CLCDK_OPTIONS_FRAME_VIEW_NONE then
+	if CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"] ~= CLCDK_OPTIONS_FRAME_VIEW_NONE then
 		CLCDK.Move:SetAlpha(1)
 		CLCDK.MoveBackdrop:SetAlpha(1)
 		CLCDK.UpdateCD("CLCDK_Options_DD_Priority", CLCDK.Move)

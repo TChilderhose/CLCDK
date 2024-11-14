@@ -1,17 +1,19 @@
-local name, CLCDK = ...
+local _, CLCDK = ...
+
+local GetSpellTexture = C_Spell.GetSpellTexture
 
 local function AddCategory(frame)
 	if frame.parent then
-        local category = Settings.GetCategory(frame.parent);
-        local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, frame.name, frame.name);
-        subcategory.ID = frame.name;
-        return subcategory, category;
-    else
-        local category = Settings.RegisterCanvasLayoutCategory(frame, frame.name, frame.name);
-        category.ID = frame.name;
-        Settings.RegisterAddOnCategory(category);
-        return category;
-    end
+		local category = Settings.GetCategory(frame.parent);
+		local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, frame.name, frame.name);
+		subcategory.ID = frame.name;
+		return subcategory, category;
+	else
+		local category = Settings.RegisterCanvasLayoutCategory(frame, frame.name, frame.name);
+		category.ID = frame.name;
+		Settings.RegisterAddOnCategory(category);
+		return category;
+	end
 end
 
 function CLCDK.InitializeOptions()
@@ -61,13 +63,12 @@ function CLCDK_Options_DD_OnLoad(self, level)
 	level = level or 1
 
 	--Template for an item in the dropdown box
-	local function CLCDK_Options_DD_Item(panel, spell, buff)
+	local function CLCDK_Options_DD_Item(panel, spell)
 		info = {}
 		info.text = spell
 		info.value = spell
 		info.func = function()
-			CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][panel:GetName()][1] = spell
-			CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][panel:GetName()][2] = buff
+			CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][panel:GetName()] = spell
 			UIDropDownMenu_SetSelectedValue(panel, spell)
 			CloseDropDownMenus()
 		end
@@ -77,11 +78,7 @@ function CLCDK_Options_DD_OnLoad(self, level)
 	--Function to add specs specific CDs
 	local function AddSpecCDs(Spec)
 		for i = 1, #Spec do
-			if (CLCDK.Cooldowns.Buffs[Spec[i]] == nil or CLCDK.Cooldowns.Buffs[Spec[i]][2]) then
-				UIDropDownMenu_AddButton(CLCDK_Options_DD_Item(self, Spec[i]), 2)
-			elseif CLCDK.Cooldowns.Buffs[Spec[i]] then
-				UIDropDownMenu_AddButton(CLCDK_Options_DD_Item(self, Spec[i], true), 2)
-			end
+			UIDropDownMenu_AddButton(CLCDK_Options_DD_Item(self, Spec[i]), 2)
 		end
 	end
 
@@ -135,7 +132,7 @@ function CLCDK_Options_DD_OnLoad(self, level)
 
 		elseif key == "Moves" then
 			for i = 1, #CLCDK.Cooldowns.Moves do
-				if CLCDK.Cooldowns.Moves[i] and C_Spell.GetSpellTexture(CLCDK.Cooldowns.Moves[i]) then
+				if CLCDK.Cooldowns.Moves[i] and GetSpellTexture(CLCDK.Cooldowns.Moves[i]) then
 					UIDropDownMenu_AddButton(CLCDK_Options_DD_Item(self, CLCDK.Cooldowns.Moves[i]), 2)
 				end
 			end
@@ -179,20 +176,19 @@ function CLCDK.OptionsRefresh()
 		CLCDK_Options_DD_CD4:SetChecked(CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][4])
 
 		--Priority Dropdown
-		if CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"] and 
-			CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"][1] then
-			UIDropDownMenu_SetSelectedValue(CLCDK_Options_DD_Priority, CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"][1])
-			UIDropDownMenu_SetText(CLCDK_Options_DD_Priority, CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"][1])
+		if CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"] then
+			UIDropDownMenu_SetSelectedValue(CLCDK_Options_DD_Priority, CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"])
+			UIDropDownMenu_SetText(CLCDK_Options_DD_Priority, CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"])
 		end
 
 		--Cooldown Dropdown
 		for i = 1, #CDDisplayList do
 			if _G[CDDisplayList[i]] and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]] then
-				UIDropDownMenu_SetSelectedValue(_G[CDDisplayList[i]], CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1])
-				UIDropDownMenu_SetText(_G[CDDisplayList[i]], CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1])
+				UIDropDownMenu_SetSelectedValue(_G[CDDisplayList[i]], CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]])
+				UIDropDownMenu_SetText(_G[CDDisplayList[i]], CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]])
 			end
 		end
-	
+
 		CLCDK.PrintDebug("OptionsRefresh")
 		CLCDK.UpdatePosition()
 	else
@@ -291,8 +287,7 @@ function CLCDK.CheckSettings()
 	for i=1,#specs do
 		if CLCDK_Settings.CD[specs[i]] == nil then CLCDK_Settings.CD[specs[i]] = {}	end
 		for j=1,#spots do
-			if CLCDK_Settings.CD[specs[i]]["CLCDK_Options_DD_"..spots[j]] == nil or
-				CLCDK_Settings.CD[specs[i]]["CLCDK_Options_DD_"..spots[j]][1] == nil then
+			if CLCDK_Settings.CD[specs[i]]["CLCDK_Options_DD_"..spots[j]] == nil then
 				CLCDK_Settings.CD[specs[i]]["CLCDK_Options_DD_"..spots[j]] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil}
 			end
 		end
@@ -324,9 +319,9 @@ function CLCDK_SetDefaults()
 	CLCDK.SetDefaults()
 end
 function CLCDK.SetDefaults()
-	if CLCDK_Settings then 
-		wipe(CLCDK_Settings); 
-		CLCDK_Settings = nil 
+	if CLCDK_Settings then
+		wipe(CLCDK_Settings);
+		CLCDK_Settings = nil
 	end
 	CLCDK.CheckSettings()
 
@@ -338,9 +333,9 @@ function CLCDK_SetLocationDefault()
 	CLCDK.SetLocationDefault()
 end
 function CLCDK.SetLocationDefault()
-	if CLCDK_Settings.Location then 
-		wipe(CLCDK_Settings.Location); 
-		CLCDK_Settings.Location = nil 
+	if CLCDK_Settings.Location then
+		wipe(CLCDK_Settings.Location);
+		CLCDK_Settings.Location = nil
 	end
 	CLCDK.CheckSettings()
 
@@ -352,95 +347,95 @@ function CLCDK_CooldownDefaults()
 	CLCDK.CooldownDefaults()
 end
 function CLCDK.CooldownDefaults()
-	if CLCDK_Settings.CD then 
-		wipe(CLCDK_Settings.CD) 
+	if CLCDK_Settings.CD then
+		wipe(CLCDK_Settings.CD)
 	end
 
 	CLCDK_Settings.CD = {
 		[CLCDK.SPEC_UNHOLY] = {
-			["CLCDK_Options_DD_Priority"] = {CLCDK_OPTIONS_CDR_CD_PRIORITY, nil},
+			["CLCDK_Options_DD_Priority"] = CLCDK_OPTIONS_CDR_CD_PRIORITY,
 
 			[1] = true,
-			["CLCDK_Options_DD_CD1_One"] = {CLCDK.Spells["Shadow Infusion"], true},
-			["CLCDK_Options_DD_CD1_Two"] = {CLCDK.Spells["Dark Transformation"], true},
+			["CLCDK_Options_DD_CD1_One"] = CLCDK.Spells["Apocalypse"],
+			["CLCDK_Options_DD_CD1_Two"] = CLCDK.Spells["Dark Transformation"],
 
 			[2] = true,
-			["CLCDK_Options_DD_CD2_One"] = {CLCDK.Spells["Runic Corruption"], true},
-			["CLCDK_Options_DD_CD2_Two"] = {CLCDK.Spells["Sudden Doom"], true},
+			["CLCDK_Options_DD_CD2_One"] = CLCDK.Spells["Plaguebringer"],
+			["CLCDK_Options_DD_CD2_Two"] = CLCDK.Spells["Festering Wound"],
 
-			[3] = false,
-			["CLCDK_Options_DD_CD3_One"] = {CLCDK.Spells["Death Strike"], nil},
-			["CLCDK_Options_DD_CD3_Two"] = {CLCDK.Spells["Festering Wound"], true},
+			[3] = true,
+			["CLCDK_Options_DD_CD3_One"] = CLCDK.Spells["Sudden Doom"],
+			["CLCDK_Options_DD_CD3_Two"] = CLCDK.Spells["Army of the Dead"],
 
-			[4] = false,
-			["CLCDK_Options_DD_CD4_One"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
-			["CLCDK_Options_DD_CD4_Two"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
+			[4] = true,
+			["CLCDK_Options_DD_CD4_One"] = CLCDK.Spells["Icy Talons"],
+			["CLCDK_Options_DD_CD4_Two"] = CLCDK.Spells["Death Rot"],
 		},
 
 		[CLCDK.SPEC_FROST] = {
-			["CLCDK_Options_DD_Priority"] = {CLCDK_OPTIONS_CDR_CD_PRIORITY, nil},
+			["CLCDK_Options_DD_Priority"] = CLCDK_OPTIONS_CDR_CD_PRIORITY,
 
 			[1] = true,
-			["CLCDK_Options_DD_CD1_One"] = {CLCDK.Spells["Pillar of Frost"], nil},
-			["CLCDK_Options_DD_CD1_Two"] = {CLCDK.Spells["Remorseless Winter"], nil},
+			["CLCDK_Options_DD_CD1_One"] = CLCDK.Spells["Pillar of Frost"],
+			["CLCDK_Options_DD_CD1_Two"] = CLCDK.Spells["Remorseless Winter"],
 
 			[2] = true,
-			["CLCDK_Options_DD_CD2_One"] = {CLCDK.Spells["Killing Machine"], true},
-			["CLCDK_Options_DD_CD2_Two"] = {CLCDK.Spells["Rime"], true},
+			["CLCDK_Options_DD_CD2_One"] = CLCDK.Spells["Killing Machine"],
+			["CLCDK_Options_DD_CD2_Two"] = CLCDK.Spells["Rime"],
 
 			[3] = false,
-			["CLCDK_Options_DD_CD3_One"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
-			["CLCDK_Options_DD_CD3_Two"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
+			["CLCDK_Options_DD_CD3_One"] = CLCDK_OPTIONS_FRAME_VIEW_NONE,
+			["CLCDK_Options_DD_CD3_Two"] = CLCDK_OPTIONS_FRAME_VIEW_NONE,
 
 			[4] = true,
-			["CLCDK_Options_DD_CD4_One"] = {CLCDK.Spells["Icy Talons"], true},
-			["CLCDK_Options_DD_CD4_Two"] = {CLCDK.Spells["Unleashed Frenzy"], true},
+			["CLCDK_Options_DD_CD4_One"] = CLCDK.Spells["Icy Talons"],
+			["CLCDK_Options_DD_CD4_Two"] = CLCDK.Spells["Unleashed Frenzy"],
 		},
 
 		[CLCDK.SPEC_BLOOD] = {
-			["CLCDK_Options_DD_Priority"] = {CLCDK_OPTIONS_CDR_CD_PRIORITY, nil},
+			["CLCDK_Options_DD_Priority"] = CLCDK_OPTIONS_CDR_CD_PRIORITY,
 
 			[1] = true,
-			["CLCDK_Options_DD_CD1_One"] = {CLCDK.Spells["Bone Shield"], true},
-			["CLCDK_Options_DD_CD1_Two"] = {CLCDK.Spells["Vampiric Blood"], nil},
+			["CLCDK_Options_DD_CD1_One"] = CLCDK.Spells["Bone Shield"],
+			["CLCDK_Options_DD_CD1_Two"] = CLCDK.Spells["Vampiric Blood"],
 
 			[2] = true,
-			["CLCDK_Options_DD_CD2_One"] = {CLCDK.Spells["Rune Tap"], nil},
-			["CLCDK_Options_DD_CD2_Two"] = {CLCDK.Spells["Scarlet Fever"], true},
+			["CLCDK_Options_DD_CD2_One"] = CLCDK.Spells["Rune Tap"],
+			["CLCDK_Options_DD_CD2_Two"] = CLCDK.Spells["Scarlet Fever"],
 
 			[3] = false,
-			["CLCDK_Options_DD_CD3_One"] = {CLCDK.Spells["Horn of Winter"], true},
-			["CLCDK_Options_DD_CD3_Two"] = {CLCDK.Spells["Blood Charge"], true},
+			["CLCDK_Options_DD_CD3_One"] = CLCDK.Spells["Horn of Winter"],
+			["CLCDK_Options_DD_CD3_Two"] = CLCDK.Spells["Blood Charge"],
 
 			[4] = false,
-			["CLCDK_Options_DD_CD4_One"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
-			["CLCDK_Options_DD_CD4_Two"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
+			["CLCDK_Options_DD_CD4_One"] = CLCDK_OPTIONS_FRAME_VIEW_NONE,
+			["CLCDK_Options_DD_CD4_Two"] = CLCDK_OPTIONS_FRAME_VIEW_NONE,
 		},
 
 		[CLCDK.SPEC_UNKNOWN] = {
-			["CLCDK_Options_DD_Priority"] = {CLCDK_OPTIONS_CDR_CD_PRIORITY, nil},
+			["CLCDK_Options_DD_Priority"] = CLCDK_OPTIONS_CDR_CD_PRIORITY,
 
 			[1] = true,
-			["CLCDK_Options_DD_CD1_One"] = {CLCDK.Spells["Horn of Winter"], nil},
-			["CLCDK_Options_DD_CD1_Two"] = {CLCDK.Spells["Blood Charge"], true},
+			["CLCDK_Options_DD_CD1_One"] = CLCDK.Spells["Horn of Winter"],
+			["CLCDK_Options_DD_CD1_Two"] = CLCDK.Spells["Blood Charge"],
 
 			[2] = true,
-			["CLCDK_Options_DD_CD2_One"] = {CLCDK.Spells["Raise Dead"], nil},
-			["CLCDK_Options_DD_CD2_Two"] = {CLCDK.Spells["Army of the Dead"], nil},
+			["CLCDK_Options_DD_CD2_One"] = CLCDK.Spells["Raise Dead"],
+			["CLCDK_Options_DD_CD2_Two"] = CLCDK.Spells["Army of the Dead"],
 
 			[3] = false,
-			["CLCDK_Options_DD_CD3_One"] = {CLCDK.Spells["Horn of Winter"], true},
-			["CLCDK_Options_DD_CD3_Two"] = {CLCDK.Spells["Blood Tap"], nil},
+			["CLCDK_Options_DD_CD3_One"] = CLCDK.Spells["Horn of Winter"],
+			["CLCDK_Options_DD_CD3_Two"] = CLCDK.Spells["Blood Tap"],
 
 			[4] = false,
-			["CLCDK_Options_DD_CD4_One"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
-			["CLCDK_Options_DD_CD4_Two"] = {CLCDK_OPTIONS_FRAME_VIEW_NONE, nil},
+			["CLCDK_Options_DD_CD4_One"] = CLCDK_OPTIONS_FRAME_VIEW_NONE,
+			["CLCDK_Options_DD_CD4_Two"] = CLCDK_OPTIONS_FRAME_VIEW_NONE,
 		},
 	}
 end
 
 
------Slash Command----- 
+-----Slash Command-----
 SLASH_CLCDK1 = '/clcdk'
 SlashCmdList["CLCDK"] = function()
 	CLCDK.PrintDebug("Slash Command Used")

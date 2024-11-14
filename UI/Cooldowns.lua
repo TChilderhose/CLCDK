@@ -50,26 +50,19 @@ function CLCDK.UpdateCD(location, frame)
 	frame.Time:SetText("")
 	frame.Stack:SetText("")
 
-	--If the option is not set to nothing
-	if 	CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location] and 
-		CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1] and
-		CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1] ~= CLCDK_OPTIONS_FRAME_VIEW_NONE then
+	local action = CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location]
 
-		local action = CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1]		
+	--If the option is not set to nothing
+	if action and action ~= CLCDK_OPTIONS_FRAME_VIEW_NONE then
 		frame:SetAlpha(1)
 
 		if action == CLCDK_OPTIONS_CDR_CD_PRIORITY then --Priority
 			CLCDK.HandlePriority(frame)
 
-		elseif CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][CLCDK.IS_BUFF] and 
-				CLCDK.Cooldowns.Buffs[action] and 
-				not CLCDK.Cooldowns.Buffs[action][2] then --Buff/DeBuff
-			CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1])
-
 		elseif CLCDK.IsInTable(CLCDK.Cooldowns.Moves, action) then --Move
 			CLCDK.HandleAbility(frame, action)
 
-		else --Cooldown or Racial
+		else --Cooldown, Buff or Racial
 			if action == CLCDK_OPTIONS_CDR_RACIAL then
 				action = CLCDK.Spells[CLCDK.PLAYER_RACE]
 			end
@@ -79,15 +72,14 @@ function CLCDK.UpdateCD(location, frame)
 			end
 			CLCDK.HandleCooldown(frame, action)
 		end
-		
+
 		--if the icon is nil, then just hide the frame
 		if frame.Icon:GetTexture() == nil then
 			frame:SetAlpha(0)
 		end
-	else		
+	else
 		CLCDK.PrintDebug("Nothing Set for ", CLCDK.CURRENT_SPEC, location)
 		CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][location][1] = CLCDK_OPTIONS_FRAME_VIEW_NONE
 		frame:SetAlpha(0)
 	end
 end
-		

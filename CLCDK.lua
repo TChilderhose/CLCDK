@@ -2,7 +2,7 @@ local _, CLCDK = ...
 
 if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 	CLCDK.PrintDebug("Is DK. Starting...")
-	
+
 	--Create Main Frame
 	CLCDK.MainFrame = CreateFrame("Button", "CLCDK", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	CLCDK.MainFrame:SetWidth(94)
@@ -12,7 +12,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 
 	local GetTime = GetTime
 	local mutex = false
-	local timeSinceLastUpdate = 0	
+	local timeSinceLastUpdate = 0
 
 	CLCDK.MainFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
 	CLCDK.MainFrame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
@@ -27,7 +27,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 		if (not mutex and timeSinceLastUpdate > CLCDK.UPDATE_INTERVAL) then
 			mutex = true
 			timeSinceLastUpdate = 0
-			
+
 			if CLCDK.LOADED then
 				--Check if visibility conditions are met, if so update the information in the addon
 				if (not UnitHasVehicleUI("player")) and (
@@ -40,7 +40,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 				else
 					CLCDK.MainFrame:SetAlpha(0)
 				end
-				
+
 			elseif (not CLCDK.LOADED) then
 				CLCDK.PrintDebug("Initialize")
 
@@ -59,7 +59,7 @@ if CLCDK.PLAYER_CLASS == "DEATHKNIGHT" then
 
 				collectgarbage()
 			end
-			
+
 			mutex = false
 		end
 	end)

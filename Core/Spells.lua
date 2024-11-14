@@ -13,20 +13,23 @@ local spellLookup = {
 	["Death Strike"] = 49998,
 	["Death's Advance"] = 48265,
 	["Icebound Fortitude"] = 48792,
+	["Icy Talons"] = 194878,
 	["Lichborne"] = 49039,
 	["Obliteration"] = 207256,
+	["Plaguebringer"] = 390175,
 	["Sacrificial Pact"] = 327574,
 	["Mind Freeze"] = 47528,
 	["Path of Frost"] = 3714,
 	["Raise Ally"] = 61999,
-	["Raise Dead"] = 46584,		
+	["Raise Dead"] = 46584,
 	["Unholy Strength"] = 53365,
-	
-	
+
+
 	--Unholy Only
-	["Apocalypse"] = 220143,	
+	["Apocalypse"] = 220143,
 	["Army of the Dead"] = 42650,
 	["Dark Transformation"] = 63560,
+	["Death Rot"] = 377537,
 	["Epidemic"] = 207317,
 	["Festering Strike"] = 85948,
 	["Festering Wound"] = 194310,
@@ -39,8 +42,8 @@ local spellLookup = {
 	["Unholy Blight"] = 115989,
 	["Virulent Plague"] = 191587,
 	["Wraith Walk"] = 212552,
-	
-	
+
+
 	--Blood Only
 	["Blood Boil"] = 50842,
 	["Blood Plague"] = 55078,
@@ -50,8 +53,8 @@ local spellLookup = {
 	["Marrowrend"] = 195182,
 	["Rune Tap"] = 194679,
 	["Vampiric Blood"] = 55233,
-	
-	
+
+
 	--Frost Only
 	["Breath of Sindragosa"] = 152279,
 	["Empower Rune Weapon"] = 47568,
@@ -59,14 +62,13 @@ local spellLookup = {
 	["Frost Strike"] = 49143,
 	["Gathering Storm"] = 194912,
 	["Howling Blast"] = 49184,
-	["Icy Talons"] = 194878,
 	["Killing Machine"] = 51124,
 	["Obliterate"] = 49020,
 	["Pillar of Frost"] = 51271,
 	["Remorseless Winter"] = 196770,
 	["Rime"] = 59057,
 	["Unleashed Frenzy"] = 376905,
-	
+
 
 	--Racials
 	["Human"] = 59752,--Every Man for Himself
@@ -93,8 +95,9 @@ function CLCDK.LoadSpells()
 	CLCDK.Spells = {}
 
 	local info
+	local GetSpellInfo = C_Spell.GetSpellInfo
 	for name, id in pairs(spellLookup) do
-		info = C_Spell.GetSpellInfo(id).name
+		info = GetSpellInfo(id).name
 		if (info == nil) then
 			CLCDK.PrintDebug("Spell " .. name .. " is null")
 		else
@@ -110,7 +113,7 @@ function CLCDK.LoadCooldowns()
 		wipe(CLCDK.Cooldowns)
 	end
 	CLCDK.Cooldowns = {
-		NormCDs = {--CDs that all DKs get		
+		NormCDs = {--CDs that all DKs get
 			CLCDK.Spells["Abomination Limb"],
 			CLCDK.Spells["Anti-Magic Shell"],
 			CLCDK.Spells["Anti-Magic Zone"],
@@ -118,6 +121,7 @@ function CLCDK.LoadCooldowns()
 			CLCDK.Spells["Dark Command"],
 			CLCDK.Spells["Death Grip"],
 			CLCDK.Spells["Icebound Fortitude"],
+			CLCDK.Spells["Icy Talons"],
 			CLCDK.Spells["Lichborne"],
 			CLCDK.Spells["Mind Freeze"],
 			CLCDK.Spells["Raise Ally"],
@@ -140,7 +144,6 @@ function CLCDK.LoadCooldowns()
 		FrostCDs = {
 			CLCDK.Spells["Breath of Sindragosa"],
 			CLCDK.Spells["Empower Rune Weapon"],
-			CLCDK.Spells["Icy Talons"],
 			CLCDK.Spells["Killing Machine"],
 			CLCDK.Spells["Pillar of Frost"],
 			CLCDK.Spells["Remorseless Winter"],
@@ -162,12 +165,14 @@ function CLCDK.LoadCooldowns()
 			[CLCDK.Spells["Anti-Magic Shell"]] = {"player", true},
 			[CLCDK.Spells["Death and Decay"]] = {"player", true},
 			[CLCDK.Spells["Icebound Fortitude"]] = {"player", true},
-			[CLCDK.Spells["Obliteration"]] = {"player", false},
+			[CLCDK.Spells["Icy Talons"]] = {"player", false},
 			[CLCDK.Spells["Unholy Strength"]] = {"player", false},
 
 			--unholy
 			[CLCDK.Spells["Dark Transformation"]] = {"pet", true},
+			[CLCDK.Spells["Death Rot"]] = {"target", false},
 			[CLCDK.Spells["Festering Wound"]] = {"target", false},
+			[CLCDK.Spells["Plaguebringer"]] = {"player", false},
 			[CLCDK.Spells["Runic Corruption"]] = {"player", false},
 			[CLCDK.Spells["Soul Reaper"]] = {"target", true},
 			[CLCDK.Spells["Sudden Doom"]] = {"player", false},
@@ -178,10 +183,10 @@ function CLCDK.LoadCooldowns()
 			--frost
 			[CLCDK.Spells["Breath of Sindragosa"]] = {"player", true},
 			[CLCDK.Spells["Empower Rune Weapon"]] = {"player", true},
-			[CLCDK.Spells["Pillar of Frost"]] = {"player", true},
-			[CLCDK.Spells["Icy Talons"]] = {"player", false},
-			[CLCDK.Spells["Lichborne"]] = {"player", true},
 			[CLCDK.Spells["Killing Machine"]] = {"player", false},
+			[CLCDK.Spells["Lichborne"]] = {"player", true},
+			[CLCDK.Spells["Obliteration"]] = {"player", false},
+			[CLCDK.Spells["Pillar of Frost"]] = {"player", true},
 			[CLCDK.Spells["Remorseless Winter"]] = {"player", true},
 			[CLCDK.Spells["Rime"]] = {"player", false},
 			[CLCDK.Spells["Unleashed Frenzy"]] = {"player", false},

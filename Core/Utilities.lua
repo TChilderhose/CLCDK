@@ -1,8 +1,10 @@
 local _, CLCDK = ...
 
 local cachedDisease = ""
+local playerSpells = {}
+
 local GetBuffDataByIndex, GetDebuffDataByIndex = C_UnitAuras.GetBuffDataByIndex, C_UnitAuras.GetDebuffDataByIndex
-local GetSpellCooldown = C_Spell.GetSpellCooldown
+local GetSpellCooldown, GetSpellIDForSpellIdentifier = C_Spell.GetSpellCooldown, C_Spell.GetSpellIDForSpellIdentifier
 
 function CLCDK.PrintDebug(text)
 	if CLCDK.DEBUG then
@@ -34,9 +36,9 @@ function CLCDK.NumFormat(num)
 		num = format("%.2fb", num / 1000000000)
 	elseif num >= 1000000 then
 		num = format("%.2fm", num / 1000000)
-	elseif num >= 100000 then		
+	elseif num >= 100000 then
 		num = format("%.2fk", num / 1000)
-	end		
+	end
 	return num
 end
 
@@ -47,6 +49,19 @@ function CLCDK.IsInTable(tbl, key)
 		end
 	end
 	return false
+end
+
+local function PlayerHasSpell(spellName)
+	if (playerSpells[spellName] == nil) then
+		local spellId = GetSpellIDForSpellIdentifier(spellName)
+
+		if not spellId then
+			playerSpells[spellName] = false
+		else
+			playerSpells[spellName] = IsPlayerSpell(spellId)
+		end
+	end
+	return playerSpells[spellName]
 end
 
 local function GetCDTimeWithGCD(startTime, duration)
@@ -65,6 +80,10 @@ function CLCDK.GetSpellNameCDRemaining(spellName)
 end
 
 function CLCDK.IsSpellNameOffCD(spellName)
+	if (not PlayerHasSpell(spellName)) then
+		CLCDK.PrintDebug("Player Doesnt Have Spell: " .. spellName)
+		return false
+	end
 	return CLCDK.GetSpellNameCDRemaining(spellName) <= 0
 end
 
@@ -95,6 +114,7 @@ function CLCDK.CheckSpec()
 	CLCDK.OptionsRefresh()
 
 	cachedDisease = ""
+	playerSpells = {}
 end
 
 local function GetSpecDisease()
@@ -113,8 +133,8 @@ end
 
 function CLCDK.GetSpecDiseaseRemaining()
 	local aura = CLCDK.FindTargetDebuff(GetSpecDisease())
-	if aura == nil then 
-		return 0 			
+	if aura == nil then
+		return 0
 	end
 	return (aura.expirationTime - CLCDK.CURRENT_TIME)
 end
@@ -124,11 +144,11 @@ function CLCDK.GetPlayerBuff(spellName)
 end
 
 function CLCDK.FindBuff(spellName, unit)
-	if (spellName == nil) then 
+	if (spellName == nil) then
 		return nil
 	end
 
-	for i = 1, 40 do	
+	for i = 1, 40 do
 		local aura = GetBuffDataByIndex(unit, i);
 		if aura == nil then
 			return nil
@@ -139,7 +159,7 @@ function CLCDK.FindBuff(spellName, unit)
 end
 
 function CLCDK.FindTargetDebuff(spellName)
-	if (spellName == nil) then 
+	if (spellName == nil) then
 		return nil
 	end
 
@@ -153,11 +173,11 @@ function CLCDK.FindTargetDebuff(spellName)
 	end
 end
 
-function CLCDK.GetUnitHealthPct(unit)
+function CLCDK.CanShowExecute(unit)
+	local minHealth = 1000000
 	local curh, maxh = UnitHealth(unit), UnitHealthMax(unit)
-	if maxh == 0 then
-		return -1
-	else
-		return (curh/maxh)*100
+	if maxh > minHealth or UnitIsPlayer(unit) then
+		return (curh/maxh) < 0.35
 	end
+	return false
 end

@@ -1,5 +1,7 @@
 local _, CLCDK = ...
 
+local GetSpellTexture, IsSpellInRange, GetSpellCooldown, GetSpellCharges = C_Spell.GetSpellTexture, C_Spell.IsSpellInRange,  C_Spell.GetSpellCooldown, C_Spell.GetSpellCharges
+
 function CLCDK.CreateIcon(name, parent, size)
 	local frame = CreateFrame('Button', name, parent, BackdropTemplateMixin and "BackdropTemplate")
 	frame:SetWidth(size)
@@ -15,7 +17,7 @@ function CLCDK.CreateIcon(name, parent, size)
 	frame.Icon = frame:CreateTexture("$parentIcon", "ARTWORK")
 	frame.Icon:SetAllPoints()
 	frame.Icon:SetTexture(nil)
-	
+
 	frame.Time = frame:CreateFontString(nil, 'OVERLAY')
 	frame.Time:SetPoint("CENTER", frame, 1, 0)
 	frame.Time:SetJustifyH("CENTER")
@@ -25,10 +27,10 @@ function CLCDK.CreateIcon(name, parent, size)
 	frame.Stack:SetPoint("BOTTOMRIGHT", frame, 4, 1)
 	frame.Stack:SetJustifyH("CENTER")
 	frame.Stack:SetFont(CLCDK.FONT, CLCDK.FONT_SIZE_S, "THICKOUTLINE")
-	
+
 	frame.start = 0
 	frame.dur = 0
-	
+
 	frame:EnableMouse(false)
 
 	return frame
@@ -44,8 +46,9 @@ end
 
 function CLCDK.SetRangeandIcon(icon, move)
 	if move then
-		icon:SetTexture(C_Spell.GetSpellTexture(move))
-		if CLCDK_Settings.Range and C_Spell.IsSpellInRange(move, "target") == 0 then
+		--CLCDK.PrintDebug(move)
+		icon:SetTexture(GetSpellTexture(move))
+		if CLCDK_Settings.Range and IsSpellInRange(move, "target") == 0 then
 			icon:SetVertexColor(196/255, 30/255, 58/255, 1) --DK Red
 		else
 			icon:SetVertexColor(1, 1, 1, 1)
@@ -57,16 +60,16 @@ end
 
 function CLCDK.SetIconData(frame, icon, duration, stackCount, iconType)
 	frame.Icon:SetTexture(icon)
-	
+
 	if duration > 0 then
 		local color = nil
 		if (iconType == CLCDK.IS_BUFF) then
 			color = CLCDK.COLOR_GREEN
-			
+
 		elseif (iconType == CLCDK.IS_CD) then
 			if (duration < 5) then
 				color = CLCDK.COLOR_RED
-			else			
+			else
 				color = CLCDK.COLOR_WHITE
 			end
 		end
@@ -115,16 +118,16 @@ function CLCDK.HandleBuff(frame, action, target)
 end
 
 function CLCDK.HandleCooldown(frame, action)
-	local spellCooldownInfo = C_Spell.GetSpellCooldown(action)
-	local chargeInfo = C_Spell.GetSpellCharges(action)
+	local spellCooldownInfo = GetSpellCooldown(action)
+	local chargeInfo = GetSpellCharges(action)
 	local count = chargeInfo and chargeInfo.maxCharges >= 1 and chargeInfo.currentCharges or 0
 
-	CLCDK.SetIconData(frame, C_Spell.GetSpellTexture(action), 0, count, CLCDK.IS_CD)
+	CLCDK.SetIconData(frame, GetSpellTexture(action), 0, count, CLCDK.IS_CD)
 
 	--by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
 	if (spellCooldownInfo and (spellCooldownInfo.duration > CLCDK.CD_DURATION_THRESHOLD or (spellCooldownInfo.duration > 1.5 and CLCDK.IsInTable(CLCDK.Cooldowns.LowDuration, action)))) then
 		CLCDK.SetIconCooldown(frame, spellCooldownInfo.startTime, spellCooldownInfo.duration)
-	end			
+	end
 end
 
 function CLCDK.HandleAbility(frame, action)
