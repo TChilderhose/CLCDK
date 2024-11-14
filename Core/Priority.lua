@@ -1,17 +1,5 @@
 local _, CLCDK = ...
 
-function CLCDK.GetNextMove(frame)
-	if (CLCDK.CURRENT_SPEC == CLCDK.SPEC_UNHOLY) then
-		return UnholyMove(frame)
-	elseif (CLCDK.CURRENT_SPEC == CLCDK.SPEC_FROST) then
-		return FrostMove(frame)
-	elseif (CLCDK.CURRENT_SPEC == CLCDK.SPEC_BLOOD) then
-		return BloodMove(frame)
-	else
-		return BlankMove(frame)
-	end
-end
-
 local function UnholyMove(frame)
 	--https://www.method.gg/guides/unholy-death-knight/playstyle-and-rotation
 
@@ -30,7 +18,8 @@ local function UnholyMove(frame)
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Dark Transformation"])
 	end
 
-	local numFestWounds = CLCDK.GetPlayerBuff("Festering Wound").applications or 0
+	local festWounds = CLCDK.GetPlayerBuff("Festering Wounds")
+	local numFestWounds =  festWounds and festWounds.applications or 0
 
 	-- Apocalypse - at 4+ stacks of Festering Wound
 	if (numFestWounds >= 4 and CLCDK.IsSpellNameOffCD("Apocalypse")) then
@@ -53,7 +42,7 @@ local function UnholyMove(frame)
 	end
 
 	-- Death Coil - If you have 85+ Runic Power or have 0 runes
-	if (runicPower >= 85 or numRunes = 0) then
+	if (runicPower >= 85 or numRunes == 0) then
 		if (not aoeSet and frame.AOE ~= nil) then
 			CLCDK.SetRangeandIcon(frame.AOE.Icon, CLCDK.Spells["Epidemic"])
 			aoeSet = true
@@ -189,4 +178,16 @@ end
 local function BlankMove(frame)
 	
 	return frame.Icon:SetTexture(nil)
+end
+
+function CLCDK.GetNextMove(frame)
+	if (CLCDK.CURRENT_SPEC == CLCDK.SPEC_UNHOLY) then
+		return UnholyMove(frame)
+	elseif (CLCDK.CURRENT_SPEC == CLCDK.SPEC_FROST) then
+		return FrostMove(frame)
+	elseif (CLCDK.CURRENT_SPEC == CLCDK.SPEC_BLOOD) then
+		return BloodMove(frame)
+	else
+		return BlankMove(frame)
+	end
 end

@@ -1,4 +1,18 @@
-local _, CLCDK = ...
+local name, CLCDK = ...
+
+local function AddCategory(frame)
+	if frame.parent then
+        local category = Settings.GetCategory(frame.parent);
+        local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, frame.name, frame.name);
+        subcategory.ID = frame.name;
+        return subcategory, category;
+    else
+        local category = Settings.RegisterCanvasLayoutCategory(frame, frame.name, frame.name);
+        category.ID = frame.name;
+        Settings.RegisterAddOnCategory(category);
+        return category;
+    end
+end
 
 function CLCDK.InitializeOptions()
 	CLCDK.PrintDebug("InitializeOptions Start")
@@ -15,23 +29,8 @@ function CLCDK.InitializeOptions()
 	CLCDK.PrintDebug("InitializeOptions Done")
 end
 
-local function AddCategory(frame)
-	if frame.parent then
-        local category = Settings.GetCategory(frame.parent);
-        local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, frame.name, frame.name);
-        subcategory.ID = frame.name;
-        return subcategory, category;
-    else
-        local category = Settings.RegisterCanvasLayoutCategory(frame, frame.name, frame.name);
-        category.ID = frame.name;
-        Settings.RegisterAddOnCategory(category);
-        return category;
-    end
-end
-
-
 --function to handle the View dropdown box
-local function CLCDK_Options_ViewDD_OnLoad()
+function CLCDK_Options_ViewDD_OnLoad()
 	info            = {}
 	info.text       = CLCDK_OPTIONS_FRAME_VIEW_NORM
 	info.value      = CLCDK_OPTIONS_FRAME_VIEW_NORM
@@ -64,12 +63,12 @@ function CLCDK_Options_DD_OnLoad(self, level)
 	--Template for an item in the dropdown box
 	local function CLCDK_Options_DD_Item(panel, spell, buff)
 		info = {}
-		--CLCDK.PrintDebug(spell)
 		info.text = spell
 		info.value = spell
 		info.func = function()
 			CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][panel:GetName()][1] = spell
 			CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][panel:GetName()][2] = buff
+			UIDropDownMenu_SetSelectedValue(panel, spell)
 			CloseDropDownMenus()
 		end
 		return info
@@ -136,7 +135,7 @@ function CLCDK_Options_DD_OnLoad(self, level)
 
 		elseif key == "Moves" then
 			for i = 1, #CLCDK.Cooldowns.Moves do
-				if C_Spell.GetSpellTexture(CLCDK.Cooldowns.Moves[i].name) then
+				if CLCDK.Cooldowns.Moves[i] and C_Spell.GetSpellTexture(CLCDK.Cooldowns.Moves[i]) then
 					UIDropDownMenu_AddButton(CLCDK_Options_DD_Item(self, CLCDK.Cooldowns.Moves[i]), 2)
 				end
 			end
@@ -148,7 +147,7 @@ end
 
 -----Validation/Checks-----
 --Update the Blizzard interface Options with settings
-local function CLCDK_OptionsRefresh()
+function CLCDK_OptionsRefresh()
 	CLCDK.OptionsRefresh()
 end
 function CLCDK.OptionsRefresh()
@@ -180,29 +179,20 @@ function CLCDK.OptionsRefresh()
 		CLCDK_Options_DD_CD4:SetChecked(CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][4])
 
 		--Priority Dropdown
-		if CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"] and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"][1] then
+		if CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"] and 
+			CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"][1] then
 			UIDropDownMenu_SetSelectedValue(CLCDK_Options_DD_Priority, CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"][1])
 			UIDropDownMenu_SetText(CLCDK_Options_DD_Priority, CLCDK_Settings.CD[CLCDK.CURRENT_SPEC]["CLCDK_Options_DD_Priority"][1])
 		end
 
 		--Cooldown Dropdown
 		for i = 1, #CDDisplayList do
-			if _G[CDDisplayList[i]] and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]] and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1].name then
-				print(CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1].name)
-				UIDropDownMenu_SetSelectedValue(_G[CDDisplayList[i]], CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1].name)
-				UIDropDownMenu_SetText(_G[CDDisplayList[i]], CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1].name)
+			if _G[CDDisplayList[i]] and CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]] then
+				UIDropDownMenu_SetSelectedValue(_G[CDDisplayList[i]], CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1])
+				UIDropDownMenu_SetText(_G[CDDisplayList[i]], CLCDK_Settings.CD[CLCDK.CURRENT_SPEC][CDDisplayList[i]][1])
 			end
 		end
-
-		--About Options
-		local expText = "<html><body>"
-				.."<p>"..CLCDK_ABOUT_BODY.."</p>"
-				.."<p><br/>"
-				.."</p>"
-				.."</body></html>";
-		CLCDK_ABOUTHTML:SetText (expText);
-		--CLCDK_ABOUTHTML:SetSpacing(2);
-
+	
 		CLCDK.PrintDebug("OptionsRefresh")
 		CLCDK.UpdatePosition()
 	else
@@ -211,7 +201,7 @@ function CLCDK.OptionsRefresh()
 end
 
 --Check if options are valid and save them to settings if so
-local function CLCDK_OptionsOkay()
+function CLCDK_OptionsOkay()
 	CLCDK.OptionsOkay()
 end
 function CLCDK.OptionsOkay()
@@ -330,7 +320,7 @@ end
 
 
 -----Reset/Defaults-----
-local function CLCDK_SetDefaults()
+function CLCDK_SetDefaults()
 	CLCDK.SetDefaults()
 end
 function CLCDK.SetDefaults()
@@ -344,7 +334,7 @@ function CLCDK.SetDefaults()
 	CLCDK.PrintDebug("SetDefaults Done")
 end
 
-local function CLCDK_SetLocationDefault()
+function CLCDK_SetLocationDefault()
 	CLCDK.SetLocationDefault()
 end
 function CLCDK.SetLocationDefault()
@@ -358,7 +348,7 @@ function CLCDK.SetLocationDefault()
 	CLCDK.PrintDebug("SetLocationDefault Done")
 end
 
-local function CLCDK_CooldownDefaults()
+function CLCDK_CooldownDefaults()
 	CLCDK.CooldownDefaults()
 end
 function CLCDK.CooldownDefaults()
@@ -453,6 +443,6 @@ end
 -----Slash Command----- 
 SLASH_CLCDK1 = '/clcdk'
 SlashCmdList["CLCDK"] = function()
-	Settings.OpenToCategory(CLCDK_Options)
 	CLCDK.PrintDebug("Slash Command Used")
+	Settings.OpenToCategory("CLCDK")
 end

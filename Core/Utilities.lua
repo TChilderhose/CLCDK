@@ -49,12 +49,8 @@ function CLCDK.IsInTable(tbl, key)
 	return false
 end
 
-function CLCDK.IsSpellNameOffCD(spellName)
-	return GetSpellNameCDRemaining(spellName) <= 0
-end
-
-function CLCDK.GetSpellNameCDRemaining(spellName)
-	return GetSpellInfoCDRemaining(GetSpellCooldown(CLCDK.Spells[spellName]))
+local function GetCDTimeWithGCD(startTime, duration)
+	return CLCDK.GetCDTime(startTime, duration) - CLCDK.GCD
 end
 
 local function GetSpellInfoCDRemaining(spellCooldownInfo)
@@ -64,8 +60,12 @@ local function GetSpellInfoCDRemaining(spellCooldownInfo)
 	return GetCDTimeWithGCD(spellCooldownInfo.startTime, spellCooldownInfo.duration)
 end
 
-local function GetCDTimeWithGCD(startTime, duration)
-	return CLCDK.GetCDTime(startTime, duration) - CLCDK.GCD
+function CLCDK.GetSpellNameCDRemaining(spellName)
+	return GetSpellInfoCDRemaining(GetSpellCooldown(CLCDK.Spells[spellName]))
+end
+
+function CLCDK.IsSpellNameOffCD(spellName)
+	return CLCDK.GetSpellNameCDRemaining(spellName) <= 0
 end
 
 function CLCDK.GetCDTime(startTime, duration)

@@ -1,6 +1,7 @@
 local _, CLCDK = ...
 
 local spellLookup = {
+	["Abomination Limb"] = 315443,
 	["Anti-Magic Shell"] = 48707,
 	["Anti-Magic Zone"] = 51052,
 	["Death and Decay"] = 43265,
@@ -110,6 +111,7 @@ function CLCDK.LoadCooldowns()
 	end
 	CLCDK.Cooldowns = {
 		NormCDs = {--CDs that all DKs get		
+			CLCDK.Spells["Abomination Limb"],
 			CLCDK.Spells["Anti-Magic Shell"],
 			CLCDK.Spells["Anti-Magic Zone"],
 			CLCDK.Spells["Death and Decay"],
@@ -201,11 +203,7 @@ function CLCDK.LoadCooldowns()
 			CLCDK.Spells["Frost Strike"],
 			CLCDK.Spells["Heart Strike"],
 			CLCDK.Spells["Howling Blast"],
-			CLCDK.Spells["Icy Touch"],
-			CLCDK.Spells["Necrotic Strike"],
 			CLCDK.Spells["Obliterate"],
-			CLCDK.Spells["Pestilence"],
-			CLCDK.Spells["Plague Strike"],
 			CLCDK.Spells["Scourge Strike"],
 		},
 		LowDuration = { --by default cds that are under 10 seconds are ignored because of rune CDs, but there are some that are acutally under 10 seconds
