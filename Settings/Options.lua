@@ -352,7 +352,7 @@ function CLCDK.CooldownDefaults()
 			["CLCDK_Options_DD_CD2_Two"] = CLCDK.Spells["Festering Wound"],
 
 			[3] = true,
-			["CLCDK_Options_DD_CD3_One"] = CLCDK.Spells["Sudden Doom"],
+			["CLCDK_Options_DD_CD3_One"] = CLCDK.Spells["Unholy Assault"],
 			["CLCDK_Options_DD_CD3_Two"] = CLCDK.Spells["Army of the Dead"],
 
 			[4] = true,

@@ -39,6 +39,7 @@ local spellLookup = {
 	["Scourge Strike"] = 55090,
 	["Soul Reaper"] = 343294,
 	["Sudden Doom"] = 81340,
+	["Unholy Assault"] = 207289,
 	["Unholy Blight"] = 115989,
 	["Virulent Plague"] = 191587,
 	["Wraith Walk"] = 212552,
@@ -138,6 +139,7 @@ function CLCDK.LoadCooldowns()
 			CLCDK.Spells["Runic Corruption"],
 			CLCDK.Spells["Soul Reaper"],
 			CLCDK.Spells["Sudden Doom"],
+			CLCDK.Spells["Unholy Assault"],
 			CLCDK.Spells["Unholy Blight"],
 			CLCDK.Spells["Wraith Walk"],
 		},
@@ -177,6 +179,7 @@ function CLCDK.LoadCooldowns()
 			[CLCDK.Spells["Soul Reaper"]] = {"target", true},
 			[CLCDK.Spells["Sudden Doom"]] = {"player", false},
 			[CLCDK.Spells["Virulent Plague"]] = {"target", false},
+			[CLCDK.Spells["Unholy Assault"]] = {"player", true},
 			[CLCDK.Spells["Unholy Blight"]] = {"player", true},
 			[CLCDK.Spells["Wraith Walk"]] = {"player", true},
 

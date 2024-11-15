@@ -13,6 +13,16 @@ local function UnholyMove(frame)
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Raise Abomination"])
 	end
 
+	-- No Ghoul Out
+	if (not UnitExists("pet") and CLCDK.IsSpellNameOffCD("Raise Dead")) then
+		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Raise Dead"])
+	end
+
+	-- Unholy Assault
+	if (CLCDK.IsSpellNameOffCD("Unholy Assault")) then
+		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Unholy Assault"])
+	end
+
 	-- Dark Transformation
 	if (UnitExists("pet") and CLCDK.IsSpellNameOffCD("Dark Transformation")) then
 		return CLCDK.SetRangeandIcon(frame.Icon, CLCDK.Spells["Dark Transformation"])
