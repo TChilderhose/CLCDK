@@ -2,24 +2,12 @@ local _, CLCDK = ...
 
 local GetSpellTexture = C_Spell.GetSpellTexture
 
-local function AddCategory(frame)
-	if frame.parent then
-		local category = Settings.GetCategory(frame.parent);
-		local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, frame.name, frame.name);
-		subcategory.ID = frame.name;
-		return subcategory, category;
-	else
-		local category = Settings.RegisterCanvasLayoutCategory(frame, frame.name, frame.name);
-		category.ID = frame.name;
-		Settings.RegisterAddOnCategory(category);
-		return category;
-	end
-end
-
 function CLCDK.InitializeOptions()
 	CLCDK.PrintDebug("InitializeOptions Start")
 
-	AddCategory(CLCDK_Options)
+	local category = Settings.RegisterCanvasLayoutCategory(CLCDK_Options, CLCDK_Options.name, CLCDK_Options.name);
+	category.ID = CLCDK_Options.name;
+	Settings.RegisterAddOnCategory(category);
 
 	--Initalize all dropdowns
 	UIDropDownMenu_Initialize(CLCDK_Options_DD_Priority, CLCDK_Options_DD_OnLoad)

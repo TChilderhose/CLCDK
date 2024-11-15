@@ -67,7 +67,8 @@ function CLCDK.UpdateCD(location, frame)
 				action = CLCDK.Spells[CLCDK.PLAYER_RACE]
 			end
 
-			if CLCDK.Cooldowns.Buffs[action] and CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1]) then
+			if CLCDK.Cooldowns.Buffs[action] and
+				(CLCDK.HandleBuff(frame, action, CLCDK.Cooldowns.Buffs[action][1]) or not CLCDK.Cooldowns.Buffs[action][2]) then
 				return
 			end
 			CLCDK.HandleCooldown(frame, action)

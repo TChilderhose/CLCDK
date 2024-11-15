@@ -6,11 +6,11 @@ CLCDK.VERSION = 11.05
 CLCDK.PLAYER_RACE = select(2, UnitRace("player"))
 CLCDK.PLAYER_CLASS = select(2, UnitClass("player"))
 
-CLCDK.FONT_MONO = 'Interface\\AddOns\\CLCDK\\Media\\CascadiaMono-2404.23.ttf'
+CLCDK.FONT_MONO = 'Interface\\AddOns\\CLCDK\\Media\\unispace.otf'
 CLCDK.FONT = 'fonts/frizqt__.ttf'
-CLCDK.FONT_SIZE_L = 18
-CLCDK.FONT_SIZE_M = 14
-CLCDK.FONT_SIZE_S = 10
+CLCDK.FONT_SIZE_L = 16
+CLCDK.FONT_SIZE_M = 12
+CLCDK.FONT_SIZE_S = 8
 
 CLCDK.SPEC_BLOOD = 1
 CLCDK.SPEC_FROST = 2
